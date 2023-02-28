@@ -1,0 +1,66 @@
+<div class="reports_show">
+   <%= title "Отзыв: #{h(@report.subject)}" %>
+   Тип отзыва: <b><%= @report.report_type %></b>
+   <table class="notlist">
+   <tr>
+     <tr>
+      <td colspan="2"><h2>Контактная информация:</h2></td>
+    </tr>
+    <tr>
+      <th width="25%">Имя:</th>
+      <td>
+        <%= @report.name %> 
+      </td>
+    </tr>
+    <tr>
+      <th>E-mail:</th>
+      <td>
+        <%= link_to @report.email, "mailto:#{@report.email}" %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><h2>Технические детали:</h2></td>
+    </tr>
+    <tr>
+      <th>Операционная система: *</th>
+      <td>
+        <%= @report.os %>
+      </td>
+    </tr>
+    <tr>
+      <th>Браузер:</th>
+      <td>
+       <%= @report.browser %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><h2>Сообщение</h2></td>
+    </tr>
+    <tr>
+      <th>Тема:</th>
+      <td>
+        <%= @report.subject%>
+      </td>
+    </tr>
+    <tr>
+      <th>Текст:</th><td></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <%= @report.details %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2"><h2>Прикрепленные файлы:</h2></td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <ul>
+        <% @report.fitems.each do |file| %>
+          <li><%= link_to file.original_filename, file.url %></li>
+        <% end %>
+        </ul>
+      </td>
+    </tr>
+  </table>
+</div>

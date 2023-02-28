@@ -1,0 +1,24 @@
+<%
+  @return_to ||= (params[:return_to] || request.request_uri)
+%>
+<div id="image_form">
+  <% unless @noimage -%>
+    <div><%= framed_user_image(@user) %></div>
+  <% end -%>
+  <% if current_user && (current_user == @user || has_permission?(:change_user_images)) -%>
+    <div id="show_image">
+      <%= link_to_function( 'изменить', "$('change_image').show();$('show_image').hide()") %>
+    </div>
+    <div id="change_image" style="display:none;" class="msg">
+      <div class="right">
+        <%= link_to_function(icon_close, "$('change_image').hide();$('show_image').show()") %>
+      </div>
+      <%- 
+        @url = {:action => 'update_image', :id => @user.id, :return_to => @return_to}
+        @upload_hint = '(большие картинки будут уменьшены до размера 300x300)'
+      -%>
+      <%= render :partial => 'fitems/upload_form' %>
+    </div>
+  <% end -%>
+</div>
+

@@ -1,0 +1,87 @@
+<div class="users_edit">
+<%= title("Пользователь #{@user.login}") %>
+<%= flash_messages %>
+<%= error_messages_for :user %>
+<br />
+<% form_for @user, :html=>{:multipart=>true} do |f| -%>
+  <table>
+    <tr>
+      <td>
+        <label for="user_login">Логин</label>:
+      </td>
+      <td>
+        <%= f.text_field :login %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="user_full_name">Имя</label>:
+      </td>
+      <td>
+        <%= f.text_field :full_name %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label>Часовой пояс:</label>
+      </td>
+      <td>
+       <%= f.time_zone_select :time_zone, TZInfo::Timezone.all.sort, :model => TZInfo::Timezone %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="user_email">E-Mail</label>:
+      </td>
+      <td>
+        <%= f.text_field :email %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        Заполняйте только в том случае, если хотите сменить пароль:
+        <table>
+          <tr>
+            <td>
+              <label for="user_current_password">Текущий пароль</label>:
+            </td>
+            <td>
+              <%= password_field :user, :current_password, :size=>15 %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="user_password">Новый пароль</label>:
+            </td>
+            <td>
+              <%= f.password_field :password, :size=>15 %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <label for="user_password_confirmation">Повторите ввод нового пароля</label>:
+            </td>
+            <td>
+              <%= f.password_field :password_confirmation, :size=>15%>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+    <td colspan="2">
+      <label for="user_info"> О себе</label>:<br /> 
+      <%= f.text_area :info, :rows=>13, :cols=>40 %>    
+    </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <div class="submit">
+        <%= submit_tag _('refresh'), {:name=>'refresh', :class=>"submit"} %>
+        <%= submit_tag _('cancel'),  {:name=>'cancel', :class=>"cancel"} %>
+        </div>
+      </td>
+    </tr>
+  </table>
+<% end -%>
+</div>

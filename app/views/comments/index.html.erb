@@ -1,0 +1,25 @@
+<%
+  def my_url_for(obj)
+    case obj
+    when Topic
+      i_topic_path(obj)
+    else
+      url_for(obj)
+    end
+  end
+%>
+
+<h1>Последние комментарии на сайте</h1>
+<%
+  rus = {"Person" => "к записи", "Lost" => "к объявлению", "Topic" => "к статье"}
+%>
+<%= will_paginate @comments %>
+
+<% for @comment in @comments %>
+  <% if @comment.obj %>
+    <h3>Комментарий <%= rus[@comment.obj.class.to_s] || "на странице" %>: <%= link_to obj_title(@comment.obj), my_url_for(@comment.obj) %></h3>
+  <% end %>
+  <%= render :partial => 'comments/comment_wrapper', :object => @comment %>
+<% end %>
+
+<%= will_paginate %> 

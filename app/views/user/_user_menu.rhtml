@@ -1,0 +1,32 @@
+<% if current_user -%>
+<div id="user_menu" class="user_menu<%=@style%>">
+  <ul width="100%">
+   <li>
+      $<%= current_user.login %>:
+    </li>
+    <li>
+      <%= link_to 'Мой&nbsp;профайл', edit_user_path(current_user) %>
+    </li>
+    <li>
+      <%= link_to 'Cтраницы', list_topics_path %>
+    </li>
+    <li>
+      <%= link_to 'Файлы', list_fitems_path %>
+    </li>
+    <% if has_permission?(:requests) -%>
+    <li>
+      <%= link_to 'Запросы', list_requests_path %>
+    </li>
+    <% end -%>
+    <% if has_permission?(:losts) -%>
+    <li>
+      <%= link_to 'Объявления', list_losts_path %>
+    </li>
+    <% end -%>
+    <li align="right" style="float:right; text-align:right; width:auto;">
+      <%= link_to '&Lt; Выйти',  signout_url %>
+    </li>
+   </ul>
+</div>
+<% end -%>
+

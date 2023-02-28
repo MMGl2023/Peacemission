@@ -1,0 +1,38 @@
+<div class="lost_search">
+<h1><%= @title ||= 'Похищенные люди'%></h1>
+<table width="100%">
+  <tr>
+    <td>
+      <%- form_tag({},{:method=>'get'}) do -%>
+     <input type="search" name="lost_s" value="<%= params[:lost_s] %>" id="lost_s" size="20"/>
+      <%= submit_tag "Искать" %>
+    </td>
+    <td align="right">&nbsp;
+      <%= link_to "Добавить объявление о розыске", :controller=>'lost', :action=>'create' %>
+    </td>
+  </tr>
+</table>
+<%- end -%>
+<%= flash_messages %>
+<table class="list">
+	<% @losts.each do |x| -%>
+	<tr class="<%= cycle "odd", "even" %>">
+    <td valign="top">
+      <%= link_to( image_item(x.image, :width=>125), 
+            :action=>'view', :controller=>'lost', :id=>x )%>
+    </td>
+    <td valign="top">
+      <%= link_to( icon_edit, :controller=>'lost', :action=>'edit', :id=>x ) %>
+      <b>Имя:</b> <font size="+1"><%= x.full_name %></font><br />
+      <b>Год рождения:</b> <%= x.birth_year %><br />
+      <b>Дата исчезновения:</b> <%= fuzzy_date_s(x, :lost_on) %><br />
+      <% if x.found_on -%>
+      <b>Дата возвращения:</b><%= fuxxy_date_s(x, :found_on) %><br />
+      <% end -%>
+      <b>Подробности:</b><br /><%= x.details %>
+    </td>
+  </tr>
+	<% end -%>
+</table>
+<%= pagination_links @losts_pages, {:params=>params} if @losts_pages %>
+</div>

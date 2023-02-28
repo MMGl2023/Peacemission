@@ -1,0 +1,38 @@
+<% content_for :css do %>
+  td.pa {width: 18px; height: 18px;}
+<% end %>
+<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td align="center">
+      <span style="font-size:10px"><br /></span>
+      <span id="image">
+        <%=
+          link_to_function(
+            image_item(@fitem, :no_link=>true, :border=>"0"),        
+            'window.close()'
+          )
+        %>
+      </span>
+    </td>
+  </tr>
+  <% cache :pallete do %>
+  <tr>
+    <td align="center" style="height: 50px">
+      <table cellpadding="0" cellspacing="2" border="0">
+        <tr>
+          <%= 
+            ([0] + (0...25).map{|i| 5 + i*10}).map {|i|
+              color = '#' + ("%02x" % i) * 3
+              "<td bgcolor=\"#{color}\" onmouseover=\"document.bgColor = '#{color}'\" class=\"pa\" ></td>"
+            }.reverse.join("\n")
+          %>
+          <td class="pa"></td>
+          <td class="pa"> <%= link_to_function(icon_close, 'window.close()' ) %></td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <% end %>
+</table>
+
+

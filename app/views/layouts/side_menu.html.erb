@@ -1,0 +1,24 @@
+<% cache('side_menu' + (authenticated? ? 'auth' : '')) do %>
+  <div id="side_menu">
+    <div id="search">
+    <%- form_tag(search_topics_path, :method => 'post') do -%>
+      <input type="text" style="width: 130px;" name="topic_s" value="" id="s" size="15"/>
+      <%=  image_submit_tag 'icon-search.gif' %>
+    <%- end -%>
+    </div>
+    <ul>
+      <% if authenticated? %>
+        <li><%= link_to "Комментарии", comments_path %></li>
+      <% end -%>
+      <li><%= link_to "Объявления", losts_path %></li>
+      <li><%= link_to_topic "Справочная<br> информация", :name => 'info'  %></li>
+      <li><%= link_to_topic "Документы",  :name => 'documents' %></li>
+      <li><%= link_to_topic "Часто задаваемые вопросы", :name => 'faq' %></li>
+      <li><%= link_to_topic "Контакты",   :name => 'contacts' %></li>
+      <li><%= link_to_topic "О нас",      :name => 'about' %> </li>
+    </ul>
+    <div class="banners">
+      <%= render :file => 'layouts/mail_ru_js' %>
+    </div>
+  </div>
+<% end -%>

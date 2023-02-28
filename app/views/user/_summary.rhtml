@@ -1,0 +1,44 @@
+<%
+  @u = summary
+  @user = @u if @u
+  unless defined?(@skip_links)
+    @skip_links = (@user != current_user)
+  end
+%>
+<% if @user %>
+<div class="summary user_summary">
+      <ul class="list">
+        <% unless @user.summary.blank? %>
+          <li><%= gender_icon(@user)  -%>
+            <font size="+1"><%= h(@user.full_name) %></font>:  <%= @user.summary %>
+          </li>
+        <% end -%>
+        <% unless @user.birthday.blank? -%>
+          <li><% 
+          today = Date.today
+          b = @user.birthday
+          b1 = Date.civil( today.year, b.month, b.day )
+          b2 = Date.civil( today.year+1, b.month, b.day )
+          days = b1 - today
+          days = b2 - today if days < 0 -%>
+          <%= _('n_[days]_to_your_birthday') % {:days=> days } %>
+          </li>
+        <% end -%>
+        <% unless @skip_links -%>
+          <li><%= _('you_can_edit_personal_info')%>.
+            <%= link_to(_('edit_user_profile'), :action=>'edit') -%>
+          </li>
+        <% end -%>
+        <% unless @user.city.blank? -%>
+          <li>
+            <%=_('city')%>: <%= link_to h(@user.city), :controller=>'people', :action=>'list', :city=>@user.city %>
+          </li>
+        <% end -%>
+        <%- unless @voted_tracks.blank? -%>
+        <li> <%=_('last_voted_tracks') %>:
+          <%= render :partial=>'track/voted_tracks', :object=>@voted_tracks %> 
+        </li>
+        <%- end -%>
+      </ul>
+</div>
+<% end %>

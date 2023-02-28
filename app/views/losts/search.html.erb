@@ -1,0 +1,35 @@
+<div class="lost_search">
+<%= flash_messages %>
+<%= topic_content 'lost_index', :include_title => true %>
+<%= link_to "[Список объявлений для администраторов]", list_losts_path(:show_all => true) if current_user %>
+<table class="list" id="lost_search">
+  <tr>
+	<% @losts.each_with_index do |x, idx| -%>
+    <td valign="top" align="center">
+       <div style="position: relative; float: right">
+         <%= link_to( icon_edit, edit_lost_path(x) ) %>
+         <%= link_to( icon_info, person_path(x.person) ) if x.person %>
+       </div>
+       <div class="lost_search_photo">
+        <div class="photo_title"><%= link_to h(x.full_name), lost_path(x)  %></div>
+        <% if current_user -%>
+       <% end -%>
+        <%= image_item(x.image, :alt => x.full_name)%>
+      </div>
+      <div class="lost_search_info">
+        <b>Дата рождения:&nbsp;</b><%= fuzzy_date_s(x, :birth_date) %><br />
+        <b>Дата исчезновения:&nbsp;</b><%= fuzzy_date_s(x, :lost_on) %><br />
+        <% unless fuzzy_date_blank?(x, :found_on) -%>
+          <div class="found">
+            <b>Дата обнаружения:</b>&nbsp;<%= fuzzy_date_s(x, :found_on) %></b>
+          </div>
+          <br />
+        <% end -%>
+      </div>
+    </td>
+  <%= "</tr>\n<tr>" if idx % 2 == 1 %>
+	<% end -%>
+  </tr>
+</table>
+<%= will_paginate @losts %>
+</div>

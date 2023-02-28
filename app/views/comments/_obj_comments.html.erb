@@ -1,0 +1,19 @@
+<%
+  @obj = obj_comments if defined?(obj_comments) && obj_comments
+  @ctitle = (
+    case @obj
+    when Lost
+     "Комментарии к объявлению"  
+    when Comment
+      "Комментарии к комментарию" 
+    when Topic
+      "Комментарии к статье"
+    else
+      "Комментарии к записи"
+    end
+  )
+%>
+<h2 class="comments"><%= @ctitle  %></h2>
+<%= render :partial => 'comments/comment_wrapper', :object => @obj %>
+<%= javascript_tag "live_comments('#{@obj.class}', #{@obj.id})" %>
+  

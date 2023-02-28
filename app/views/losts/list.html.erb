@@ -1,0 +1,75 @@
+<div class="lost_list">
+<h1>Список похищенных (пропавших)</h1>
+
+<table width="100%">
+<tr>
+  <td>
+  <%- form_tag({}, {:method => 'get'}) do -%>
+    <input type="text" name="lost_s" value="<%= params[:lost_s] %>" id="lost_s" size="25" />
+    <%= hidden_field 'show_all', params[:show_all] %>
+    <%= image_submit_tag "icon-search.gif", :style => 'vertical-align: middle' %>
+  <%- end -%>
+  </td>
+  <td style="padding-left:30px;">
+    <%= link_to "[добавить новую запись]", new_lost_path %>
+  </td>
+</tr>
+</td>
+
+<%= flash_messages %>
+
+<table width="100%" class="list" id="lost_list">
+	<tr>
+    <% p = params.dup %>
+    <th>&nbsp;</th>
+    <th>
+      <%= column_title(:id, '№', p) %>
+    </th>
+    <th>
+      <%= column_title(:active, 'Активно?', p) %>  
+    </th>
+		<th>
+      <%= column_title(:name, 'ФИО', p) %>
+    </th>
+    <th>
+      <%= column_title(:last_location, 'Место<br>исчезновения', p) %> 
+    </th>
+    <th>
+      <%= column_title(:created_at, 'Дата<br>создания', p) %>
+    </th>
+	    <th>
+      <%= column_title(:lost_on, 'Дата<br>исчезновения', p) %>
+    </th>
+	</tr>
+	<% @losts.each do |x| -%>
+	<tr class="<%= cycle "odd", "even" %>">
+    <td>
+      <%= link_to icon_edit, edit_lost_path(x) %>
+      <%= link_to icon_delete, lost_path(x), :method => :delete, :confirm=>"Вы действительно хотите удалить объявление о #{x.full_name}" %>
+    </td>
+    <td>
+      <%= x.id %>
+    </td>
+    <td>
+      <%= x.active? ? 'активно' : 'нет' %>
+    </td>
+    <td>
+      <%= link_to h(x.full_name), lost_path(x) %>
+    </td>
+	  <td>
+      <%= h(x.last_location) %>
+    </td>
+    <td>
+      <%= date_s(x.created_at) %>
+    </td>
+    <td>
+      <%= fuzzy_date_s(x, :lost_on) %>
+      <% unless fuzzy_date_blank?(x, :found_on) -%>
+        <font color="red"><%= "обнаружен " + fuzzy_date_s(x, :found_on) %> </font>
+      <% end -%>
+    </td>
+  </tr>
+	<% end -%>
+</table>
+<%= will_paginate @losts %>
+</div>

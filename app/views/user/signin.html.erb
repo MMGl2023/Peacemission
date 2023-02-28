@@ -1,0 +1,27 @@
+<div class="signin">
+  <h1>Вход в систему</h1>
+  <%= flash_messages %>
+
+  <% form_tag do -%>
+    <%= hidden_field_tag :return_to, params[:return_to] || (request.referer if request.referer =~ /^https?:\/\/(www.)?rozysk\.org/) || "" %>
+    <p>
+      <label for="login">Логин:</label>
+      <%= text_field_tag :login, params[:login] %>
+    </p>
+    <p>
+       <label for="password">Пароль:</label>
+       <%= password_field_tag :password, params[:password] %>
+    </p>
+    <p>
+       <%= submit_tag 'Войти', :name => 'login', :class => 'login'%>
+    </p>
+    <p>
+      <label for="remember_me">Запомнить меня на этом компьютере:</label>
+      <%= check_box_tag 'remember_me' %>
+    </p>
+    <p>
+      <%= link_to "Я забыл пароль", forgot_password_path %>
+    </p>
+  <% end -%>
+</div>
+

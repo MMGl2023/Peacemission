@@ -1,0 +1,75 @@
+<div class="invitations_list">
+  <table width="100%">
+    <tr>
+      <td>
+      <%- form_tag({}, {:method => 'get'}) do -%>
+       Поиск по списку: <input type="search" name="invitation_s" value="<%= params[:invitation_s] %>" id="_s" size="25" />
+        <%= image_submit_tag "icon-search.gif" %>
+      <%- end -%>
+      </td>
+      <td style="padding-left:30px;" align="right">
+        <% if has_permission?(:invitations) -%>
+          <%= link_to "Создать новое приглашение", new_invitation_path, :class => "create_record"  %>
+        <% end -%>
+      </td>
+    </tr>
+  </table>
+
+  <%= flash_messages %>
+
+  <%= will_paginate @invitations %> (найдено <%= rus_plural @invitations.total_entries, 'запись', 'записи', 'записей' %>)
+  <% now = Time.now %>
+  <table width="100%" class="list" cellspacing="0">
+    <tr>
+      <% p = params.dup %>
+      <% if has_permission?(:invitations) %>
+        <th>&nbsp;</th>
+      <% end -%>
+      <%= column_title_tag('th', 'name', "Имя", p) %> 
+      <%= column_title_tag('th', 'email', "Email", p) %>
+      <%= column_title_tag('th', 'created_at', "Дата<br />создания", p) %>
+      <%= column_title_tag('th', 'created_by_id', "Кто<br />пригласил", p) %>
+      <%= column_title_tag('th', 'used_by_id', "Кем<br />использовано", p) %>
+      <%= column_title_tag('th', 'expired_at', "Действительно<br />до", p) %>
+    </tr>
+    <% @invitations.each do |x| -%>
+    <tr class="<%= cycle "odd", "even" %>">
+      <% p = params.dup %>
+      <% if has_permission?(:invitations) -%>
+        <td>
+          <%= link_to icon_edit, edit_invitation_path(x) %>
+          <%= link_to icon_delete, invitation_path(x), :method => :delete, :confirm => "Вы действительно хотите удалить приглашение человеку #{x.name}?" %><br/>
+          <%= link_to_remote 'send', :url => send_inv_invitation_path(x, :target => (target = 'inv_' + x.id.to_s)) %>
+          <div id="<%= target %>"></div>
+        </td>
+      <% end -%>
+      <td>
+        <%= link_to x.name, invitation_path(x) %>
+      </td>
+      <td>
+        <%= link_to x.email, "mailto:#{x.email}" %>
+      </td>
+      <td>
+        <%= datetime_s(x.created_at) %>
+      </td>
+      <td>
+        <%= link_to(x.created_by.login, p.flip(:created_by_id => x.created_by_id.to_s)) rescue 'некто' %> 
+      </td>
+      <td>
+        <%= link_to(x.used_by.login, x.used_by) if x.used_by %> 
+      </td>
+      <td>
+        <% if x.expired_at < now && !x.used_by -%>
+          <font color="#a33"><%= datetime_s(x.expired_at) %></font> 
+        <% elsif x.expired_at < now  -%>
+          <font color="#33a"><%= datetime_s(x.expired_at) %></font> 
+        <% else -%>
+          <font color="#3a3"><%= datetime_s(x.expired_at) %></font> 
+        <% end %>
+      </td>
+     </tr>
+    <% end -%>
+  </table>
+  <%= will_paginate @invitations %>
+</div>
+

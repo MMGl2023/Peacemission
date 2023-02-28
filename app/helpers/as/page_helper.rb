@@ -1,0 +1,2 @@
+module As::PageHelper
+end

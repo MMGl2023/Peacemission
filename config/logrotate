@@ -1,0 +1,6 @@
+/home/webmaster/mmgl/branches/v2.0/log/*log {
+    missingok
+    monthly  
+    rotate 5
+    compress
+}

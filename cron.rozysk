@@ -1,0 +1,3 @@
+23 2 * * * root /home/webmaster/rozysk.org/script/clear_logs
+30 3 * * * root /home/webmaster/rozysk.org/script/httpd_restart
+ 

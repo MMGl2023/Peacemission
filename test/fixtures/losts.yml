@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  full_name: MyString
+  lost_on: 2008-02-13
+  found_on: 2008-02-13
+  image_id: 1
+  birth_year: 1
+  last_position: MyString
+  comment: MyText
+
+two:
+  full_name: MyString
+  lost_on: 2008-02-13
+  found_on: 2008-02-13
+  image_id: 1
+  birth_year: 1
+  last_position: MyString
+  comment: MyText

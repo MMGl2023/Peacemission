@@ -1,0 +1,613 @@
+--- 
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: application/vnd.ms-excel
+    name: people_list_example.xls
+    size: "308224"
+    updated_at: 2008-07-10 17:46:25
+    ext: .xls
+    id: "7"
+    file_hash: f0bdec17c626a1371d1e21a65d3aba45
+    height: 
+    user_id: 
+    comment: "\xD0\xA1\xD0\xBF\xD0\xB8\xD1\x81\xD0\xBE\xD0\xBA \xD0\xBF\xD1\x80\xD0\xBE\xD0\xBF\xD0\xB0\xD0\xB2\xD1\x88\xD0\xB8\xD1\x85 \xD0\xBD\xD0\xB0 \xD0\xBE\xD1\x81\xD0\xBD\xD0\xBE\xD0\xB2\xD0\xB5 \xD1\x83\xD1\x87\xD0\xB5\xD1\x82\xD0\xBE\xD0\xB2 \xD0\x9C\xD0\x92\xD0\x94"
+    width: 
+    created_at: 2008-02-08 01:37:18
+    original_filename: "\xD0\xA1\xD0\xBF\xD0\xB8\xD1\x81\xD0\xBE\xD0\xBA \xD0\xBF\xD1\x80\xD0\xBE\xD0\xBF\xD0\xB0\xD0\xB2\xD1\x88\xD0\xB8\xD1\x85 \xD0\xBD\xD0\xB0 \xD0\xBE\xD1\x81\xD0\xBD\xD0\xBE\xD0\xB2\xD0\xB5 \xD1\x83\xD1\x87\xD0\xB5\xD1\x82\xD0\xBE\xD0\xB2 \xD0\x9C\xD0\x92\xD0\x94 \xD0\xA7\xD0\xA0_\xD1\x80\xD0\xB5\xD0\xB4\xD0\xB0\xD0\xBA\xD1\x82_310108.xls"
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: lost_2.jpg
+    size: "13526"
+    updated_at: 2008-07-10 17:46:26
+    ext: .jpg
+    id: "8"
+    file_hash: 3ba9a8af19358d579f05dfc75fd076c8
+    height: "298"
+    user_id: 
+    comment: 
+    width: "243"
+    created_at: 2008-02-13 22:03:54
+    original_filename: oziev_ruslan_big.jpg
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: lost_1.jpg
+    size: "11320"
+    updated_at: 2008-07-10 17:46:26
+    ext: .jpg
+    id: "10"
+    file_hash: 69791e065b3c056ba691e0f144a8ef30
+    height: "182"
+    user_id: 
+    comment: 
+    width: "155"
+    created_at: 2008-02-13 22:03:54
+    original_filename: hutiev.jpg
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: rehab_servicemen_1.jpg
+    size: "421139"
+    updated_at: 2008-07-10 17:46:26
+    ext: .jpg
+    id: "11"
+    file_hash: 57d210d7bfd2b67d2a192fbf015630fb
+    height: "2592"
+    user_id: 
+    comment: 
+    width: "1944"
+    created_at: 2008-03-07 15:53:09
+    original_filename: DSC04456.JPG
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: rehab_servicemen_2.jpg
+    size: "149654"
+    updated_at: 2008-07-10 17:46:26
+    ext: .jpg
+    id: "12"
+    file_hash: e41ab2641e1249eef11e4898ea02380c
+    height: "1296"
+    user_id: 
+    comment: 
+    width: "972"
+    created_at: 2008-03-07 15:54:51
+    original_filename: DSC04432.JPG
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: rehab_servicemen_3.jpg
+    size: "686059"
+    updated_at: 2008-07-10 17:46:26
+    ext: .jpg
+    id: "13"
+    file_hash: b21161edad9fa9b8977720138658e793
+    height: "972"
+    user_id: 
+    comment: 
+    width: "1296"
+    created_at: 2008-03-07 15:56:46
+    original_filename: DSC04525.JPG
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: rehab_servicemen_4.jpg
+    size: "378387"
+    updated_at: 2008-07-10 17:46:26
+    ext: .jpg
+    id: "14"
+    file_hash: f2ad0236af0782d6ec7b07b43a073189
+    height: "583"
+    user_id: 
+    comment: 
+    width: "778"
+    created_at: 2008-03-07 15:57:43
+    original_filename: DSC04570.JPG
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: rehab_women_1.jpg
+    size: "548495"
+    updated_at: 2008-07-10 17:46:26
+    ext: .jpg
+    id: "15"
+    file_hash: 4f1945c6cf552b352f44ac4548678344
+    height: "729"
+    user_id: 
+    comment: 
+    width: "972"
+    created_at: 2008-03-07 15:58:42
+    original_filename: DSC04046.JPG
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: rehab_women_2.jpg
+    size: "247322"
+    updated_at: 2008-07-10 17:46:26
+    ext: .jpg
+    id: "16"
+    file_hash: b2a47236f97276a967faf9fde0ea28d0
+    height: "1094"
+    user_id: 
+    comment: 
+    width: "1458"
+    created_at: 2008-03-07 15:59:28
+    original_filename: DSC04048.JPG
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: rehab_women_3.jpg
+    size: "95214"
+    updated_at: 2008-07-10 17:46:27
+    ext: .jpg
+    id: "17"
+    file_hash: 16eca5a36458cf2382f18628d1d7da74
+    height: "1018"
+    user_id: 
+    comment: 
+    width: "806"
+    created_at: 2008-03-07 16:00:34
+    original_filename: "DSC04048\xD0\xBE.jpg"
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: rehab_women_4.jpg
+    size: "284141"
+    updated_at: 2008-07-10 17:46:27
+    ext: .jpg
+    id: "18"
+    file_hash: 9f669ab702f1d126564137a796b877f0
+    height: "547"
+    user_id: 
+    comment: 
+    width: "729"
+    created_at: 2008-03-07 16:02:45
+    original_filename: DSC04271.JPG
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: rehab_women_5.jpg
+    size: "459278"
+    updated_at: 2008-07-10 17:46:27
+    ext: .jpg
+    id: "19"
+    file_hash: 063dd97420bad23b8f09c41dd4463a94
+    height: "729"
+    user_id: 
+    comment: 
+    width: "972"
+    created_at: 2008-03-07 16:03:53
+    original_filename: DSC04304.JPG
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: rehab_women_6.jpg
+    size: "569133"
+    updated_at: 2008-07-10 17:46:27
+    ext: .jpg
+    id: "20"
+    file_hash: 6b4742994fadfdedf7879059c69a3f58
+    height: "729"
+    user_id: 
+    comment: 
+    width: "972"
+    created_at: 2008-03-07 16:05:52
+    original_filename: DSC04091.JPG
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: released_servicemen_1.jpg
+    size: "116863"
+    updated_at: 2008-07-10 17:46:27
+    ext: .jpg
+    id: "21"
+    file_hash: 13a282efa4ee4d6920a61e31e1e81cea
+    height: "343"
+    user_id: 
+    comment: 
+    width: "462"
+    created_at: 2008-03-07 16:14:29
+    original_filename: "\xD0\xA4\xD0\xBE\xD1\x82\xD0\xBE \xD1\x81 \xD0\xBE\xD1\x81\xD0\xB2\xD0\xBE\xD0\xB1\xD0\xBE\xD0\xB6\xD0\xB4\xD0\xB5\xD0\xBD\xD0\xBD\xD1\x8B\xD0\xBC\xD0\xB81.jpg"
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: exhum_1.jpg
+    size: "252657"
+    updated_at: 2008-07-10 17:46:27
+    ext: .jpg
+    id: "22"
+    file_hash: 58c40a7a907c316f35f0c0cba88bffbe
+    height: "576"
+    user_id: 
+    comment: 
+    width: "768"
+    created_at: 2008-03-07 16:23:07
+    original_filename: cap001.bmp
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/bmp
+    name: exhum_2.jpg
+    size: "322814"
+    updated_at: 2008-07-10 17:46:27
+    ext: .jpg
+    id: "23"
+    file_hash: 3d6d14338b1a9ee51cfb0ed574b3051e
+    height: "576"
+    user_id: 
+    comment: 
+    width: "768"
+    created_at: 2008-03-07 16:23:47
+    original_filename: cap003.bmp
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/bmp
+    name: weapons_1.jpg
+    size: "314451"
+    updated_at: 2008-07-10 17:46:27
+    ext: .jpg
+    id: "24"
+    file_hash: e6369e8e6f9a900ff9dabca5b4954fd7
+    height: "576"
+    user_id: 
+    comment: 
+    width: "768"
+    created_at: 2008-03-07 16:24:15
+    original_filename: cap004.bmp
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/bmp
+    name: weapons_2.jpg
+    size: "275847"
+    updated_at: 2008-07-10 17:46:27
+    ext: .jpg
+    id: "25"
+    file_hash: f332076b96baa389292ccaed9b282157
+    height: "576"
+    user_id: 
+    comment: 
+    width: "768"
+    created_at: 2008-03-07 16:24:50
+    original_filename: cap007.bmp
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: application/octet-stream
+    name: ccas_list_1700.xls
+    size: "361984"
+    updated_at: 2008-07-10 17:46:27
+    ext: .xls
+    id: "26"
+    file_hash: 52f98e1092bc4430b1a4219a41367758
+    height: 
+    user_id: 
+    comment: 
+    width: 
+    created_at: 2008-03-08 22:10:01
+    original_filename: CCAS_list_1700.xls
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: application/msword
+    name: ccas_application.doc
+    size: "475648"
+    updated_at: 2008-07-10 17:46:27
+    ext: .doc
+    id: "27"
+    file_hash: a81799e1031830b14204dfe6823fd09d
+    height: 
+    user_id: 
+    comment: 
+    width: 
+    created_at: 2008-03-20 11:01:01
+    original_filename: "\xD0\x90\xD0\xBD\xD0\xBA\xD0\xB5\xD1\x82\xD0\xB0_\xD0\xA6\xD0\x93\xD0\xA1\xD0\xA0_\xD0\xBC\xD0\xB0\xD1\x80\xD1\x822007.doc"
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: application/vnd.ms-excel
+    name: ccas_list_full.xls
+    size: "1079808"
+    updated_at: 2008-07-10 17:46:27
+    ext: .xls
+    id: "28"
+    file_hash: 111b4b41251e5c1b9195094d6407b450
+    height: 
+    user_id: 
+    comment: ""
+    width: 
+    created_at: 2008-03-31 15:38:44
+    original_filename: "\xD0\x98\xD1\x82\xD0\xBE\xD0\xB3\xD0\xBE\xD0\xB2\xD1\x8B\xD0\xB9 \xD1\x81\xD0\xBF\xD0\xB8\xD1\x81\xD0\xBE\xD0\xBA \xD0\xBF\xD1\x80\xD0\xBE\xD0\xBF\xD0\xB0\xD0\xB2\xD1\x88\xD0\xB8\xD1\x85_final_\xD0\xBA\xD1\x80\xD0\xB0\xD1\x82\xD0\xBA\xD0\xB8\xD0\xB9-\xD0\xB4\xD0\xBB\xD1\x8F \xD1\x81\xD0\xB0\xD0\xB9\xD1\x82\xD0\xB0.xls"
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: application/vnd.ms-excel
+    name: ccas_list.xls
+    size: "159232"
+    updated_at: 2008-07-10 17:46:27
+    ext: .xls
+    id: "29"
+    file_hash: eaf3ac93218a558b98ade0eb3a12f154
+    height: 
+    user_id: 
+    comment: 
+    width: 
+    created_at: 2008-04-04 11:06:59
+    original_filename: "\xD0\x98\xD1\x82\xD0\xBE\xD0\xB3\xD0\xBE\xD0\xB2\xD1\x8B\xD0\xB9 \xD1\x81\xD0\xBF\xD0\xB8\xD1\x81\xD0\xBE\xD0\xBA \xD0\xBF\xD1\x80\xD0\xBE\xD0\xBF\xD0\xB0\xD0\xB2\xD1\x88\xD0\xB8\xD1\x85_final_\xD0\xBA\xD1\x80\xD0\xB0\xD1\x82\xD0\xBA\xD0\xB8\xD0\xB9-\xD0\xB4\xD0\xBB\xD1\x8F \xD1\x81\xD0\xB0\xD0\xB9\xD1\x82\xD0\xB0_demo.xls"
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: lost_4.jpg
+    size: "412222"
+    updated_at: 2008-07-10 17:46:27
+    ext: .jpg
+    id: "31"
+    file_hash: 15f8dc1afb61c6cdf222462b8ddaa9ea
+    height: "768"
+    user_id: 
+    comment: 
+    width: "1024"
+    created_at: 2008-04-16 13:54:20
+    original_filename: DSC03689.JPG
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: lost_7.jpg
+    size: "89133"
+    updated_at: 2008-07-10 17:46:28
+    ext: .jpg
+    id: "33"
+    file_hash: 7074050e38a7b1632af44cee29a8a22e
+    height: "1444"
+    user_id: 
+    comment: 
+    width: "1020"
+    created_at: 2008-04-17 11:38:09
+    original_filename: "\xD0\x91\xD0\xBE\xD0\xB1\xD1\x8B\xD1\x88\xD0\xB5\xD0\xB2.jpg"
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/pjpeg
+    name: lost_16.jpg
+    size: "92026"
+    updated_at: 2008-07-10 17:46:28
+    ext: .jpg
+    id: "54"
+    file_hash: ccc15cc3e782864aa9a3a364280dd355
+    height: "1168"
+    user_id: 
+    comment: 
+    width: "873"
+    created_at: 2008-05-31 00:28:59
+    original_filename: 101.jpg
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/pjpeg
+    name: lost_17.jpg
+    size: "33153"
+    updated_at: 2008-07-10 17:46:28
+    ext: .jpg
+    id: "55"
+    file_hash: 5cb463038d3a1ae5b0d17bbfd03948c3
+    height: "526"
+    user_id: 
+    comment: 
+    width: "631"
+    created_at: 2008-06-03 06:39:46
+    original_filename: "\xD1\x81\xD0\xB5\xD1\x80\xD0\xB3\xD0\xB5\xD0\xB92.jpg"
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: lost_18.jpg
+    size: "33610"
+    updated_at: 2008-07-10 17:46:29
+    ext: .jpg
+    id: "56"
+    file_hash: c29833748c93743f07f1977a0f4cba24
+    height: "600"
+    user_id: 
+    comment: 
+    width: "800"
+    created_at: 2008-06-13 06:12:02
+    original_filename: "\xE2\x80\xA9.jpg"
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/pjpeg
+    name: lost_19.jpg
+    size: "18448"
+    updated_at: 2008-07-10 17:46:29
+    ext: .jpg
+    id: "57"
+    file_hash: 9386cf199090f0c0d78724c88d5edaf1
+    height: "480"
+    user_id: 
+    comment: 
+    width: "640"
+    created_at: 2008-07-04 10:47:28
+    original_filename: Photo-0003.jpg
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: application/msword
+    name: hello.doc
+    size: "20992"
+    updated_at: 2008-07-10 17:46:29
+    ext: .doc
+    id: "58"
+    file_hash: a041e29dc901c3abc4a20815b9b0dcbf
+    height: 
+    user_id: 
+    comment: 
+    width: 
+    created_at: 2008-07-04 13:10:33
+    original_filename: "\xD0\x97\xD0\xB0\xD0\xB4\xD0\xB0\xD1\x87\xD0\xB0 \xD0\x90.doc"
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: conf_chech_jun08_1.jpg
+    size: "87165"
+    updated_at: 2008-07-10 17:46:29
+    ext: .jpg
+    id: "60"
+    file_hash: c897efe307086728c41f9dd6ee86dfe1
+    height: "336"
+    user_id: 
+    comment: 
+    width: "448"
+    created_at: 2008-07-04 13:30:29
+    original_filename: conf_chech_jun08_1.jpg
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: rt_june08_1.jpg
+    size: "85985"
+    updated_at: 2008-07-10 17:46:29
+    ext: .jpg
+    id: "61"
+    file_hash: adb1f3218f7f6940630a481d805db567
+    height: "336"
+    user_id: 
+    comment: 
+    width: "448"
+    created_at: 2008-07-04 13:36:51
+    original_filename: RT_June08_1.jpg
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: vikup_oruzhiya_1.jpg
+    size: "112003"
+    updated_at: 2008-07-10 17:46:29
+    ext: .jpg
+    id: "62"
+    file_hash: e771895c86d48dd03d2e67033ddadfb9
+    height: "336"
+    user_id: 
+    comment: ""
+    width: "448"
+    created_at: 2008-07-07 11:57:25
+    original_filename: vikup_oruzhiya_1.jpg
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: vikup_oruzhiya_2.jpg
+    size: "107013"
+    updated_at: 2008-07-10 17:46:29
+    ext: .jpg
+    id: "63"
+    file_hash: 5e1176cc724183bb250a355f0c734aeb
+    height: "336"
+    user_id: 
+    comment: 
+    width: "448"
+    created_at: 2008-07-07 11:58:56
+    original_filename: vikup_oruzhiya_2.jpg
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: vikup_oruzhiya_3.jpg
+    size: "121842"
+    updated_at: 2008-07-10 17:46:29
+    ext: .jpg
+    id: "64"
+    file_hash: ff65593b23b556890870d0b2ff016a25
+    height: "336"
+    user_id: 
+    comment: 
+    width: "448"
+    created_at: 2008-07-07 11:59:25
+    original_filename: vikup_oruzhiya_3.jpg
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/jpeg
+    name: vikup_oruzhiya_4.jpg
+    size: "119120"
+    updated_at: 2008-07-10 17:46:29
+    ext: .jpg
+    id: "65"
+    file_hash: 76d3f807ea2e70811a9df112d2fceb6e
+    height: "336"
+    user_id: 
+    comment: 
+    width: "448"
+    created_at: 2008-07-07 12:00:01
+    original_filename: vikup_oruzhiya_4.jpg
+  attributes_cache: {}
+
+- !ruby/object:Fitem 
+  attributes: 
+    content_type: image/pjpeg
+    name: lost_22.jpg
+    size: "49056"
+    updated_at: 2008-07-13 22:30:42
+    ext: .jpg
+    id: "68"
+    file_hash: 10bbebcecfcecf50aebcf28c80b43230
+    height: "397"
+    user_id: 
+    comment: 
+    width: "317"
+    created_at: 2008-07-13 22:30:41
+    original_filename: 03-002.jpg
+  attributes_cache: {}
+

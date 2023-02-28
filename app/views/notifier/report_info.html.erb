@@ -1,0 +1,15 @@
+Information report
+
+Url       : <%= report_url(@report, :host => 'rozysk.org') %>  
+
+Email     : <%= @report.email %> 
+Name      : <%= @report.name  %> 
+User      : <%= @report.user.login if @report.user  %>
+Created at: <%= @report.created_at.to_s(:db) %>
+Subject   : <%= @report.subject %>
+
+Details: 
+<%= @report.details %>
+
+
+

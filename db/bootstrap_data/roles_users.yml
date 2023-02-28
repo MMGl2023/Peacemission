@@ -1,0 +1,22 @@
+--- 
+- !ruby/object:RolesUser 
+  attributes: 
+    role_id: "1"
+    id: "2"
+    user_id: "1"
+  attributes_cache: {}
+
+- !ruby/object:RolesUser 
+  attributes: 
+    role_id: "2"
+    id: "4"
+    user_id: "2"
+  attributes_cache: {}
+
+- !ruby/object:RolesUser 
+  attributes: 
+    role_id: "3"
+    id: "6"
+    user_id: "1"
+  attributes_cache: {}
+

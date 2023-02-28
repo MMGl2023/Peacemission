@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+  <title>Expert Site</title>
+  <%= stylesheet_link_tag "expert", :media => "all" %>
+  <%= javascript_include_tag "application", "prototype", "effects" %>
+  <%= javascript_include_tag :defaults %>
+  <%= active_scaffold_includes %>
+</head>
+<body id="store">
+  <div id="banner">
+    <%= @page_title || "Expert Site" %>
+  </div>
+  <div id="columns">
+    <div id="side">
+      <%= link_to "SITE", :controller=>'/home' %>
+      <hr>
+      <%= link_to "Люди", :controller=>'/as/person'   %><br />
+      <%= link_to "Анкеты", :controller=>'/as/anketa'   %><br />
+      <%= link_to "Запросы", :controller=>'/as/request'   %><br />
+      <hr>
+      <%= link_to "Страницы", :controller=>'/as/page'   %><br />
+      <%= link_to "Файлы", :controller=>'/as/file_item'   %><br />
+      <hr>
+      <%= link_to "Feedbacks", :controller=>'/as/report' %><br/>
+      <hr>
+      <% if has_permission?(:permissions) -%>
+        <%= link_to "Users", :controller=>'/as/user'%><br>
+        <%= link_to "Roles", :controller=>'/as/role'%><br>
+        <%= link_to "Permissions", :controller=>'/as/permission'%><br>
+      <% end -%>
+      </div>
+    <div id="main">
+      <%= yield :layout %>
+    </div>
+  </div>
+</body>
+</html>

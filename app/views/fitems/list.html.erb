@@ -1,0 +1,90 @@
+<div class="fitem_list">
+<h1>Файлы</h1>
+
+<table width="100%">
+  <tr>
+    <td class="fitem_search" valign="top">
+      <h2>Поиск:</h2>
+      <%- form_tag({},{:method=>'get'}) do -%>
+        <div class="hint">Укажите часть имени или имени исходного файла</div>
+        <input type="text" name="fitem_s" value="<%= params[:fitem_s] %>" id="_s" size="25" />
+        <%= image_submit_tag "icon-search.gif" %>
+      <%- end -%>
+    </td>
+    <td class="fitem_new" valign="top">
+      <h2>Создание:</h2> 
+      <%- form_tag({:action=>'create', :controller=>'fitems'}, {:multipart=>true, :method=>'post'}) do -%>
+        <div class="hint">
+        Укажите имя загружаемого файла. Оно должно состоять из маленьких
+        латинских букв, знаков подчеркивания и цифр. К имени автоматически добавиться
+        расширение, которое имеет исходный загружаемый файл.
+        </div>
+        <script language="javascript">
+          function setFitemName() {
+            var name = $('fitem_file').value;
+            if (name) {
+              $('fitem_name').value = name.replace(/.+[\/\\]/, '').replace(/[^\w\.]/, '')
+            }
+          }
+        </script>
+        <p><label>Имя:</label>&nbsp;<input id="fitem_name" type="text" name="fitem[name]" value="<%= params[:name] %>" size="29">
+        <p><label>Файл:</label>&nbsp;<input id="fitem_file" type="file" name="fitem[file]" size="16" onchange="setFitemName()">
+        <p><%= submit_tag "Загрузить", :class => "yes_btn" %>
+      <%- end -%>
+    </td>
+  </tr>
+</table>
+<%= flash_messages %>
+
+<%= will_paginate @fitems %>
+
+<table width="100%" class="list">
+	<tr>
+    <% p = params.dup %>
+    <th>&nbsp;</th>
+    <th>
+      <%= column_title('name', 'Имя', p) %>
+    </th>
+    <th>
+      <%= column_title('size', 'Размер', p) %>
+    </th>
+    <th>
+      <%= column_title('content_type', "Type", p) %>
+    </th>
+    <th>
+      <%= column_title('date', 'Дата', p) %>
+    </th>
+	</tr>
+	<% @fitems.each do |x| -%>
+	<tr class="<%= cycle "odd", "even" %>">
+	  <% p = params.dup %>
+    <td>
+      <%= link_to icon_edit, edit_fitem_path(x) %><br/>
+      <%= link_to icon_delete, fitem_path(x), 
+        :method=>'delete', 
+        :confirm=>"Вы действительно хотите удалить файл #{x.name}?"
+      %>
+    </td>
+    <td>
+      <%= link_to x.name, x.url %><br/>
+      <small><%= x.original_filename %></small><br/>
+      <%= x.comment %>
+    </td>
+    <td>
+      <%= x.ensure_size.to_human_size %>
+      <% if x.image? -%>
+        <%= "<span class=\"imgdims\"><br/>#{x.width}x#{x.height}</span>" %><br/>
+        <%= image_item x, :max_width=>60, :max_height=>80%>
+      <% end -%>
+    </td>
+    <td>
+      <small><%= x.content_type.gsub(/(application|image)\//, '') %></small>
+    </td>
+		<td>
+      <%= date_s(x.created_at) %>
+    </td>
+  </tr>
+	<% end -%>
+</table>
+<%= will_paginate @fitems %>
+</div>

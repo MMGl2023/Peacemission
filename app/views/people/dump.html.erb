@@ -1,0 +1,58 @@
+<div class="people_list">
+  <%= title "Список пропавших без вести на Северном Кавказе - #{date_s(Date.today)}" %>
+  <%= "Количество записей: #{@people.size}" %>
+  <table width="100%" class="list" cellspacing="0">
+    <tr>
+      <%= content_tag('th', '№') %>
+      <%= content_tag('th', "ФИО") %> 
+      <%= content_tag('th', "Дата рождения") %>
+      <%= content_tag('th', "Место жительства на момент исчезновения") %>
+      <%= content_tag('th', "Дата исчезновения") %> 
+      <%= content_tag('th', "Место исчезновения") %>
+      <%= content_tag('th', "Контакты родственников") %>
+      <%= content_tag('th', "Источник данных") %>
+      <%= content_tag('th', "Комментарии") %>
+      <%= content_tag('th', "Номер анкеты ЦГСР") %>
+      <%= content_tag('th', "Статус") %>
+    </tr>
+    <% @people.each do |x| -%>
+      <tr class="<%= cycle "odd", "even" %>">
+        <% p = params.dup %>
+        <td>
+          <%= x.id %>
+        </td>
+        <td>
+          <%= x.full_name  %>
+        </td>
+        <td>
+          <%= fuzzy_date_s x, :birth_date, :birth_year, :birth_month, :reverse => true %>
+        </td>
+        <td>
+          <%= x.last_address %> 
+        </td>
+        <td>
+          <%= fuzzy_date_s x, :lost_on, :lost_on_year, :lost_on_month, :reverse => true %>
+        </td>
+        <td>
+          <%= x.disappear_location %> 
+        </td>
+        <td>
+          <%= x.relatives_contacts %> 
+        </td>
+        <td>
+          <%= x.info_source %> 
+        </td>
+        <td>
+          <%= x.remark %> 
+        </td>
+        <td>
+          <%= x.anket_n %>
+        </td>
+        <td>
+          <%= people_statuses[x.status]  %> 
+        </td>
+      </tr>
+    <% end -%>
+  </table>
+</div>
+

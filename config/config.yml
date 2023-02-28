@@ -1,0 +1,57 @@
+#
+# Constants for MMGL application
+defaults:
+  #
+  # Users related configs
+  users:
+    invitation_needed: true
+  #
+  # Topics related_config
+  topics:
+    #
+    # Lock time of a topic when somebody starts editing it
+    # 1800 stands for 1800 seconds = 30 minutes
+    lock_seconds: 1800
+    #
+    # All sections
+    sections:
+      - news
+      - home
+      - ankets
+      - help
+    #
+    # Hash {section => required_user_role_to_view_and_edit_it }
+    authorized_sections:
+      help: _any # any authorized section 
+      admin: topic-admin  
+  #
+  # Requests related config
+  requests:
+    request_types:
+      1: Запрос на добавление пропавшего без вести в список
+      2: Запрос на внесение поправок/дополнений в данные списка
+      3: Сообщить об установлении судьбы пропавшего
+      4: Сообщить о своей заинтересованности в судьбе пропавшего
+    request_short_types:
+      1: добавить
+      2: поправки
+      3: судьба
+      4: связь
+    request_statuses:
+      1: подан
+      2: обрабатывается
+      3: выполнен
+      4: отменен
+  people:
+    statuses:
+      0: в розыске
+      1: судьба установлена
+  recent_people:
+    statuses:
+      0: в розыске
+      1: судьба установлена
+  #file_host: '/s/' # Url for FileItem's. Default is assets_host + '/s/'
+  emails:
+    from: "rozysk@inbox.ru"
+    to: ["rozysk@inbox.ru", "artem.voroztsov@gmail.com", "katia.tatarinova@gmail.com"]
+

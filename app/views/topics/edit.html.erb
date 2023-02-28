@@ -1,0 +1,133 @@
+<div class="padder topics_edit">
+<%= title('Редактирование cтраницы ' + @topic.name) %> 
+<%= flash_messages %>
+<%= error_messages_for :topic %>
+<br />
+<script language="javascript">
+  function fillTagsText() {
+    $('topic_tags_text').value = ($('tags_container').textContent || $('tags_container').innerText).strip();
+  }
+
+  function addTag(event, tag) {
+    if (event && (event == 1 || event.witch == 13 || event.keyCode == 13)) {
+      
+      if ( (tag && !tag.blank()) || !$('tag').value.blank() ) {
+        $('tags_container').innerHTML += 
+          '<div class="tag_marker">' 
+          + (tag || $('tag').value.strip()) 
+          + '<span class="remove_me" onclick="this.parentNode.remove()">;;</span>'
+          + '</div>';
+        $('tag').value = '';
+      }
+
+      if (event != 1) {
+        event.preventDefault();
+      }
+      return false;
+    } else {
+      return true;
+    }
+  }
+  function addCurrentTags() {
+    $('topic_tags_text').value.split(';;').map(function(el){return el.strip()}).uniq().each(function(el){ addTag(1, el)});
+  }
+  document.addEventListener("DOMContentLoaded", addCurrentTags, false);
+
+</script>
+<% form_for(@topic, :html => {:multipart => true, :onsubmit => "fillTagsText(); return true"}) do |f| -%>
+  <table width="100%" class="topic_attrs">
+    <tr>
+      <td width="56%">
+      <label for="topic_name"> Имя:</label><br />
+        <%= f.text_field :name, :size => 48 %>
+      </td>
+      <td width="44%">
+        <label for="topic_engine" id="for_topic_engine">Формат</label>:<br />
+        <%= f.select(:engine, 
+          ["HTML", "Plain", "Textile", "Markdown"].map{|b| [b,b]}, 
+          {:include_blank => true, :selected => (@topic.engine||'').camelize ||'HTML'}
+        ) 
+        %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="topic_title" id="for_topic_title">Заголовок</label>:<br />
+        <%= f.text_field :title, :size => 48 %>
+      </td>
+      <td valign="bottom">
+        <%= f.check_box :show_title  %>&nbsp;Показывать&nbsp;заголовок
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="topic_author" id="for_topic_author">Автор</label>:<br />
+        <%= f.text_field :author, :size => 48 %>
+      </td>
+      <td valign="bottom">
+        <%= f.check_box :show_author  %>&nbsp;Показывать&nbsp;автора
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="topic_published_at_string" id="for_topic_published_at_string">Дата новости</label>:<br />
+        <%= f.text_field :published_at_string, :size=>48 %>
+      </td>
+      <td valign="bottom">
+        <%= f.check_box :show_published_at %>&nbsp;Показывать&nbsp;дату
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <table width="100%">
+        <tr><td>
+          <%= f.check_box :justified %>&nbsp;Выровнять по ширине
+        </td></tr>
+        <tr><td>
+          <%= f.check_box :allow_comments %>&nbsp;Разрешить комментарии
+        </td></tr>
+        <tr><td>
+          <%= f.check_box :wide_style %>&nbsp;Показывать без правого меню
+        </td></tr>
+        </table>
+        <label for="topic_section" id="for_topic_section">Раздел:</label>
+        <%= f.select(:section, 
+          APP_CONFIG['topics']['sections'].map{|b| [b,b]}, 
+          {:include_blank => true, :selected => (@topic.section||'home') }
+        ) 
+        %>
+      </td>
+      <td align="left">
+        <%= submit_tag 'Сохранить', {:name => 'refresh', :class => "yes_btn"} %>
+        <%= submit_tag 'Отменить', {:name => 'cancel', :class => "no_btn"} %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <label for="topic_tags" id="for_topic_tags">Теги:</label><br />
+        <%= text_field_tag :tag, '',  :class => "tag", :id => "tag", :onkeypress => 'return addTag(event)'  %>
+        <button onclick="addTag(1); return false" id="add_tag_buttom">добавить тег к странице</button>
+        <%= f.hidden_field :tags_text  %>
+        <div id="tags_container">
+        </div>
+        <label for="topic_content" id="for_topic_content" style="display: none">Текст:</label><br />
+        <div class="help_link" style="position:relative; float: left; margin: -9px 5px 7px 0px"><%= link_to "помощь по синтаксису", "/i_auth/macros", :target => "_new" %></div>
+        <%= f.text_area :content, :rows => 30, :cols => 69 %>    
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <label for="topic_summary" id="for_topic_summary">Аннотация</label>:<br />
+        <%= f.text_area :summary, :rows => 8, :cols => 69 %>    
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <%= submit_tag 'Сохранить', {:name => 'refresh', :class => "yes_btn"} %>
+        <%= submit_tag 'Отменить',  {:name => 'cancel', :class => "no_btn"} %>
+        <%= link_to icon_delete + "&nbsp;Удалить&nbsp;страницу", topic_path(@topic), :method => :delete, :confirm => "Вы действительно хотите удалить страницу #{@topic.name}", :class => 'button_delete' %>
+      </td>
+    </tr>
+  </table>
+<% end -%>
+</div>

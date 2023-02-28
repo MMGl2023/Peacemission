@@ -1,0 +1,64 @@
+--- 
+- !ruby/object:RolesPermission 
+  attributes: 
+    permission_id: "1"
+    role_id: "1"
+    id: "1"
+  attributes_cache: {}
+
+- !ruby/object:RolesPermission 
+  attributes: 
+    permission_id: "2"
+    role_id: "1"
+    id: "2"
+  attributes_cache: {}
+
+- !ruby/object:RolesPermission 
+  attributes: 
+    permission_id: "2"
+    role_id: "2"
+    id: "3"
+  attributes_cache: {}
+
+- !ruby/object:RolesPermission 
+  attributes: 
+    permission_id: "3"
+    role_id: "1"
+    id: "4"
+  attributes_cache: {}
+
+- !ruby/object:RolesPermission 
+  attributes: 
+    permission_id: "4"
+    role_id: "3"
+    id: "5"
+  attributes_cache: {}
+
+- !ruby/object:RolesPermission 
+  attributes: 
+    permission_id: "4"
+    role_id: "1"
+    id: "6"
+  attributes_cache: {}
+
+- !ruby/object:RolesPermission 
+  attributes: 
+    permission_id: "5"
+    role_id: "2"
+    id: "7"
+  attributes_cache: {}
+
+- !ruby/object:RolesPermission 
+  attributes: 
+    permission_id: "6"
+    role_id: "2"
+    id: "8"
+  attributes_cache: {}
+
+- !ruby/object:RolesPermission 
+  attributes: 
+    permission_id: "7"
+    role_id: "4"
+    id: "9"
+  attributes_cache: {}
+

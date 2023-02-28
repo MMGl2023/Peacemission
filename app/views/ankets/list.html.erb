@@ -1,0 +1,31 @@
+<h1>Список анкет</h1>
+
+<table>
+  <tr>
+    <th>Имя</th>
+    <th>Отчество</th>
+    <th>Фамилия</th>
+    <th>Дата рождения</th>
+    <th>Гражданство</th>
+  </tr>
+
+<% for anket in @ankets %>
+  <tr>
+    <td><%=h anket.first_name %></td>
+    <td><%=h anket.second_name %></td>
+    <td><%=h anket.last_name %></td>
+    <td><%=h anket.birth_date %></td>
+    <td><%=h anket.sitizenship %></td>
+    <td><%= link_to 'Показать', anket %><br/>
+        <%= link_to 'Редактировать', edit_anket_path(anket) %><br/>
+        <%= link_to 'Удалить', anket, :confirm => 'Are you sure?', :method => :delete %>
+  </td>
+  </tr>
+<% end %>
+</table>
+
+<%= will_paginate @ankets %>
+
+<br />
+
+<%= link_to 'Добавить новую анкету', new_anket_path, {:class=>'button'} %>

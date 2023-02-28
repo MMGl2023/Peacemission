@@ -1,0 +1,52 @@
+<%
+  @redirect_to ||= request.env['REQUEST_PATH']
+%>
+
+<div id="userpicture_form">
+  <% unless @nopicture -%>
+    <div class="left"><%= framed_userpicture(@user) %></div>
+    <br clear="both"/>
+  <% end -%>
+  <% if current_user && (current_user == @user || current_user.id == @user.master_id || @user.has_permission[:change_userpictures]) -%>
+  <div id="show_userpicture">
+    <%= link_to_function( _('change_userpicture'), "$('change_userpicture').show();$('show_userpicture').hide()") %>
+  </div>
+  <div id="change_userpicture">
+    <div align="right">
+      <%= link_to_function( '[x]', "$('change_userpicture').hide();$('show_userpicture').show()") %>
+    </div><br />
+      <% form_tag({:controller=>'user', :action=>'userpicture', :id=>@user.id, :redirect_to=>@redirect_to}, :multipart=>true) do -%>
+        <table>
+          <tr>
+            <td class="radio_input">
+              <input type="radio" name="user[picture]" value="dont_touch" id="user_picture_touch" checked />
+            </td>
+            <td>
+              <label for="user_picture_touch"><%= _('do_not_change_userpicture') %></label>
+            </td>
+          </tr>
+          <tr>
+            <td class="radio_input">
+              <input type="radio" name="user[picture]" value="upload" id="user_picture_upload" />
+            </td>
+            <td>
+              <label for="user_picture_upload"> <%= _('set_new_userpicture') %><br />
+                <input type="file" name="user[picture_file]" value="" id="user_picture_file" />
+                <div class="help">(<%=_('big_userpicture_will_be_downsized')%>)</div>
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td class="radio_input">
+              <input type="radio" name="user[picture]" value="reset" id="user_picture_reset" />
+            </td>
+            <td>
+              <label for="user_picture_reset"> <%= _('set_default_userpicture') %></label>
+            </td>
+          </tr>
+        </table>
+        <%= submit_tag( _('change'), :class=>'greenbtn', :name=>'change' )%>
+    <% end -%>
+  </div><script>$('change_userpicture').hide();</script>
+  <% end -%>
+</div>

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+DIR=$( cd "$( dirname "$0" )" && pwd )
+
+cd  $DIR/..
+
+
+(
+  flock -x -w 100 201 && (
+    echo "delete from sessions where updated_at < now() - interval 2 day" | RAILS_ENV=production ./script/dbconsole -p
+  )
+) 201>tmp/restart_if_off.lock

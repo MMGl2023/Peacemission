@@ -1,0 +1,36 @@
+<h1>Listing invitations</h1>
+
+<table>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Subject</th>
+    <th>Body</th>
+    <th>Used by</th>
+    <th>Used at</th>
+    <th>Created by</th>
+    <th>Code</th>
+    <th>Expired at</th>
+  </tr>
+
+<% for invitation in @invitations %>
+  <tr>
+    <td><%=h invitation.name %></td>
+    <td><%=h invitation.email %></td>
+    <td><%=h invitation.subject %></td>
+    <td><%=h invitation.body %></td>
+    <td><%=h invitation.used_by_id %></td>
+    <td><%=h invitation.used_at %></td>
+    <td><%=h invitation.created_by_id %></td>
+    <td><%=h invitation.code %></td>
+    <td><%=h invitation.expired_at %></td>
+    <td><%= link_to 'Show', invitation %></td>
+    <td><%= link_to 'Edit', edit_invitation_path(invitation) %></td>
+    <td><%= link_to 'Destroy', invitation, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New invitation', new_invitation_path %>

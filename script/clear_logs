@@ -1,0 +1,7 @@
+rm -rf ./tmp/cache
+rm -f ./logs/*.gz
+rm -f ./public/i/*.html
+
+sudo rm -f /var/log/httpd/*.gz
+sudo rm -f /var/log/secure*.gz
+

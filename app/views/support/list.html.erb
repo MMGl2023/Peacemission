@@ -1,0 +1,68 @@
+<div class="reports_list">
+<%= link_to  "&lt;&lt; На главную страницу", "/" %>
+<table width="100%">
+  <tr>
+    <td>
+    <%- form_tag({}, {:method => 'get'}) do -%>
+     Поиск по отзывам: <input type="search" name="report_s" value="<%= params[:report_s] %>" id="_s" size="25" />
+      <%= image_submit_tag "icon-search.gif" %>
+    <%- end -%>
+    </td>
+    <td style="padding-left:30px;" align="right">
+      <% if current_user -%>
+        <%= link_to "Создать новый отзыв", new_report_path, :class => "new_record" %> 
+      <% end -%>
+    </td>
+  </tr>
+</table>
+
+<%= flash_messages %>
+
+<%= will_paginate @reports %> (найдено <%= rus_plural @reports.total_entries, 'отзыв', 'отзыва', 'отзывов' %>)
+
+<table width="100%" class="list" cellspacing="0">
+	<tr>
+    <% p = params.dup %>
+    <% if current_user %>
+      <th>&nbsp;</th>
+    <% end -%>
+    <%= column_title_tag('th', 'id', '№', p) %>
+    <%= column_title_tag('th', 'subject', "Тема", p, :width => 125) %> 
+    <%= column_title_tag('th', 'report_type', "Тип", p) %>
+    <%= column_title_tag('th', 'name', "Имя автора", p, :width => 90) %>
+    <%= column_title_tag('th', 'details', "Сообщение", p, :width => 130) %> 
+    <%= column_title_tag('th', 'created_at', "Дата создания", p) %>
+	</tr>
+	<% @reports.each do |x| -%>
+	<tr class="<%= cycle "odd", "even" %>">
+	  <% p = params.dup %>
+    <% if current_user -%>
+      <td>
+        <%= link_to icon_edit, edit_report_path(x), :title => 'Редактировать' %><br/>
+        <%= link_to icon_delete, report_path(x), :method => :delete, :confirm => "Вы действительно хотите удалить отзыв  #{x.id}", :title => 'Удалить' %>
+      </td>
+    <% end -%>
+    <td>
+      <%= x.id %>
+    </td>
+    <td>
+      <%= link_to x.subject, person_path(x) %>
+    </td>
+		<td>
+      <%= link_to x.report_type, p.flip{:report_type => x.report_type} %>
+    </td>
+		<td>
+      <%= link_to x.name, p.flip(:name => x.name) %> 
+    </td>
+ 		<td>
+      <%= x.details[1..300] %>
+    </td>
+ 		<td>
+      <%= date_s(x.created_at) %> 
+    </td>
+  </tr>
+	<% end -%>
+</table>
+<%= will_paginate @reports %>
+</div>
+

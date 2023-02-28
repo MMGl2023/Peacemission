@@ -1,0 +1,29 @@
+--- 
+- !ruby/object:Role 
+  attributes: 
+    role: admin
+    id: "1"
+    description: Site administrator
+  attributes_cache: {}
+
+- !ruby/object:Role 
+  attributes: 
+    role: editor
+    id: "2"
+    description: Manages site contents
+  attributes_cache: {}
+
+- !ruby/object:Role 
+  attributes: 
+    role: requests
+    id: "3"
+    description: Manage requests
+  attributes_cache: {}
+
+- !ruby/object:Role 
+  attributes: 
+    role: viewer
+    id: "4"
+    description: Special role with anti-permisson
+  attributes_cache: {}
+

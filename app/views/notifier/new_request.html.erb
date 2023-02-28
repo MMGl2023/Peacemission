@@ -1,0 +1,13 @@
+Создан новый запрос №<%= @req.id %>
+
+От    : <%= @req.email %> 
+Тип   : <%= APP_CONFIG['requests']['request_types'][@req.request_type]   %>
+
+Описание: 
+<%= @req.details %>
+
+------
+Запись:
+<%= @req.attributes.to_yaml.hex_decode %>
+
+

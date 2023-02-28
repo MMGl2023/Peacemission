@@ -1,0 +1,29 @@
+--- 
+- !ruby/object:User 
+  attributes: 
+    full_name: Master
+    updated_at: 2008-01-30 14:18:22
+    activated_at: 2008-01-30 14:18:22
+    password: qaz1qaz
+    state: "active"
+    id: "1"
+    info: 
+    login: master
+    created_at: 2008-01-24 17:49:39
+    hidden: "0"
+    email: artema@dgap.mipt.ru
+
+- !ruby/object:User 
+  attributes: 
+    full_name: "\xD0\x9A\xD0\xB0\xD1\x82\xD1\x8F \xD0\xA2\xD0\xB0\xD1\x82\xD0\xB0\xD1\x80\xD0\xB8\xD0\xBD\xD0\xBE\xD0\xB2\xD0\xB0"
+    updated_at: 2008-05-30 14:29:58
+    activated_at: 2008-05-30 14:29:58
+    password: 'torqwepa'
+    state: "active"
+    id: "2"
+    info: 
+    login: katia
+    created_at: 2008-01-30 13:55:28
+    hidden: "0"
+    email: katia@fewer-eurasia.ru
+

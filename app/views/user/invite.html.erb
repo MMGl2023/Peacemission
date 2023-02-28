@@ -1,0 +1,61 @@
+<div class="users_invite">
+  <%= flash_messages %>
+  <h1> Приглашение нового пользователя </h1>
+  <%= error_messages_for :invitation -%>
+  <% form_for :invitation do |f| -%>  
+  <table width="400">
+  <tr>
+    <td width="200">
+      <label for="name">Имя приглашаемого:</label>
+    </td>
+    <td>
+      <%= f.text_field :name, :class=>"allwidth" %>
+    </td>
+  </tr>  
+  <tr>
+    <td>
+      <label for="email">Email:</label>
+    </td>
+    <td>
+      <%= f.text_field :email, :class=>"allwidth" %>
+    </td>
+  </tr>  
+  <tr>
+    <td>
+      <label>Тема письма: </label>
+    </td>
+    <td>
+      <%= f.text_field :subject, :class=>"allwidth" %>
+      <div clas="help">
+        Тема письмо по умолчанию:<br/>
+          &nbsp;&nbsp;<i><%= @default_subject %></i><br/>
+        (оставьте поле пустым, если хотите оставить тему по умолчанию)
+      </div>
+    </td>
+  </tr>
+   <tr>
+    <td>
+     <label>Дополнительный текст письма:</label>
+    </td>
+    <td>
+      <%= f.text_area :text, {:rows => 10,:cols => 50} %>
+    </td>
+  </tr> 
+ <tr>
+    <td colspan="2">
+      Основной текст письма:<br />
+      <pre>
+      <%= @letter || '' %>
+      </pre>
+    <td>
+  <td>
+  <tr>
+    <td>
+    </td>
+    <td align="right">
+      <%= submit_tag "Пригласить" %>
+    </td>
+  </tr>  
+  </table>
+<% end -%>
+</div>

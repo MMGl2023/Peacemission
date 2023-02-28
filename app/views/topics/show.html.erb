@@ -1,0 +1,56 @@
+<div class="topics_show">
+  <%= flash_messages %>
+  <% if @topic -%>
+    <% if has_permission?(:topics)  -%>
+      <div class="topic_versions_info">
+      <% expandable_block 'Версии этой страницы &Gt;', :expanded => params[:rev], :icon_close => '&Lt;' do %>
+        Версии этой страницы: 
+        <%  start_rev = [@topic.rev.to_i - 10, 1].max %>
+        <%  end_rev =  [@topic.rev.to_i, 1].max %>
+        <%=
+          cur_r = params[:rev].to_i
+          (start_rev...end_rev).map {|r|
+            if r == cur_r
+              "<strong>[#{r}]</strong>"
+            else
+              link_to "[#{r}]", i_topic_path(@topic, :rev => r)
+            end
+          }.join("\n")
+        %>
+        <% if params[:rev] -%>
+          <%= link_to "[#{@topic.rev} (последняя версия)]", i_topic_path(@topic) %>
+        <% end -%>
+      <% end -%>
+      <% if params[:rev] && params[:rev].to_i != @topic.rev %>
+        <div class="roll_back">
+          <% form_tag rollback_topic_path(@topic, :rev => params[:rev]) do %>
+            <%= submit_tag "Вернуться к этой версии", :confirm => "Вы уверены, что хотите вернуться к версии #{params[:rev]}?", :class => "no_btn" %>
+            Версия №<%= params[:rev] %> от <%= datetime_s(@topic.updated_at) %>.
+          <% end %>
+        </div>
+      <% end %>
+      </div>
+      <div class="edit_link">
+        <%= link_to '[редактировать]', edit_topic_path(@topic) %>
+      </div>
+    <% end -%>
+    <% if !@topic.title.blank? && !params[:skip_title] && @topic.show_title? %>
+      <h1><%= @topic.title %></h1>
+    <% end -%>
+    <div class="text">
+      <%= @topic.formatted_content(self) %>
+    </div>
+    <% if !@topic.author.blank? && @topic.show_author? %> 
+      <div class="author"><b>Автор:</b> <%= @topic.author %></div>
+    <% end -%>
+    <% if !@topic.published_at.blank? && !params[:skip_published_at] && @topic.show_published_at? -%>
+      <div class="date"><b>Опубликовано:</b> <%= date_s(@topic.published_at) %></div>
+    <% end -%>
+    <% if @topic.allow_comments %>
+      <% @obj = @topic %>
+      <%= render :partial => 'comments/obj_comments', :object => @topic %>
+    <% end -%>
+  <% else -%>
+    <%= no_topic(params[:name] || @name || 'noname') %>
+  <% end -%>
+</div>

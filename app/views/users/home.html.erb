@@ -1,0 +1,20 @@
+<div class="users_show">
+  <%= flash_messages %>
+  <%= title "Пользователь #{@user.login||''}" %>
+  <table width="100%">
+    <tr>
+      <td align="center" style="align:center" valign="top">
+        <%= render :partial => 'users/image_form' %>
+      </td>
+      <td valign="top">
+        <%= render :partial => 'users/summary' %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <%= render :partial => 'users/actions_list' %>
+      </td>
+    </tr>
+  </table>
+</div>
+

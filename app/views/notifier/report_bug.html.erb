@@ -1,0 +1,18 @@
+Bug report #<%= @report.id %>
+
+Url     : <%= report_url(@report, :host => 'rozysk.org') %> 
+
+From    : <%= @report.email %> 
+User    : <%= @report.user.login if @report.user  %>
+
+Subject : <%= @report.subject %>
+
+OS      : <%= @report.os %>
+Browser : <%= @report.browser %>
+
+Details: 
+<%= @report.details %>
+
+
+
+

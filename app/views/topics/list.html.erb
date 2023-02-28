@@ -1,0 +1,65 @@
+<div class="topics_list">
+  <%= title('Страницы сайта') %>
+  <table width="100%" id="topics_form">
+    <tr>
+      <td class="topics_search_form">
+      <%- form_tag({}, {:method => 'get'}) do -%>
+        <label for="topic_s">Поиск:</label><input type="search" name="topic_s" value="<%= params[:topic_s] %>" id="_topic_s" size="22" />
+        <%= image_submit_tag "icon-search.gif" %>
+      <%- end -%>
+      </td>
+      <td class="topics_birth_form">
+        <%= render :file => 'topics/birth' %>
+      </td>
+    </tr>
+  </td>
+
+  <%= flash_messages %>
+  <%= will_paginate @topics, :inner_window => 3 %>
+
+  <table width="100%" class="list">
+    <tr>
+      <% p = params.dup %>
+      <th>&nbsp;</th>
+      <th>
+        <%= column_title 'name', 'Имя', p %>
+      </th>
+      <th>
+        <%= column_title 'title', 'Заголовок', p %>
+      </th>
+      <th>
+        <%= column_title 'author', 'Автор', p %> 
+      </th>
+      <th>
+        <%= column_title 'published_at', 'Дата публикации', p %>
+      </th>
+    </tr>
+    <% @topics.each do |topic| -%>
+      <tr class="<%= cycle "odd", "even" %>">
+        <% p = params.dup %>
+        <td>
+          <%= link_to icon_edit, edit_topic_path(topic) %><%= link_to icon_delete, topic_path(topic), :method => :delete, :confirm => "Вы действительно хотите удалить страницу #{topic.name}" %>
+        </td>
+        <td>
+          <%= link_to topic.name, edit_topic_path(topic) %>
+        </td>
+        <td>
+          <%= link_to h(topic.title), i_topic_path(topic) %>
+        </td>
+        <td>
+          <%= 
+            unless topic.author.blank?
+              topic.author.split(/,\s+/).map{|a|
+                link_to h(a), p.flip({:author => a}.except(:page))  
+              }.join(', ')
+            end 
+          %>
+        </td>
+        <td>
+          <%= date_s(topic.published_at) %>
+        </td>
+      </tr>
+    <% end -%>
+  </table>
+  <%= will_paginate @topics, :inner_window => 3 %>
+</div>

@@ -1,0 +1,22 @@
+<% if authenticated? -%>
+  <ul>
+    <% if has_permission?(:users) -%>
+      <li><%= link_to 'Управление пользователями', users_path %></li>
+    <% end -%>
+    <% if has_permission?(:invitations) -%>
+      <li><%= link_to 'Управление приглашениями', invitations_path %></li>
+    <% end -%>
+    <% if has_permission?(:requests) -%>
+      <li><%= link_to 'Управление запросами', requests_path %></li>
+    <% end -%>
+    <% if has_permission?(:reports) -%>
+      <li><%= link_to 'Управление отзывами', list_reports_path %></li>
+    <% end -%>
+    <% if has_permission?(:topics) -%>
+      <li><%= link_to 'Управление страницами', list_topics_path %></li>
+    <% end -%>
+    <% if has_permission?(:losts) -%>
+      <li><%= link_to 'Управление объявлениями', list_losts_path %></li>
+    <% end -%>
+  </ul>
+<% end -%>

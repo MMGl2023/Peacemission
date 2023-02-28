@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd ~/mmgl/branches/
+
+tar -c --exclude-from=.tarignore  -zvf ~/db_backups/rozysk-`date +%Y-%m-%d`.tar.gz  v2.0
+

@@ -1,0 +1,141 @@
+<div class="people_list">
+  <%= topic_content('recent_list', :include_title => true) %>
+  <%
+    @region = params[:disappear_region]
+    @full_region = regions_cfg[@region]
+  %>
+  <h2 style="text-align: center"><%= 
+      if !@region.blank?
+        (
+          if !@full_region.blank?
+            h("Регион: #{@full_region} (#{@region})")
+          else
+            h("Регион: #{@region}")
+          end
+        ) + " (" + link_to("список по всем регионам", recent_list_people_path) + ")"
+      else
+        "Все регионы: " +  regions_cfg.map{|r, rf| link_to(r, {:disappear_region => r}, :title => rf )}.join(", ")
+      end
+   %></h2>
+ <table width="100%">
+    <tr>
+      <td>
+      <%- form_tag({}, {:method => 'get'}) do -%>
+        Поиск по списку: <input type="search" name="person_s" value="<%= params[:person_s] %>" id="_s" size="25" />
+        <%= image_submit_tag "icon-search.gif", :style => 'vertical-align: middle' %>
+        <%= hidden_field 'disappear_region', params[:disappear_region] %>
+      <%- end -%>
+      </td>
+      <td style="padding-left:30px;" align="right">
+        <% if current_user -%>
+          <%= link_to(
+              "Создать новую запись по горячим следам" + (params[:disappear_region].blank? ? "" : " в " + params[:disappear_region]),
+              new_person_path('person[recent]' => 1, 'person[main]' => 0, 'person[disappear_region]' => params[:disappear_region]),
+              :class => "button"
+            )
+          %>
+        <% end -%>
+      </td>
+    </tr>
+  </table>
+
+  <%= flash_messages %>
+  <%= will_paginate @people %>
+  (найдено <%= rus_plural @people.total_entries, 'запись', 'записи', 'записей' %>)
+
+  <% if !params[:person_s].blank? %>
+    <script lang="text/javscript" defer="defer">
+      document.addEventListener("DOMContentLoaded", hilite, false);
+      setInterval(hilite, 2000);
+    </script>
+  <% end %>
+
+  <% if current_user -%>
+    <p style="position: relative; float: right;  font-size: 10px; margin-right: 10px; margin-top: 5px; margin-bottom: -5px;"><%= link_to 'ВЕСЬ СПИСОК НА ОДНОЙ СТРАНИЦЕ', dump_people_path(:recent => 1) %></p>
+  <% end -%>
+  <table id="search_result" width="100%" class="list" cellspacing="0">
+    <tr>
+      <% p = params.dup %>
+      <% if current_user %>
+        <th>&nbsp;</th>
+      <% end -%>
+      <%= column_title_tag('th', 'id', '№', p) %>
+      <%= column_title_tag('th', 'full_name', "ФИО", p, :width => 125) %>
+      <%= column_title_tag('th', 'birth_year', "Дата<br/>рождения", p) %>
+      <%= column_title_tag('th', 'last_address', "Место жительства<br/>на момент<br/>исчезновения", p, :width => 120) %>
+      <%= column_title_tag('th', 'lost_on_year', "Дата<br/>исчезновения или<br/>дата объявления в розыск", p) %>
+      <%=
+        column_title_tag(
+          'th',
+          'disappear_location',
+          "Место<br>исчезновения" + (!p[:disappear_region].blank? ?
+            '<br />' + link_to(
+              p[:disappear_region] + '&nbsp;' + icon_close,
+              p.except(:disappear_region, :page), :class => 'stop_filtering', :title => 'Отключить фильтрацию по значению'
+            ) :
+            ""
+          ),
+          p,
+          :width => 120,
+          :class => (!p[:disappear_region].blank? ? 'filtered_column' : '')
+        )
+      %>
+      <!--
+        <%= column_title_tag('th', 'anket_n', "Номер<br/>анкеты<br/>ЦГСР", p) %>
+      -->
+      <%= column_title_tag('th', 'status', "Статус", p) %>
+    </tr>
+    <% @people.each do |x| -%>
+    <tr class="<%= cycle "odd", "even" %>">
+      <% p = params.dup %>
+      <% if current_user -%>
+        <td>
+          <%= link_to icon_edit, edit_person_path(x), :title => 'Редактировать' %><br/>
+          <%= link_to icon_delete, props_person_path(x, :recent => 0), :method => :post, :confirm => "Вы действительно хотите удалить запись на человека #{x.full_name} из Списка «Поиск по горячим следам»?", :title => 'Удалить' %>
+        </td>
+      <% end -%>
+      <td>
+        <%= x.id %>
+      </td>
+      <td>
+        <%= link_to x.full_name, person_path(x) %>
+        <%= ('<br/>' + multiple_link_to([icon_info, h('объявление>>')], '&nbsp;', lost_path(x.lost))) if x.lost  -%>
+      </td>
+      <td>
+        <%=
+          fuzzy_date_s(
+            x,
+            :birth_date, :birth_year, :birth_month,
+            :link_year => [p.flip(:birth_year => x.birth_year.to_s).except(:page)]
+          )
+        %>
+      </td>
+      <td>
+        <%= x.last_address %>
+      </td>
+      <td>
+        <%=
+          fuzzy_date_s(
+            x,
+            :lost_on, :lost_on_year, :lost_on_month,
+            :link_year => [p.flip(:lost_on_year => x.lost_on_year.to_s).except(:page)]
+          )
+        %>
+      </td>
+      <td>
+        <%= x.disappear_address.gsub(x.disappear_region || 'NOTHING', link_to(x.disappear_region, p.flip(:disappear_region => x.disappear_region).except(:page))) %> 
+      </td>
+      <!--
+      <td>
+        <%= x.anket_n %>
+      </td>
+      -->
+      <td>
+        <%= link_to people_statuses[x.status], p.flip(:status => x.status).except(:page)  %>
+      </td>
+    </tr>
+    <% end -%>
+  </table>
+  <%= will_paginate @people %>
+</div>
+

@@ -1,0 +1,7 @@
+<%= topic_content 'create_request', :include_title=>true %>
+
+<% if has_permission?(:requests) -%>
+  <hr>
+  <%= render :file=>'requests/list' %>
+<% end -%>
+

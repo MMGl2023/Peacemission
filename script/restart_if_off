@@ -1,0 +1,26 @@
+#!/bin/bash
+
+DIR=$( cd "$( dirname "$0" )" && pwd )
+
+cd  $DIR/..
+
+
+test -e  /var/lib/mysql/mysql.sock || sudo /etc/init.d/mysql start
+
+
+(
+  flock -x -w 100 200 && (
+    mongrels=`mongrel_rails cluster::status 2>&1 | grep 'found mongrel_rails' | wc -l`
+
+    d=`date +"%Y-%m-%d %H:%M:%S" | perl -pe 's/\n//'`
+
+    echo -n "$d "
+
+    if [ $mongrels == 5 ]; then
+      echo "Ok"
+    else
+      echo "restarting"
+      . script/restart
+    fi
+  )
+) 200>tmp/restart_if_off.lock

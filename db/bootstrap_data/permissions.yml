@@ -1,0 +1,50 @@
+--- 
+- !ruby/object:Permission 
+  attributes: 
+    permission: access
+    id: "1"
+    description: Manages user roles and permissions
+  attributes_cache: {}
+
+- !ruby/object:Permission 
+  attributes: 
+    permission: topics
+    id: "2"
+    description: Manages topics
+  attributes_cache: {}
+
+- !ruby/object:Permission 
+  attributes: 
+    permission: invitations
+    id: "3"
+    description: Manages invitations
+  attributes_cache: {}
+
+- !ruby/object:Permission 
+  attributes: 
+    permission: requests
+    id: "4"
+    description: Manage requests
+  attributes_cache: {}
+
+- !ruby/object:Permission 
+  attributes: 
+    permission: losts
+    id: "5"
+    description: 
+  attributes_cache: {}
+
+- !ruby/object:Permission 
+  attributes: 
+    permission: people
+    id: "6"
+    description: 
+  attributes_cache: {}
+
+- !ruby/object:Permission 
+  attributes: 
+    permission: viewer
+    id: "7"
+    description: Special anti-permission that does not allow to change anything in DB
+  attributes_cache: {}
+

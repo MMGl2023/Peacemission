@@ -1,0 +1,215 @@
+<div class="requests_edit">
+<%= title(@title || 'Новый запрос в ЦГСР') %>
+
+<%= error_messages_for :req %>
+<% 
+  @req.status ||= 1
+%>
+<% form_for(@req) do |f| %>
+  <table class="request">
+    <% if has_permission?(:requests) -%>
+    <tr>
+      <th id="for_request_status">
+        Статус запроса
+      </th>
+    <tr>
+      <td>
+        <%= f.select :status, request_statuses.invert.to_a.sort_by{|a| a.last}  %>
+      </td>
+    </tr>
+    <% end -%>
+    <tr>
+      <th id="for_request_request_type">
+        Тип запроса
+      </th>
+    <tr>
+      <td>
+        <%= f.select :request_type, request_types.invert.to_a.sort_by{|a| a.last}  %>
+      </td>
+    </tr>
+    <tr>
+      <th>
+        <h2>Данные о пропавшем</h2>
+      </th>
+    </tr>
+    <tr>
+      <td>
+      <table class="subform request">
+        <!-- <thead><h3>Данные о пропавшем</h3></thead> -->
+        <tr>
+          <th id="for_request_lost_full_name">
+            ФИО полностью
+          </th>
+        </tr>
+        <tr>
+           <td>
+            <%= f.text_field :lost_full_name, :size=>80 %>
+          </td>
+        </tr>
+        <tr>
+          <th id="for_request_lost_birth_year">
+            Год рождения пропавшего
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <% y = Date.today.year -%>
+            <%= select_fuzzy_date @req, :lost_birth_date,
+              :default_year => y-25,
+              :prefix => 'request',
+              :start_year => 1900, 
+              :end_year => y 
+            %>
+          </td>
+        </tr>
+        <tr>
+          <th id="for_request_lost_on">
+            Дата исчезновения
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <%= select_fuzzy_date @req, :lost_on,
+              :default_year => y,
+              :use_month_numbers => true, 
+              :start_year => 1970,
+              :end_year => y
+            %>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <span id="for_request_lost_address">Место жительства на момент исчезновения</span>.
+            <div class="hint">
+              Указывается фактическое место жительства человека на момент исчезновения, 
+              а также место прописки, если оно не совпадает с фактическим местом жительства
+            </div>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <%= f.text_area :lost_address, :cols => 60, :rows => 3 %>
+          </td>
+        </tr>
+        <tr>
+          <th>
+            <span id="for_request_lost_last_location">Место исчезновения</span>.
+            <div class="hint">
+              Например, <tt>Чеченская Республика, п. Ханкала</tt>
+            </div>
+          </th>
+        </tr>
+        <tr>
+          <td>
+            <%= f.text_field :lost_last_location, :size => 80 %>
+          </td>
+        </tr>
+      </table>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <label for="person_requests">Записи из списка пропавших, связанные с записью</label>
+        <div class="hint">
+          Введите номер записи, или начните ввод с фамилии
+          и ждите подсказки. Например: "123", "№234", "№400 - Иванов Иван Иванович", "Петров Иван".
+          Появившаяся подсказка гарантирует, что запись будет найдена.
+        </div>
+        <%= auto_complete_fields_for_many @req, :people, 
+            :attribute=>:signature, 
+            :html=>{:size=>53} 
+        %>
+      </td>
+    </tr>
+    <tr>
+      <th id="for_request_details">
+        Текст запроса
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <%= f.text_area :details, :cols=>60, :rows=>20 %>
+      </td>
+    </tr>
+ 
+    <tr>
+      <th>
+        <h2>Ваши данные</h2>
+      </th>
+    </tr>
+    <tr>
+      <td>
+        <table class="subform request">
+          <tr>
+            <th>
+              <span id="for_request_full_name">ФИО полностью</span>.
+              <div class="hint">
+                Например: <tt>Сергеев Иван Васильевич</tt>
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <%= f.text_field :full_name, :size=>80 %>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <span id="for_request_address">Ваш адрес</span>. 
+              <div class="hint">
+                Например: <tt>г. Нальчик, ул. Академическая, д. 8, кв. 12.</tt>
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <%= f.text_area :address, :cols=>60, :rows=>3 %>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              <span id="for_request_phone_number">Ваш телефон с кодом города</span>.
+              <div class="hint">
+                Например: <tt>+7 (485) 132 13 13.</tt>
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <%= f.text_field :phone_number, :size=>80 %>
+            </td>
+          </tr>
+          <tr>
+            <th id="for_request_email">
+              Ваш E-mail
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <%= f.text_field :email, :size=>80 %>
+           </td>
+          </tr>
+          <tr>
+            <th>
+              <span id="for_request_contacts">Другие контактые данные</span>.
+              <div class="hint">
+                Укажите другие способы связаться с Вами (дополнительные телефоны, адреса, ICQ)
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <td>
+              <%= f.text_field :contacts, :size=>80 %>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <br />
+  <p>
+    <%= f.submit( @submit_text||"Послать запрос" ) %>
+  </p>
+<% end -%>
+</div>
+

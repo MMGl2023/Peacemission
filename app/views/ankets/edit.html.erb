@@ -1,0 +1,267 @@
+<h1>Редактирование анкеты</h1>
+
+<%= error_messages_for :anket %>
+
+<% form_for(@anket) do |f| %>
+  <p>
+    <b>Имя</b><br />
+    <%= f.text_field :first_name %>
+  </p>
+
+  <p>
+    <b>Отчество</b><br />
+    <%= f.text_field :second_name %>
+  </p>
+
+  <p>
+    <b>Фамилия</b><br />
+    <%= f.text_field :last_name %>
+  </p>
+
+  <p>
+    <b>Girl family name</b><br />
+    <%= f.text_field :girl_family_name %>
+  </p>
+
+  <p>
+    <b>Nickname</b><br />
+    <%= f.text_field :nickname %>
+  </p>
+
+  <p>
+    <b>Gender</b><br />
+    <%= f.check_box :gender %>
+  </p>
+
+  <p>
+    <b>Marital status</b><br />
+    <%= f.text_field :marital_status %>
+  </p>
+
+  <p>
+    <b>Birth date</b><br />
+    <%= f.date_select :birth_date %>
+  </p>
+
+  <p>
+    <b>Birth place</b><br />
+    <%= f.text_field :birth_place %>
+  </p>
+
+  <p>
+    <b>Sitizenship</b><br />
+    <%= f.text_field :sitizenship %>
+  </p>
+
+  <p>
+    <b>Ethnicity</b><br />
+    <%= f.text_field :ethnicity %>
+  </p>
+
+  <p>
+    <b>Passport info</b><br />
+    <%= f.text_area :passport_info %>
+  </p>
+
+  <p>
+    <b>Military number</b><br />
+    <%= f.text_field :military_number %>
+  </p>
+
+  <p>
+    <b>Residental address</b><br />
+    <%= f.text_field :residental_address %>
+  </p>
+
+  <p>
+    <b>Education info</b><br />
+    <%= f.text_area :education_info %>
+  </p>
+
+  <p>
+    <b>Job info</b><br />
+    <%= f.text_area :job_info %>
+  </p>
+
+  <p>
+    <b>Skills info</b><br />
+    <%= f.text_area :skills_info %>
+  </p>
+
+  <p>
+    <b>Life plans</b><br />
+    <%= f.text_area :life_plans %>
+  </p>
+
+  <p>
+    <b>Military info1</b><br />
+    <%= f.text_area :military_info1 %>
+  </p>
+
+  <p>
+    <b>Military info2</b><br />
+    <%= f.text_area :military_info2 %>
+  </p>
+
+  <p>
+    <b>Family members</b><br />
+    <%= f.text_area :family_members %>
+  </p>
+
+  <p>
+    <b>Friends</b><br />
+    <%= f.text_area :friends %>
+  </p>
+
+  <p>
+    <b>Diseases info1</b><br />
+    <%= f.text_area :diseases_info1 %>
+  </p>
+
+  <p>
+    <b>Deseases info2</b><br />
+    <%= f.text_area :deseases_info2 %>
+  </p>
+
+  <p>
+    <b>Pregnancy info</b><br />
+    <%= f.text_area :pregnancy_info %>
+  </p>
+
+  <p>
+    <b>Body height</b><br />
+    <%= f.text_field :body_height %>
+  </p>
+
+  <p>
+    <b>Body constitution</b><br />
+    <%= f.text_field :body_constitution %>
+  </p>
+
+  <p>
+    <b>Body corpulence</b><br />
+    <%= f.text_field :body_corpulence %>
+  </p>
+
+  <p>
+    <b>Feet size</b><br />
+    <%= f.text_field :feet_size %>
+  </p>
+
+  <p>
+    <b>Feet length</b><br />
+    <%= f.text_field :feet_length %>
+  </p>
+
+  <p>
+    <b>Blood group</b><br />
+    <%= f.text_field :blood_group %>
+  </p>
+
+  <p>
+    <b>Body pilosis</b><br />
+    <%= f.text_field :body_pilosis %>
+  </p>
+
+  <p>
+    <b>Face pilosis</b><br />
+    <%= f.text_field :face_pilosis %>
+  </p>
+
+  <p>
+    <b>Head hair</b><br />
+    <%= f.text_field :head_hair %>
+  </p>
+
+  <p>
+    <b>Head hair specials</b><br />
+    <%= f.text_field :head_hair_specials %>
+  </p>
+
+  <p>
+    <b>Head size</b><br />
+    <%= f.text_field :head_size %>
+  </p>
+
+  <p>
+    <b>Head form</b><br />
+    <%= f.text_field :head_form %>
+  </p>
+
+  <p>
+    <b>Moustache info</b><br />
+    <%= f.text_field :moustache_info %>
+  </p>
+
+  <p>
+    <b>Skin color</b><br />
+    <%= f.text_field :skin_color %>
+  </p>
+
+  <p>
+    <b>Face sideview</b><br />
+    <%= f.text_field :face_sideview %>
+  </p>
+
+  <p>
+    <b>Face frontview</b><br />
+    <%= f.text_field :face_frontview %>
+  </p>
+
+  <p>
+    <b>Face type</b><br />
+    <%= f.text_field :face_type %>
+  </p>
+
+  <p>
+    <b>Face specials</b><br />
+    <%= f.text_field :face_specials %>
+  </p>
+
+  <p>
+    <b>Forehead type</b><br />
+    <%= f.text_field :forehead_type %>
+  </p>
+
+  <p>
+    <b>Forehead height</b><br />
+    <%= f.text_field :forehead_height %>
+  </p>
+
+  <p>
+    <b>Forehead specials</b><br />
+    <%= f.text_field :forehead_specials %>
+  </p>
+
+  <p>
+    <b>Eyebrow position</b><br />
+    <%= f.text_field :eyebrow_position %>
+  </p>
+
+  <p>
+    <b>Eyebrow type</b><br />
+    <%= f.text_field :eyebrow_type %>
+  </p>
+
+  <p>
+    <b>Eyebrow specials</b><br />
+    <%= f.text_field :eyebrow_specials %>
+  </p>
+
+  <p>
+    <b>Eyes info</b><br />
+    <%= f.text_field :eyes_info %>
+  </p>
+
+  <p>
+    <b>Eyes specials</b><br />
+    <%= f.text_field :eyes_specials %>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @anket %> |
+<%= link_to 'Back', ankets_path %>

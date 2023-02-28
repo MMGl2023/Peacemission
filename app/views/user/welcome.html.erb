@@ -1,0 +1,23 @@
+<div class="rblock500">
+
+    <h1><%= _('account_created') %></h1>
+
+    <p><%= _('welcome_p1') %></p>
+    
+    <p><%= _('welcome_p2') %></p>
+    
+    <p><%= _('welcome_p3') %></p>
+    
+    <p>
+        <input type="button" class="greenbtn w220" value="<%= _('populate_profile')%>" 
+            onclick="document.location.href='<%= url_for( :action=>'edit') %>';return true; "/>
+    </p>
+    
+    <p><%= _('welcome_or') %></p>
+    
+    <p> 
+        <input type="button" class="bluebtn w220" value="<%= _('begin_listening')%>" 
+            onclick="document.location.href='<%= url_for(:controller=>'home', :action=>'index') %>';return true; "/>
+    </p>
+
+</div>
