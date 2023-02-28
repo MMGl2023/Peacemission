@@ -1,4 +1,4 @@
-class CreateConstants < ActiveRecord::Migration
+class CreateConstants < ActiveRecord::Migration[6.0]
   def self.up
     create_table :constants do |t|
       t.string :name

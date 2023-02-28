@@ -16,7 +16,7 @@ end
 
 class Object
   # Sometime we need write chain of modifying/inspecting/printing debug messages/saving/..  methods :
-  #   ary.tap(&:uniq!).tap(&:sort!).tap{|a| puts a.inspect }.tap{|a| file.write(a.dump)}...  
+  #   ary.tap(&:uniq!).tap(&:sort!).tap{|a| puts a.inspect }.tap{|a| file.write(a.dump)}...
   # It does not create new array, while the following does create two more arrays:
   #   ary.uniq.sort
   # It does matter when array is large.
@@ -32,12 +32,11 @@ class Numeric
     when (0...901)
       "%d" % self.to_i
     when (901...900_001)
-      "%.1f Kb" % (self/1_000.0)
+      "%.1f Kb" % (self / 1_000.0)
     when (900_001...900_000_001)
-      "%.1f Mb" % (self/1_000_000.0)
+      "%.1f Mb" % (self / 1_000_000.0)
     else
-      "%.1f Gb" % (self/10**9)
+      "%.1f Gb" % (self / 10 ** 9)
     end
   end
 end
-

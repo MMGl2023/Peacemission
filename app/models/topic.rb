@@ -1,16 +1,14 @@
-require 'maruku'
-require 'redcloth'
-
 class Topic < ActiveRecord::Base
+  include TopicsHelper
 
   @@cfg = APP_CONFIG['topics']
   @@cfg[:max_revisions] ||= 20
- 
+
   has_many :revisions, :class_name => 'TopicRevision'
 
-  validates_uniqueness_of :name, :message => 'должно быть уникальным' 
-  validates_format_of :name, :with => /^[a-z_][a-z\d_]+$/, 
-    :message => 'должно состоять из маленьких латинских букв, цифр и знаков подчеркивания и должно начинаться с буквы'
+  validates_uniqueness_of :name, :message => 'должно быть уникальным'
+  validates_format_of :name, :with => /\A[a-z_][a-z\d_]+\z/,
+                      :message => 'должно состоять из маленьких латинских букв, цифр и знаков подчеркивания и должно начинаться с буквы'
 
   before_save :correct_news, :fix_name, :extract_tags_from_tags_text
 
@@ -19,15 +17,15 @@ class Topic < ActiveRecord::Base
   after_save :remove_old_revisions
 
   belongs_to :locked_by, :class_name => 'User', :foreign_key => 'locked_by_id'
-  
+
   attr_accessor :edited_by, :comment, :restored
   attr_accessor :old_section
-  
-  has_many :comments, :as => :obj, :order => "created_at DESC"
-  has_many :tags_topics
-  has_many :tags, :through => :tags_topics 
 
-  class <<self
+  has_many :comments, -> { order("created_at") }, :as => :obj
+  has_many :tags_topics
+  has_many :tags, :through => :tags_topics
+
+  class << self
     def find_all_by_tag(tag_name, options = {})
       if options[:only_ids]
         Tag.find_all_by_name(tag_name, :include => :tags_topics).map(&:tags_topics).flatten.map(&:topic_id).uniq
@@ -49,7 +47,7 @@ class Topic < ActiveRecord::Base
 
   def extract_tags_from_tags_text
     if !(self.tags_text.blank?) || !(self.tags.blank?)
-      self.tags = self.tags_text.split(/\s*;;\s*/).uniq.map{|tag_text| Tag.find_by_like_or_create_by_name(tag_text)}
+      self.tags = self.tags_text.split(/\s*;;\s*/).uniq.map { |tag_text| Tag.find_by_like_or_create_by_name(tag_text) }
     end
   end
 
@@ -60,7 +58,7 @@ class Topic < ActiveRecord::Base
 
   def remove_old_revisions
     if self.rev && self.rev > @@cfg[:max_revisions]
-      old_rev =  self.rev - @@cfg[:max_revisions]
+      old_rev = self.rev - @@cfg[:max_revisions]
       TopicRevision.delete_all("rev < #{old_rev}")
     end
   end
@@ -80,7 +78,7 @@ class Topic < ActiveRecord::Base
     unless s.blank?
       self.published_at = (Time.parse_ext(s) || self.published_at || Time.now)
     end
-  rescue ArgumentError=>e
+  rescue ArgumentError => e
     @published_at_invalid = true
   end
 
@@ -89,21 +87,21 @@ class Topic < ActiveRecord::Base
   end
 
   def ensure_title
-    self.title.blank? ? (self.name || "Topic N#{self.id}") :   self.title
+    self.title.blank? ? (self.name || "Topic N#{self.id}") : self.title
   end
 
   def ensure_summary
-    self.summary.blank? ? (self.summary = summary_from_content) :  self.summary
+    self.summary.blank? ? (self.summary = summary_from_content) : self.summary
   end
 
   t = '(' + ['p', 'b', 'a', 'div', 'i', 'h1', 'h2', 'h3', 'h4', 'span', 'script'].join('|') + ')'
-  @@remove_tags_rgxp =  /\<#{t}\s*\>|\<\/#{t}\>|\<#{t}\s+[^\>\n]+\>/u
- 
+  @@remove_tags_rgxp = /\<#{t}\s*\>|\<\/#{t}\>|\<#{t}\s+[^\>\n]+\>/u
+
   def summary_from_content
     unless self.content.blank?
       s = self.content[0..400]
       s.gsub!(/\s+/, ' ')
-      s.gsub!(@@remove_tags_rgxp , '')
+      s.gsub!(@@remove_tags_rgxp, '')
       s.gsub!(/[A-Z]+\{.*?\}/, ' ')
       if s =~ /(.{110,})\.[\s\n]/
         s = $1
@@ -120,12 +118,12 @@ class Topic < ActiveRecord::Base
     end
   end
 
-  class <<self
+  class << self
     def render_plain_format(text)
       text = text.dup
       text.strip!
-      text.gsub!(/(\n\r?[*\-] [^\n]+){2,}/) {|m| render_ulist(m)}
-      text.gsub!(/(\n\r?[\d]+\. [^\n]+){2,}/) {|m| render_olist(m)}
+      text.gsub!(/(\n\r?[*\-] [^\n]+){2,}/) { |m| render_ulist(m) }
+      text.gsub!(/(\n\r?[\d]+\. [^\n]+){2,}/) { |m| render_olist(m) }
       text.gsub!(/\n(\s*\n)+/, "\n<p>")
       text.gsub!(/[\s\n]--[\s\n]/, ' &#150; ')
       text.gsub!(/[\s\n]---[\s\n]/, ' &#151; ')
@@ -136,24 +134,24 @@ class Topic < ActiveRecord::Base
     def render_ulist(t)
       '<ul>' +
         t.gsub(/\n[*\-]\s*/, "\n<li> ") +
-      '</ul>'
+        '</ul>'
     end
 
     def render_olist(t)
       '<ol>' +
         t.gsub(/\n[\d]+\.\s*/, "\n<li> ") +
-      '</ol>'
+        '</ol>'
     end
   end
 
   attr_accessor :parse_errors
 
-  def formatted_content(helper=nil)
-    formatted(content, helper)
+  def formatted_content(helper = nil)
+    (formatted(content, helper) || '').html_safe
   end
 
-  def formatted_summary(helper=nil)
-    formatted(summary, helper)
+  def formatted_summary(helper = nil)
+    (formatted(summary, helper) || '').html_safe
   end
 
   def formatted(text, helper)
@@ -186,26 +184,27 @@ class Topic < ActiveRecord::Base
         #content
         Topic.render_plain_format(text)
       when "pre"
-        "<pre>\n" + 
-        text.gsub('&','&amp;').
-        gsub('<','&lt;').
-        gsub('>', '&gt;') + 
-        "\n</pre>"
-      else # HTML, nil
+        "<pre>\n" +
+          text.gsub('&', '&amp;').
+            gsub('<', '&lt;').
+            gsub('>', '&gt;') +
+          "\n</pre>"
+      else
+        # HTML, nil
         text
       end
     )
 
     if justified?
-      text = "<div align=\"justify\">\n" + (text||'') + '</div>'
+      text = "<div align=\"justify\">\n" + (text || '') + '</div>'
     end
-    
+
     if helper
       # Helper is responsible for expanding macros related to generating HTML.
       # See topic_helper
-      text = helper.parse_topic(self, text)
+      text = helper.parse_topic(self, text).html_safe
     end
-    
+
     pre_h.reverse.each do |pre_i, pre_tag|
       text.gsub!("PRE#{pre_i}END", pre_tag)
     end
@@ -227,14 +226,14 @@ class Topic < ActiveRecord::Base
 
   def prepare_permissions
     # permissions defined by section
-    if (@@cfg['authorized_sections']||{}).has_key?  self.section
+    if (@@cfg['authorized_sections'] || {}).has_key? self.section
       perms = @@cfg['authorized_sections'][self.section]
       perms = [perms] unless perms.is_a?(Array)
-      self.permissions.push( *perms.map!(&:to_sym) )
+      self.permissions.push(*perms.map!(&:to_sym))
     end
 
     # permissions defined by macro commands in topic's content
-    extract_permissions(self, (content||'').dup)
+    extract_permissions(self, (content || '').dup)
     self.permissions.uniq!
     @prepared_permissions = true
   end

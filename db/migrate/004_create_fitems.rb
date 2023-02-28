@@ -1,4 +1,4 @@
-class CreateFitems < ActiveRecord::Migration
+class CreateFitems < ActiveRecord::Migration[6.0]
   def self.up
     create_table :fitems, :force=>true do |t|
       t.string :name

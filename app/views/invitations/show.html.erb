@@ -1,4 +1,5 @@
-<%= link_to_remote 'Послать повтороно', :url => send_inv_invitation_path(@invitation, :target => (target = 'inv_' + @invitation.id.to_s)) %> <div id="<%= target %>"></div>
+<%= link_to 'Послать повтороно', url: send_inv_invitation_path(@invitation, target: (target = 'inv_' + @invitation.id.to_s)), remote: true %>
+<div id="<%= target %>"></div>
 
 <%= link_to "Все приглашения", list_invitations_path %>
 
@@ -7,43 +8,43 @@
   <tr>
     <td>
       <b>Name:</b>
-        <%=h @invitation.name %>
+      <%= h @invitation.name %>
     </td>
     <td>
       <b>Email:</b>
-      <%=h @invitation.email %>
+      <%= h @invitation.email %>
     </td>
   </tr>
   <tr>
     <td>
       <b>Used by:</b>
-      <%=h @invitation.used_by_id %>
+      <%= h @invitation.used_by_id %>
     </td>
     <td>
       <b>Used at:</b>
-      <%=h @invitation.used_at %><br/>
+      <%= h @invitation.used_at %><br/>
       <b>Created by:</b>
-      <%=h @invitation.created_by_id %><br/>
+      <%= h @invitation.created_by_id %><br/>
       <b>Expired at:</b>
-      <%=h @invitation.expired_at %>
+      <%= h @invitation.expired_at %>
     </td>
   </tr>
   <tr>
     <td colspan="2">
-     <b>Subject:</b>
-      <%=h @invitation.subject %>
+      <b>Subject:</b>
+      <%= h @invitation.subject %>
     </td>
   </tr>
   <tr>
     <td colspan="2">
-     <b>Body:</b>
-      <%=h @invitation.body %>
+      <b>Body:</b>
+      <%= h @invitation.body %>
     </td>
   </tr>
   <tr>
     <td colspan="2">
       <b>Code:</b>
-      <%=h @invitation.code %>
+      <%= h @invitation.code %>
     </td>
   </tr>
 </table>

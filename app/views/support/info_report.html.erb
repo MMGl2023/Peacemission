@@ -1,7 +1,7 @@
 <h1>Письмо</h1>
 
 <p>* Обязательное поле </p>
-<% form_for :report, :url=>{:action=>:r}, :html=>{:multipart=>true} do |f| %>
+<%= form_for :report, :url=>{:action=>:r}, :html=>{:multipart=>true} do |f| %>
   <%= f.hidden_field :report_type, :value=>'info' %>
   <table class="form">
     <tr>
@@ -10,7 +10,7 @@
     <tr>
       <th>Имя: *</th>
       <td>
-        <%= f.text_field :name %> 
+        <%= f.text_field :name %>
       </td>
     </tr>
     <tr>

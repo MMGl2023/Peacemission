@@ -3,6 +3,9 @@
 <html>
 <head>
   <title>ММГЛ<%= " :: "+h(@title) if defined? @title %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
   <%#= stylesheet_link_tag "mediasphere" %>
   <%= stylesheet_link_tag 'main', :media => 'screen, projection' %>
 
@@ -28,7 +31,7 @@
         </div>
     </div>
 
-    <%= render :file => "layouts/footer" %>
+    <%= render partial: "layouts/footer" %>
 
 </body>
 </html>

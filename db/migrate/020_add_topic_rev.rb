@@ -1,4 +1,4 @@
-class AddTopicRev < ActiveRecord::Migration
+class AddTopicRev < ActiveRecord::Migration[6.0]
   def self.up
     add_column :topics, :rev, :integer
   end

@@ -1,4 +1,4 @@
-class AddVisibilityToComments < ActiveRecord::Migration
+class AddVisibilityToComments < ActiveRecord::Migration[6.0]
   def self.up
     # 0 - for all
     # 1 - for authenticated users

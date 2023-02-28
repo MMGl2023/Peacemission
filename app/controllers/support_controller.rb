@@ -1,23 +1,23 @@
 class SupportController < ApplicationController
-  OSES = [ 
-      'Windows Vista', 'Windows XP', 'Windows 2003', 'Windows 2000', 'Windows 98', 
-      'Linux', 
-      'Macintosh', 
+  OSES = [
+      'Windows Vista', 'Windows XP', 'Windows 2003', 'Windows 2000', 'Windows 98',
+      'Linux',
+      'Macintosh',
       'Free BSD',
       'SymbianOS'
   ]
-  
-  BROWSERS = [ 
-    'Internet Explorer 7.x',  'Internet Explorer 6.x', 'Internet Explorer 5.x', 
-    'Mozilla Firefox 1.x', 'Mozilla Firefox 2.x', 
-    'Opera 7.x', 'Opera 9.x', 'Opera 8.x', 
-    'Safari', 
+
+  BROWSERS = [
+    'Internet Explorer 7.x',  'Internet Explorer 6.x', 'Internet Explorer 5.x',
+    'Mozilla Firefox 1.x', 'Mozilla Firefox 2.x',
+    'Opera 7.x', 'Opera 9.x', 'Opera 8.x',
+    'Safari',
     'Konqueror'
   ]
 
   REPORT_TYPES = ['bug', 'info']
 
-  # before_filter :signin_if_not_yet, :except=>['tou']
+  # before_action :signin_if_not_yet, :except=>['tou']
 
   def controls_authentication?
     true
@@ -48,7 +48,7 @@ class SupportController < ApplicationController
     @oses = OSES.map{|o| [o,o]}
     @browsers = BROWSERS.map{|o| [o,o]}
   end
-  hide_action :init_report
+  # hide_action :init_report
 
   def r
     init_report
@@ -97,10 +97,10 @@ class SupportController < ApplicationController
        :page      => params[:page],
        :per_page  => params[:per_page] || 20
 
-    @reports = Report.paginate(cnds)
+    @reports = Report.where(cnds.delete(:conditions)).order(cnds.delete(:order)).paginate(cnds)
     if @reports.size == 0 && @reports.total_pages < cnds[:page].to_i
       cnds[:page] = @reports.total_pages
-      @people = Report.paginate(cnds)
+      @people = Report.where(cnds.delete(:conditions)).order(cnds.delete(:order)).paginate(cnds)
     end
   end
 end

@@ -3,7 +3,7 @@
 <table width="100%">
   <tr>
     <td>
-      <%- form_tag({},{:method=>'get'}) do -%>
+      <%= form_tag({},{:method=>'get'}) do -%>
      <input type="search" name="lost_s" value="<%= params[:lost_s] %>" id="lost_s" size="20"/>
       <%= submit_tag "Искать" %>
     </td>
@@ -18,7 +18,7 @@
 	<% @losts.each do |x| -%>
 	<tr class="<%= cycle "odd", "even" %>">
     <td valign="top">
-      <%= link_to( image_item(x.image, :width=>125), 
+      <%= link_to( image_item(x.image, :width=>125),
             :action=>'view', :controller=>'lost', :id=>x )%>
     </td>
     <td valign="top">

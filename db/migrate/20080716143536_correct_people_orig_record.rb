@@ -1,8 +1,8 @@
-class CorrectPeopleOrigRecord < ActiveRecord::Migration
+class CorrectPeopleOrigRecord < ActiveRecord::Migration[6.0]
   def self.up
     file_name = File.join( File.dirname(__FILE__), '..', 'bootstrap_data', 'people_with_old_dates.csv')
     gz_file_name = file_name + '.gz'
-    
+
     gz_cmd = "gzip -d #{gz_file_name} -c > #{file_name}"
     puts "Executing: #{gz_cmd}"
     puts `#{gz_cmd}`
@@ -32,4 +32,4 @@ class CorrectPeopleOrigRecord < ActiveRecord::Migration
   def self.down
   end
 end
- 
+

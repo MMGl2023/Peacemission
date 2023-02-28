@@ -3,6 +3,8 @@
 <html>
 <head>
   <title> <%= @title ||= "Список пропавших без вести на Северном Кавказе"  %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <%= stylesheet_link_tag 'main', :media => 'screen, projection' %>
   <meta name="Description" content="<%= h(@title) %>" />

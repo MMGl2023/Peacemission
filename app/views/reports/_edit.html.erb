@@ -1,0 +1,10 @@
+<% case @report.report_type -%>
+<% when 'bug' -%>
+  <div id="report_edit" class="report_bug">
+    <%= render partial: 'reports/report_bug' %>
+  </div>
+<% when 'info' -%>
+  <div id="report_edit" class="report_info">
+    <%= render partial: 'reports/report_info' %>
+  </div>
+<% end -%>

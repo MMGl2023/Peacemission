@@ -1,17 +1,19 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
-<html xmlns="http://www.w3.org/1999/xhtml" >
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content=":text/html; charset=UTF-8"/>
-<title>
-	РОЗЫСК ФОТО <%= @title %>
-</title>
-<style type="text/css">
-  <%= yield(:css) %>
-</style>
+  <meta http-equiv="content-type" content=":text/html; charset=UTF-8"/>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <title>
+    РОЗЫСК ФОТО <%= @title %>
+  </title>
+  <style type="text/css">
+    <%= yield(:css) %>
+  </style>
 </head>
 <body bottommargin="0" bgcolor="#191919" leftmargin="0" topmargin="0" rightmargin="0">
-  <%= yield %>
+<%= yield %>
 </body>
 </html>
 

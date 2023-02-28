@@ -5,19 +5,21 @@
   @level += 1 if @level < 10
   @done ||= {}
 %>
-<div class="comment_wrapper" id="<%= wrapper_cdom_id(@comment) %>" style="<%= @comment_style %>"><div> 
-  <% unless @done[@cdom_id] -%>
-    <% @done[@cdom_id] = true -%>
-    <%= render :partial => 'comments/comment', :object=>@comment%>
-    <% unless @no_sub_comments %>
-      <div class="comments" id="<%= comments_cdom_id(@comment) %>">
-        <%= will_paginate @comment.comments.paginate(:page => params[page_param_name_for(@comment)]), :param_name => page_param_name_for(@comment) if @comment.comments.respond_to?(:paginate) %>
-        <%= javascript_tag "g_last_update_at = #{Time.now.to_i}" %>
-        <%= render :partial => 'comments/comment_wrapper', :collection => @comment.comments %>
-      </div>
-    <% end %>
-  <% end -%>
-</div></div>
+<div class="comment_wrapper" id="<%= wrapper_cdom_id(@comment) %>" style="<%= @comment_style %>">
+  <div>
+    <% unless @done[@cdom_id] -%>
+      <% @done[@cdom_id] = true -%>
+      <%= render partial: 'comments/comment', object: @comment %>
+      <% unless @no_sub_comments %>
+        <div class="comments" id="<%= comments_cdom_id(@comment) %>">
+          <%= will_paginate @comment.comments.paginate(:page => params[page_param_name_for(@comment)]), :param_name => page_param_name_for(@comment) if @comment.comments.respond_to?(:paginate) %>
+          <%= javascript_tag "g_last_update_at = #{Time.now.to_i}" %>
+          <%= render :partial => 'comments/comment_wrapper', :collection => @comment.comments %>
+        </div>
+      <% end %>
+    <% end -%>
+  </div>
+</div>
 <%
   @level -= 1 if @level <= 10
 %>

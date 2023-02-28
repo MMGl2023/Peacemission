@@ -1,4 +1,4 @@
-class CreateLosts < ActiveRecord::Migration
+class CreateLosts < ActiveRecord::Migration[6.0]
   def self.up
     create_table :losts, :force=>true do |t|
       t.string :full_name

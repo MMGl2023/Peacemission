@@ -1,4 +1,4 @@
-class CreateRequests < ActiveRecord::Migration
+class CreateRequests < ActiveRecord::Migration[6.0]
   def self.up
     create_table :requests, :force=>true do |t|
       t.integer :request_type
@@ -18,19 +18,19 @@ class CreateRequests < ActiveRecord::Migration
       t.date    :lost_on
 
       t.integer :person_id, :lost_id
-     
+
       t.text    :details
       t.integer :status
 
       t.timestamps
     end
 
-    [:request_type, :full_name, :address, :email, :contacts, :status, 
+    [:request_type, :full_name, :address, :email, :contacts, :status,
       :lost_id, :person_id,
       :lost_full_name, :lost_birth_date, :lost_address, :lost_birth_year, :lost_last_location].each do |f|
       add_index :requests, f
     end
-    
+
     add_text_index :requests, :details
     # execute " ALTER TABLE `requests` ADD INDEX `index_requests_on_details` ( `details` ( 128 ) )"
   end

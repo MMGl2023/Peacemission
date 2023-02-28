@@ -1,7 +1,11 @@
+# encoding: UTF-8
 class String
-  RU_WORD = /[¿-ﬂ‡-ˇ]+/
-  RU_UP = ('¿'..'ﬂ').to_a.join
-  RU_DOWN = ('‡'..'ˇ').to_a.join
+  # RU_WORD = /[ÔøΩ-ﬂ®ÔøΩ-ÔøΩÔøΩ]+/
+  # RU_UP = ('ÔøΩ'..'ÔøΩ').to_a.join
+  # RU_DOWN = ('ÔøΩ'..'ÔøΩ').to_a.join
+  RU_WORD = /[–ê-–Ø–Å–∞-—è—ë]+/
+  RU_UP = (('–ê'..'–Ø').to_a + ['–Å']).join
+  RU_DOWN = (('–∞'..'—è').to_a + ['—ë']).join
   def downcase_rus
     self.tr(RU_UP, RU_DOWN)
   end
@@ -26,7 +30,7 @@ class String
     s.strip!
     s
   end
-    
+
   def similarity(str)
     s1 = self.fingerprint
     s2 = str.fingerprint
@@ -34,9 +38,9 @@ class String
     s1s = s1.size
     s2s = s2.size
     b1 = b2 = 0
-   
-    # find common prefix 
-    while s1[b1] == s2[b1] && !s1[b1].nil? 
+
+    # find common prefix
+    while s1[b1] == s2[b1] && !s1[b1].nil?
       b1 += 1
     end
     return 1.0 if s1s == s2s && b1==s1s
@@ -45,12 +49,12 @@ class String
     v2 = s2s - 1
     hits = b2 = b1
     # and common suffix
-    while s1[v1] == s2[v2] 
+    while s1[v1] == s2[v2]
       v1 -= 1
       v2 -= 1
       hits += 1
     end
-    while b1 <= v1 && b2 <= v2 
+    while b1 <= v1 && b2 <= v2
       (b1 += 1 and b2 += 1 and hits += 1 and next) if s1[b1] == s2[b2]
       (b2 += 1 and next) if s2[b2 + 1] == s1[b1]
       (b1 += 1 and next) if s2[b2] == s1[b1+1]
@@ -82,7 +86,7 @@ class String
     from_letters += i.chr
     to_letters += j
   }
-  
+
   $FROM_LETTERS = from_letters
   $TO_LETTERS = to_letters
 

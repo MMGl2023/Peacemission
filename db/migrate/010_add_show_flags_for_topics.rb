@@ -1,4 +1,4 @@
-class AddShowFlagsForTopics < ActiveRecord::Migration
+class AddShowFlagsForTopics < ActiveRecord::Migration[6.0]
   @@fields = [
     ['show_title', true],
     ['show_published_at', false],

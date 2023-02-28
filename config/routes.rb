@@ -1,103 +1,125 @@
-ActionController::Routing::Routes.draw do |map|
+Rails.application.routes.draw do
+  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  # The priority is based upon order of creation: first created -> highest priority.
+  match '/activate/:activation_code' => 'users#activate', via: %i[post get], defaults: { activation_code: nil }, as: :activate
+  match '/signup/:invitation_code' => 'users#new', via: %i[post get], defaults: { invitation_code: nil }, as: :signup
+  match '/signin' => 'sessions#new', via: %i[post get], as: :signin
+  match '/signout' => 'sessions#destroy', via: %i[post get], as: :signout
+  match '/forgot_password' => 'users#forgot_password', via: %i[post get], as: :forgot_password
+  match '/reset_password/:password_reset_code' => 'users#reset_password', via: %i[post get], as: :reset_password
 
-  # Sample of regular route:
-  #   map.connect 'products/:id', :controller => 'catalog', :action => 'view'
-  # Keep in mind you can assign values other than :controller and :action
+  resource :session
 
-  # Sample of named route:
-  #   map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
-  # This route can be invoked with purchase_url(:id => product.id)
+  resources :users do
+    member do
+      put 'suspend'
+      put 'unsuspend'
+      delete 'purge'
+    end
+    collection do
+      get 'list'
+      get 'home'
+    end
+  end
 
-  # Sample resource route (maps HTTP verbs to controller actions automatically):
-  #   map.resources :products
+  resources :invitations do
+    member do
+      post 'send_inv'
+    end
+    collection do
+      get 'list'
+    end
+  end
 
-  # Sample resource route with options:
-  #   map.resources :products, :member => { :short => :get, :toggle => :post }, :collection => { :sold => :get }
+  resources :people do
+    member do
+      post 'props'
+    end
+    collection do
+      get 'list'
+      get 'recent_list'
+      get 'recent2'
+      get 'db_info'
+      get 'dump'
+      get :auto_complete_for_person_requests
+      get :auto_complete_for_person_disappear_region
+    end
+  end
 
-  # Sample resource route with sub-resources:
-  #   map.resources :products, :has_many => [ :comments, :sales ], :has_one => :seller
+  resources :recent_people do
+    member do
+      post 'props'
+    end
+    collection do
+      get 'list'
+      get 'recent'
+      get 'dump'
+      get :auto_complete_for_recent_person_disappear_region
+    end
+  end
 
-  # Sample resource route within a namespace:
-  #   map.namespace :admin do |admin|
-  #     # Directs /admin/products/* to Admin::ProductsController (app/controllers/admin/products_controller.rb)
-  #     admin.resources :products
-  #   end
+  match '/recent' => 'recent_people#recent', via: [:get, :post], as: :recent
+  match '/people/recent' => 'recent_people#recent', via: [:get, :post], as: :recent2
+  match '/people/recent_list' => 'recent_people#list', via: [:get, :post], as: :recent_list
 
-  map.activate  '/activate/:activation_code', 
-      :controller => 'users',     :action => 'activate', :activation_code => nil
-  map.signup    '/signup/:invitation_code',   
-      :controller => 'users',     :action => 'new', :invitation_code => nil
-  map.signin    '/signin',   
-      :controller => 'sessions',  :action => 'new'
-  map.signout   '/signout',   
-      :controller => 'sessions',  :action => 'destroy'
-  map.forgot_password '/forgot_password', 
-      :controller => 'users',     :action => 'forgot_password'
-  map.reset_password '/reset_password/:password_reset_code', 
-      :controller => 'users',     :action => 'reset_password'
+  resources :ankets
 
-    map.resource :session
+  resources :requests do
+    collection do
+      get 'list'
+    end
+  end
 
-  map.resources :users, 
-      :member     => { :suspend => :put, :unsuspend => :put, :purge => :delete },
-      :collection => { :list => :get, :home => :get }
+  resources :losts do
+    collection do
+      get 'list'
+    end
+  end
 
-  map.resources :invitations,
-      :member     => { :send_inv => :post },
-      :collection => { :list => :get }
+  resources :fitems do
+    member do
+      get 'image'
+    end
+    collection do
+      get 'list'
+    end
+  end
 
-  map.resources :people, 
-      :member     => { :props => :post },
-      :collection => { :list => :get, :recent_list => :get, :recent2 => :get, :db_info => :get, :dump => :get }
+  resources :topics do
+    member do
+      post 'rollback'
+      get 'show_auth'
+    end
+    collection do
+      get 'list'
+      match 'search', via: %i[get post]
+      post 'birth'
+      get 'news'
+    end
+  end
 
-  map.resources :recent_people, 
-      :member     => { :props => :post },
-      :collection => { :list => :get, :recent => :get, :dump => :get }
+  resources :comments
 
-  map.recent '/recent', :controller => 'recent_people',  :action => 'recent'
-  map.recent2 '/people/recent', :controller => 'recent_people',  :action => 'recent'
-  map.recent_list '/people/recent_list', :controller => 'recent_people',  :action => 'list'
+  resources :reports do
+    collection do
+      get 'list'
+    end
+  end
 
-  map.resources :ankets
+  get 'message' => 'topics#message', as: :message
+  get 'i/:name' => 'topics#show', as: :i
+  get 'i_auth/:name' => 'topics#show_auth', as: :i_auth
+  get 'news' => 'topics#news', as: :news
+  post 'birth/:name' => 'topics#birth', as: :birth
 
-  map.resources :requests, 
-      :collection => { :list => :get }
-
-  map.resources :losts, 
-      :collection => { :list => :get }
-  
-  map.resources :fitems, 
-      :member     => { :image => :get },
-      :collection => { :list => :get }
-
-  map.resources :topics,
-      :member     => { :rollback => :post, :show_auth => :get },
-      :collection => { :list => :get, :search => :get, :birth => :post, :news => :get }
-
-  map.resources :comments
-
-  map.resources :reports,
-      :collection => { :list => :get }
-
-
-  map.message 'message',        :action => 'message',   :controller => 'topics', :method => :get
-  map.i       'i/:name',        :action => 'show',      :controller => 'topics', :method => :get
-  map.i_auth  'i_auth/:name',   :action => 'show_auth', :controller => 'topics', :method => :get
-  map.news    'news',           :action => 'news',      :controller => 'topics', :method => :get
-  map.birth   'birth/:name',    :action => 'birth',     :controller => 'topics', :method => :post
-
-
-  map.as 'as', :controller => 'as/topic'
+  match 'as' => 'as/topic', via: :all, as: :as
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  map.root :controller => "topics", :action=>'show', :name => 'index'
+  root 'topics#show', name: :index, as: :index
 
-	# Install the default routes as the lowest priority.
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+  # Install the default routes as the lowest priority.
+  match ':controller/:action/:id', via: :all
+  match ':controller/:action/:id.:format', via: :all
 
   # See how all your routes lay out with "rake routes"
 end
-

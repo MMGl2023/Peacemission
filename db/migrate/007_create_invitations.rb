@@ -1,4 +1,4 @@
-class CreateInvitations <ActiveRecord::Migration
+class CreateInvitations <ActiveRecord::Migration[6.0]
   def self.up
     create_table "invitations", :force => true do |t|
       t.string   "name"

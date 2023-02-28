@@ -1,13 +1,13 @@
 <div class="topics_index">
   <div class="news_search_form">
-    <% form_tag({}, {:method=>'get'}) do -%>
+    <%= form_tag({}, { :method => 'get' }) do -%>
       <input type="search" name="topic_s" value="<%= params[:topic_s] %>" id="_topic_s" size="20"/>
       <%= image_submit_tag "icon-search.gif", :alt => 'Искать' %>
-      <% if params[:section] == 'news' &&  has_permission?(:topics) -%>
+      <% if params[:section] == 'news' && has_permission?(:topics) -%>
         <%= link_to '[добавить новость]', birth_path(:name => 'news'), :method => 'post' %>
       <% end -%>
       <% unless params[:section].blank? -%>
-        <input type="hidden" name="section" value="<%= h(params[:section])%>"/>
+        <input type="hidden" name="section" value="<%= h(params[:section]) %>"/>
       <% end -%>
     <% end -%>
   </div>
@@ -19,16 +19,16 @@
     <% @topics.each do |topic| -%>
       <li class="<%= cycle "odd", "even" %>">
         <%= link_to icon_edit, edit_topic_path(topic) if has_permission?(:topics) -%>
-        <%= link_to h(topic.ensure_title), i_topic_path(topic), :class => 'search_result_item' %><%= 
-          unless topic.author.blank?
-            ', ' + topic.author.split(/,\s+/).map{|a|
-              link_to h(a), p.flip({:author => a})  
-            }.join(', ')
-          end %><br>
-          <% if @show_summary || params[:show_summary] -%>
-            <%= topic.formatted_summary(self) || 'без аннотации' %>
-          <% end -%>
-          Дата: <span class="date"><%= date_s(topic.published_at) %></span><br />
+        <%= link_to h(topic.ensure_title), i_topic_path(topic), :class => 'search_result_item' %><%=
+        unless topic.author.blank?
+          ', ' + topic.author.split(/,\s+/).map { |a|
+            link_to h(a), p.flip({ :author => a })
+          }.join(', ')
+        end %><br>
+        <% if @show_summary || params[:show_summary] -%>
+          <%= topic.formatted_summary(self) || 'без аннотации' %>
+        <% end -%>
+        Дата: <span class="date"><%= date_s(topic.published_at) %></span><br/>
       </li>
     <% end -%>
   </ol>

@@ -1,6 +1,6 @@
-class AddPersonStatus < ActiveRecord::Migration
+class AddPersonStatus < ActiveRecord::Migration[6.0]
   def self.up
-    add_column :people, :status, :integer, :limit => 11, :default => 0
+    add_column :people, :status, :integer, :default => 0
     add_index :people, :status
   end
 

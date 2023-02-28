@@ -2,27 +2,28 @@ class RolesController < ApplicationController
 
   include RolesHelper
 
-  before_filter :signin_if_not_yet, :only => [:show, :destroy, :list]
+  before_action :signin_if_not_yet, :only => [:show, :destroy, :list]
 
-  before_filter :find_role, :only => [:edit, :update, :show, :destroy]
-  before_filter :check_authority, :only => [:edit, :update]
+  before_action :find_role, :only => [:edit, :update, :show, :destroy]
+  before_action :check_authority, :only => [:edit, :update]
 
   ext_auto_complete_for_many :permission, :name,
-      :prefix => 'role', :out => :name,
-      :find => :find_permission_by_text,
-      :extract_before => [:create, :update]
+                             :prefix => 'role', :out => :name,
+                             :find => :find_permission_by_text,
+                             :extract_before => [:create, :update]
 
-  before_filter :check_people, :only => [:create, :update]
+  before_action :check_people, :only => [:create, :update]
 
   def find_permission_by_text(text)
     if text =~ /(\d+)/ && @permission = Permission.find_by_id($1)
       @permission
     else
-      (@not_found_permissions||=[]) << text
+      (@not_found_permissions ||= []) << text
       nil
     end
   end
-  hide_action :find_permission_by_text
+
+  # hide_action :find_permission_by_text
 
   def check_permission
     @role ||= Role.new(params[:role])
@@ -33,18 +34,19 @@ class RolesController < ApplicationController
   end
 
   def allow_edit?
-    has_permission?(:roles) || (@role && @role.session_id == session.session_id)
+    has_permission?(:roles) || (@role && @role.session_id == session.id)
   end
+
   helper_method :allow_edit?
 
-
   protected
+
   def find_role
     @role = Role.find_by_id(params[:id]) or access_denied
   end
-  
+
   def check_authority
-    has_permission?(:roles) || (@role && @role.session_id == session.session_id) || access_denied
+    has_permission?(:roles) || (@role && @role.session_id == session.id) || access_denied
   end
 
   def extract_params
@@ -69,26 +71,24 @@ class RolesController < ApplicationController
     cnds2 = ""
 
     # store search string
-    role_s = (params[:role_s]||"").dup
+    role_s = (params[:role_s] || "").dup
 
     cnds = conditions_from_params :role,
-      :sort_by    => %w(created_at id lost_full_name role_type),
-      :search_in  => %w(lost_full_name full_name address role_type contacts phone_number),
-      :default_order => 'created_at DESC',
-      :filter     => %w(role_type),
-      :page       => params[:page],
-      :per_page   => params[:per_page] || 20
-        
-    Role.send(:with_scope, :find => {:conditions => cnds2}) do
-      @roles = Role.paginate(cnds)
-    end
+                                  :sort_by => %w(created_at id lost_full_name role_type),
+                                  :search_in => %w(lost_full_name full_name address role_type contacts phone_number),
+                                  :default_order => 'created_at DESC',
+                                  :filter => %w(role_type),
+                                  :page => params[:page],
+                                  :per_page => params[:per_page] || 20
+
+    @roles = Role.where(cnds2).where(cnds.delete(:conditions)).order(cnds.delete(:order)).paginate(cnds)
 
     # restore search string
     params[:role_s] = role_s
 
     respond_to do |format|
       format.html #  list.html or index.html.erb
-      format.xml  { render :xml => @roles }
+      format.xml { render :xml => @roles }
     end
   end
 
@@ -97,10 +97,9 @@ class RolesController < ApplicationController
   def show
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @role }
+      format.xml { render :xml => @role }
     end
   end
-
 
   # GET /roles/new
   # GET /roles/new.xml
@@ -108,7 +107,7 @@ class RolesController < ApplicationController
     @role = Role.new(params[:role])
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @role }
+      format.xml { render :xml => @role }
     end
   end
 
@@ -126,13 +125,13 @@ class RolesController < ApplicationController
 
     respond_to do |format|
       if @role.save
-        Notifier.send('deliver_new_role', @role) 
+        Notifier.send('deliver_new_role', @role)
         flash[:info] = 'Запрос успешно создан.'
         format.html { redirect_to(@role) }
-        format.xml  { render :xml => @role, :status => :created, :location => @role }
+        format.xml { render :xml => @role, :status => :created, :location => @role }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @role.errors, :status => :unprocessable_entity }
+        format.xml { render :xml => @role.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -140,16 +139,16 @@ class RolesController < ApplicationController
   # PUT /roles/1
   # PUT /roles/1.xml
   def update
-    @role.session_id = session.session_id rescue nil
+    @role.session_id = session.id rescue nil
 
     respond_to do |format|
       if @role.update_attributes(params[:role])
         flash[:info] = 'Запрос успешно обновлён.'
         format.html { redirect_to(@role) }
-        format.xml  { head :ok }
+        format.xml { head :ok }
       else
         format.html { render :action => "edit" }
-        format.xml  { render :xml => @role.errors, :status => :unprocessable_entity }
+        format.xml { render :xml => @role.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -161,7 +160,7 @@ class RolesController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(roles_url) }
-      format.xml  { head :ok }
+      format.xml { head :ok }
     end
   end
 end

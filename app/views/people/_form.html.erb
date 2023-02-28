@@ -1,0 +1,116 @@
+<%= title @title ||= "Редактирование записи" %>
+
+<%= error_messages_for :person %>
+
+<% now = Time.now %>
+<%= form_for(@person) do |f| %>
+  <table width="100%">
+    <tr>
+      <td colspan="2">
+        <p>
+          <%= f.submit "Сохранить", :name => 'submit', :class => 'yes_btn' %>
+          <%= f.submit "Отменить", :name => 'cancel', :class => 'no_btn' %>
+        </p>
+        <p>
+          <label for="person_status">Статус</label><br/>
+          <%= f.select :status, people_statuses.invert.to_a.sort_by { |a| a.last } %>
+        </p>
+        <p>
+          <label for="person_full_name">ФИО</label><br/>
+          <%= f.text_field :full_name, :size => 35 %>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td width="50%" style="vertical-align: top">
+        <p>
+          <label for="person_birth_date">Дата рождения</label><br/>
+          <%= select_fuzzy_date @person, :birth_date,
+                                :start_year => 1900,
+                                :end_year => now.year %>
+        </p>
+        <p>
+          <label for="person_last_address">Место жительства<br/> на момент исчезновения</label><br/>
+          <%= f.text_area :last_address, :rows => 3, :cols => 25 %>
+        </p>
+        <p>
+          <label for="person_anket_n">Номер анкеты ЦГСР</label><br/>
+          <%= f.text_field :anket_n, :size => 6 %>
+        </p>
+        <p>
+          <label for="person_lost_id">Номер объявления</label><br/>
+          <%= f.text_field :lost_id, :size => 6 %>
+        </p>
+        <% if false %>
+          <p>
+            <%= f.check_box :recent %>
+            <label for="person_recent">"Поиск по горячим следам"</label><br/>
+          </p>
+          <p>
+            <%= f.check_box :main %>
+            <label for="person_main">Основной Список</label><br/>
+          </p>
+        <% end %>
+      </td>
+      <td width="50%" style="vertical-align: top">
+        <p>
+          <label for="person_lost_on">Дата исчезновения</label><br/>
+          <%= select_fuzzy_date @person, :lost_on, :start_year => 1980, :end_year => now.year %>
+        </p>
+        <p>
+          <label for="person_disappear_location">Место исчезновения</label><br/><br/>
+          <%= f.text_area :disappear_location, :rows => 3, :cols => 25 %>
+        </p>
+        <p>
+          <label for="person_disapear_region">Регион исчезновения</label><br/>
+          <%= text_field_with_auto_complete :person, :disappear_region, {}, min_chars: 0 %>
+        <div class="explain">
+          (Для обозначения региона используйте, пожалуйста,
+          сокращения: РИ - Республика Ингушетия,
+          РД - Республика Дагестан, РСО-А - Республика Северная Осетия - Алания,
+          ЧР - Чеченская Республика)
+        </div>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td colspan=2>
+        <label for="person_requests">Запросы, связанные с записью</label>
+        <div class="hint">(введите номер запроса, начните ввод с фамилии)</div>
+        <%= auto_complete_fields_for_many @person, :requests, attribute: :signature, html: { size: 73 } %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="2">
+        <p>
+          <b>Контактные данные родственников</b><br/>
+          <%= f.text_area :relatives_contacts, rows: 4, cols: 70 %>
+        </p>
+
+        <p>
+          <b>Источник информации</b><br/>
+          <%= f.text_area :info_source, rows: 4, cols: 70 %>
+        </p>
+
+        <p>
+          <b>Примечания</b><br/>
+          <%= f.text_area :remark, :rows => 4, :cols => 70 %>
+        </p>
+
+        <p>
+          <b>Исходная запись</b><br/>
+          <%= f.text_area :orig_record, :rows => 4, :cols => 70 %>
+        </p>
+
+        <p>
+          <%= f.submit "Сохранить", :name => 'submit', :class => 'yes_btn' %>
+          <%= f.submit "Отменить", :name => 'cancel', :class => 'no_btn' %>
+        </p>
+      </td>
+    </tr>
+  </table>
+<% end %>
+
+<%= link_to_function "К предыдущей странице", "history.back()" %> |
+<%= link_to('Показать запись', @person) + " | " if @person && @person.id %> <%= link_to 'К списку', people_path %>
+

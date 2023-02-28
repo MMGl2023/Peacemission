@@ -1,4 +1,4 @@
-class AddTopicWideStyle < ActiveRecord::Migration
+class AddTopicWideStyle < ActiveRecord::Migration[6.0]
   def self.up
     add_column :topics, :wide_style, :boolean, :default => false
   end

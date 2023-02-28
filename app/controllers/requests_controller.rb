@@ -4,25 +4,25 @@ class RequestsController < ApplicationController
 
   include RequestsHelper
 
-  before_filter :signin_if_not_yet, :only => [:show, :destroy, :list]
-  before_filter :find_request, :only => [:edit, :update, :show, :destroy]
-  before_filter :check_authority, :only => [:edit, :update, :destroy]
-  before_filter :extract_params, :check_create_authority,  :only => [:new, :update, :create]
+  before_action :signin_if_not_yet, :only => [:show, :destroy, :list]
+  before_action :find_request, :only => [:edit, :update, :show, :destroy]
+  before_action :check_authority, :only => [:edit, :update, :destroy]
+  before_action :extract_params, :check_create_authority,  :only => [:new, :update, :create]
 
   ext_auto_complete_for_many :person, :full_name,
-    :prefix   => 'request', 
+    :prefix   => 'request',
     :out      => :signature,
-    :extract_before => [:create, :update], # before_filter
+    :extract_before => [:create, :update], # before_action
     :find     => :find_person_by_text
 
-  before_filter :check_people, :only => [:create, :update]
-  
+  before_action :check_people, :only => [:create, :update]
+
   protected
 
   def find_person_by_text(text)
     (
       text =~ /^(№|N)?(\d+)(\D|$)\s*/ and Person.find_by_id($2)
-    ) or ( 
+    ) or (
       Person.find_by_full_name(text.gsub(/^.\d+[\-\s]*|\s*$/))
     ) or (
       (@not_found_people ||= []) << text
@@ -41,24 +41,24 @@ class RequestsController < ApplicationController
   end
 
   def allow_edit?
-    (has_permission?(:requests) && !has_permission?(:viewer)) || 
-    (@req && @req.session_id == session.session_id)
+    (has_permission?(:requests) && !has_permission?(:viewer)) ||
+    (@req && @req.session_id == session.id)
   end
   helper_method :allow_edit?
 
   def allow_create?
-    has_permission?(:requests) && !has_permission?(:viewer) 
+    has_permission?(:requests) && !has_permission?(:viewer)
   end
   helper_method :allow_edit?
 
   def find_request
     @req = Request.find_by_id(params[:id]) or access_denied
   end
-  
+
   def check_authority
     allow_edit? || access_denied
   end
- 
+
   def check_create_authority
     allow_create? || access_denied
   end
@@ -91,7 +91,7 @@ class RequestsController < ApplicationController
       types = []
       search_for = (params[:request_s] || "")
       request_short_types.each {|k,v|
-        types << k if search_for.gsub!(/#{v}/i,'')   
+        types << k if search_for.gsub!(/#{v}/i,'')
       }
       cnds2 = "request_type IN (#{types.join(', ')})" unless types.empty?
     end
@@ -103,10 +103,8 @@ class RequestsController < ApplicationController
       :filter     => %w(request_type),
       :page       => params[:page],
       :per_page   => params[:per_page] || 20
-        
-    Request.send(:with_scope, :find => {:conditions => cnds2}) do
-      @reqs = Request.paginate(cnds)
-    end
+
+    @reqs = Request.where(cnds2).where(cnds.delete(:conditions)).order(cnds.delete(:order)).paginate(cnds)
 
     # restore search string
     params[:request_s] = request_s
@@ -151,7 +149,7 @@ class RequestsController < ApplicationController
 
     respond_to do |format|
       if @req.save
-        Notifier.send('deliver_new_request', @req) 
+        Notifier.send('deliver_new_request', @req)
         flash[:info] = 'Запрос успешно создан.'
         format.html { redirect_to(@req) }
         format.xml  { render :xml => @req, :status => :created, :location => @req }
@@ -165,7 +163,7 @@ class RequestsController < ApplicationController
   # PUT /requests/1
   # PUT /requests/1.xml
   def update
-    @req.session_id = session.session_id rescue nil
+    @req.session_id = session.id rescue nil
 
     respond_to do |format|
       if @req.update_attributes(params[:request])

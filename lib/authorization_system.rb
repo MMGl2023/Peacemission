@@ -1,14 +1,14 @@
 #
 # Extends AuthenticationSystem  (which allows just to identify user)
 # AuthorizationSystem defines access level helper methods
-# 
+#
 # See http://www.railsforum.com/viewtopic.php?id=14216&p=1  (Restful Authentication with all the bells and whistles)
-# 
+#
 module AuthorizationSystem
   module ControllerClassMethods
 
   attr_accessor :controller_permissions, :controller_roles
-  
+
   protected
     #
     # Example
@@ -19,9 +19,9 @@ module AuthorizationSystem
     def require_role(*role)
       options = extract_options(role) || {}
       (@controller_roles ||= []).push(*role)
-      before_filter :check_controller_role, options
+      before_action :check_controller_role, options
     end
-  
+
     # Example
     # class MyController < ActionController::Base
     #   require_permissions :advanced_user
@@ -30,20 +30,20 @@ module AuthorizationSystem
     def require_permission(*permission)
       options = extract_options(permission) || {}
       (@controller_permissions ||= []).push(*permission)
-      before_filter :check_controller_permission, options 
+      before_action :check_controller_permission, options
     end
   end
 
   attr_accessor :no_authentication_message, :no_authorization_message
-    
+
   def no_authentication_message
     @no_authentication_message ||= "Необходимо войти в систему для досупа к этой странице."
   end
-    
+
   def no_authorization_message
     @no_authorization_message ||= "Нет прав для доступа к указанной странице."
   end
-      
+
   #Override this method in ApplicationController or in specific controller
   # if you want different default behaivour
   def require_authentication?
@@ -71,15 +71,15 @@ module AuthorizationSystem
   #
   # To require logins for all actions, use this in your controllers:
   #
-  #   before_filter :authentication_required
+  #   before_action :authentication_required
   #
   # To require logins for specific actions, use this in your controllers:
   #
-  #   before_filter :authentication_required, :only => [ :edit, :update ]
+  #   before_action :authentication_required, :only => [ :edit, :update ]
   #
   # To skip this in a subclassed controller:
   #
-  #   skip_before_filter :authentication_required
+  #   skip_before_action :authentication_required
   #
   def authentication_required
     authenticated? || not_authenticated_access_denied
@@ -89,15 +89,15 @@ module AuthorizationSystem
   def authentication_absence_required
     !authenticated? || access_denied
   end
- 
+
   def authorization_required
     authorized? || access_denied
   end
-  
+
   def authentication_required_if_require_authentication
     !require_authentication? || authenticated? ||  not_authenticated_access_denied
   end
-    
+
   # Override this method in your controllers if you want to have special
   # behavior in case the user is not authenticated.
   # Redirects to login page.
@@ -125,7 +125,7 @@ module AuthorizationSystem
   # Override this method in your controllers if you want to have special
   # behavior in case the user is not authenticated.
   # Redirects to referer page with message.
-  def access_denied(message = nil, url = nil)      
+  def access_denied(message = nil, url = nil)
     message ||= no_authorization_message
     respond_to do |format|
       format.html do
@@ -145,7 +145,7 @@ module AuthorizationSystem
             http_referer = ( session[:referer] || domain_name )
           end
           if http_referer.index(domain_name) == 0
-            redirect_to_referer_or_default(root_path)  
+            redirect_to_referer_or_default(root_path)
           else
             session[:referer] = nil
             redirect_to root_path
@@ -194,21 +194,21 @@ module AuthorizationSystem
   def store_referer
     session[:referer] = request.env["HTTP_REFERER"]
   end
-  
+
   def requests_history
     @history ||= (session[:history] ||= [])
   end
 
   # You can put in any controller
-  #   after_filter :store_requests_history
+  #   after_action :store_requests_history
   def store_history
-    if request.get? && !@history_stored       
-      requests_history << request.request_uri 
+    if request.get? && !@history_stored
+      requests_history << request.request_uri
       requests_history.unshift  if requests_history.size > 10
       @history_stored = true
     end
   end
-  
+
   def add_request_to_history?
     response.status.to_i == 200
   end
@@ -216,7 +216,7 @@ module AuthorizationSystem
   def previous_url
     requests_history.last
   end
-  
+
   def make_authenticated_url(url)
     url.gsub('/i/', '/i_auth/')
   end
@@ -227,14 +227,14 @@ module AuthorizationSystem
 
   # Override this method in ApplicationController if you have different login url
   def signin_url
-    url_for :controller=>'sessions', :action => 'new', :return_to => make_authenticated_url(request.request_uri)
-  end 
+    url_for :controller=>'sessions', :action => 'new', :return_to => make_authenticated_url(request.url)
+  end
 
   # Override this method in ApplicationController if you have different logout url
   def signout_url
-    url_for :controller => 'sessions', :action => 'destroy', :return_to => make_unauthenticated_url(request.request_uri)
+    url_for :controller => 'sessions', :action => 'destroy', :return_to => make_unauthenticated_url(request.url)
   end
-  
+
   # Redirect to the URI stored by the most recent store_location call or
   # to the passed default.
   def redirect_back_or_default(default)
@@ -247,7 +247,7 @@ module AuthorizationSystem
     referer = default if referer.blank? || request.url == referer # || request.request_uri = referer
     session[:referer] = nil
   end
-    
+
   def redirect_to_signin(message=nil)
     respond_to do |f|
       f.html do
@@ -259,7 +259,7 @@ module AuthorizationSystem
       end
     end
   end
-  
+
   # Checks if current_user has all specified roles.
   def check_role(*roles)
     has_roles?(*roles) || access_denied
@@ -275,11 +275,11 @@ module AuthorizationSystem
      has_permissions?(*permissions) || access_denied
   end
 
-  # Checks controller scope permissions 
+  # Checks controller scope permissions
   def check_controller_permission
     check_permission(*self.class.controller_permissions)
   end
-  
+
   def has_role?(*roles)
     roles.empty? || (
       current_user && roles.map(&:to_sym).all? {|r|
@@ -302,20 +302,20 @@ module AuthorizationSystem
     super
     klass.extend(ControllerClassMethods)
     klass.class_eval do
-      before_filter :authentication_required_if_require_authentication
-      # after_filter  :store_history # comment this line if you don't want to store history
+      before_action :authentication_required_if_require_authentication
+      # after_action  :store_history # comment this line if you don't want to store history
     end
-       
+
     klass.send(
-      :helper_method, 
-      :authorized?, 
-      :user_menu?, 
+      :helper_method,
+      :authorized?,
+      :user_menu?,
       :previous_url, :history_requests,
-      :signin_url, :signout_url, 
+      :signin_url, :signout_url,
       :has_permission?, :has_permissions?,
       :has_role?, :has_roles?
     )
   end
 end
-  
+
 

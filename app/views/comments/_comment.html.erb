@@ -8,23 +8,26 @@
       <% rer_id = 'error_for_' + @cdom_id %>
       <div id="<%= rer_id %>"></div>
       <div class="comment_actions">
-       <%= link_to_remote_with_spin icon_edit, 
-          :url => edit_comment_path(@comment, :remote => 1),
-          :method => :get,
-          :update => { :success => @cdom_id, :failure => rer_id }
-        %><%= link_to_remote_with_spin icon_delete, 
-          :url => comment_path(@comment),
-          :method => :delete,
-          :confirm => "Вы действительно хотите удалить комментарий #{h(@comment.ensure_author_name)}?",
-          :update => { :success => wrapper_cdom_id(@comment), :failure => rer_id }
+        <%= link_to_remote_with_spin icon_edit,
+                                     url: edit_comment_path(@comment, remote: 1),
+                                     method: :get,
+                                     update: { success: @cdom_id, failure: rer_id }
         %>
-       </div>
+        <%= link_to_remote_with_spin icon_delete,
+                                     url: comment_path(@comment),
+                                     method: :delete,
+                                     data: { confirm: "Вы действительно хотите удалить комментарий #{h(@comment.ensure_author_name)}?" },
+                                     update: { success: wrapper_cdom_id(@comment), failure: rer_id }
+        %>
+      </div>
     <% end %>
-    <div class="comment_author"><%= h(@comment.ensure_author_name) %><% 
-      if current_user && !@comment.contacts.blank?  -%>
-      <div class="comment_contacts">(контакты: <%= h(@comment.contacts) %>)</div>
-    <% end -%>:&nbsp;</div>
-    <% unless @comment.subject.blank?  -%>
+    <div class="comment_author"><%= h(@comment.ensure_author_name) %>
+      <%
+        if current_user && !@comment.contacts.blank? -%>
+        <div class="comment_contacts">(контакты: <%= h(@comment.contacts) %>)</div>
+      <% end -%>:&nbsp;
+    </div>
+    <% unless @comment.subject.blank? -%>
       <div class="comment_subject"><%= h(@comment.subject) %></div>
     <% end -%>
     <div class="comment_body">
@@ -33,13 +36,13 @@
     </div>
   <% end -%>
   <div class="add_comment">
-    <%= link_to_remote_with_spin icon_comment + "добавить комментарий", 
-        :url => new_comment_path( 
-          :level => @level,
-          'comment[obj_type]' => @comment.class.to_s, 
-          'comment[obj_id]' => @comment.id,
-          :remote => 1
-        )
+    <%= link_to_remote_with_spin icon_comment + "добавить комментарий",
+                                 url: new_comment_path(
+                                   level: @level,
+                                   'comment[obj_type]': @comment.class.to_s,
+                                   'comment[obj_id]': @comment.id,
+                                   remote: 1
+                                 )
     %>
   </div>
 </div>

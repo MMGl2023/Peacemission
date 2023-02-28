@@ -2,7 +2,7 @@
   <h1>Вход в систему</h1>
   <%= flash_messages %>
 
-  <% form_tag session_path do -%>
+  <%= form_tag session_path do -%>
     <%= hidden_field_tag :return_to, params[:return_to] || (request.referer if request.referer =~ /^https?:\/\/(www.)?rozysk\.org/) || "" %>
     <p>
       <label for="login">Логин:</label>
@@ -13,7 +13,7 @@
        <%= password_field_tag :password, params[:password] %>
     </p>
     <p>
-       <%= submit_tag 'Войти', :name => 'login', :class => 'login'%>
+       <%= submit_tag 'Войти', name: 'submit', class: 'login'%>
     </p>
     <p>
       <label for="remember_me">Запомнить меня на этом компьютере:</label>

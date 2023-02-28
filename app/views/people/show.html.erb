@@ -2,21 +2,21 @@
   <%= title "Пропавший без вести №#{@person.id}: #{@person.full_name}" %>
 
   <%= link_to_function h('<<Вернуться'), 'history.back()' %> |
-  <%= link_to 'К списку', (@person.recent? ?  recent_list_people_path : people_path) %>
+  <%= link_to 'К списку', (@person.recent? ? recent_list_people_path : people_path) %>
   <% if current_user -%>
-    | 
-    <%= link_to icon_edit  , edit_person_path(@person), :title=>'Редактировать' %> 
-    <%= link_to icon_delete, person_path(@person), :title=>'Удалить запись', :method => :delete, :confirm=>"Вы действительно хотите удалить запись на человека #{@person.full_name}" %>
+    |
+    <%= link_to icon_edit, edit_person_path(@person), title: 'Редактировать' %>
+    <%= link_to icon_delete, person_path(@person), title: 'Удалить запись', method: :delete, data: { confirm: "Вы действительно хотите удалить запись на человека #{@person.full_name}" } %>
   <% end -%>
   <p></p>
   <% if @person.lost %>
     <p>
-      <%= multiple_link_to( [icon_info, h('Объявление')], ' ', lost_path(@person.lost) ) %> 
+      <%= multiple_link_to([icon_info, h('Объявление')], ' ', lost_path(@person.lost)) %>
     </p>
   <% end -%>
   <p>
     <b>ФИО:</b>
-    <%=h @person.full_name %>
+    <%= h @person.full_name %>
   </p>
   <p>
     <b>Статус:</b>
@@ -24,67 +24,67 @@
   </p>
   <p>
     <b>Дата рождения:</b>
-    <%=  fuzzy_date_s(@person, :birth_date, :birth_year, :birth_month)  %>
+    <%= fuzzy_date_s(@person, :birth_date, :birth_year, :birth_month) %>
   </p>
 
   <p>
     <b>Место жительства на момент исчезновения:</b>
-    <%=h @person.last_address %>
+    <%= h @person.last_address %>
   </p>
 
   <p>
-    <b>Дата  исчезновения:</b>
+    <b>Дата исчезновения:</b>
     <%= fuzzy_date_s(@person, :lost_on, :lost_on_year, :lost_on_month) %>
   </p>
 
   <p>
     <b>Место исчезновения:</b>
-    <%=h @person.disappear_address %>,
+    <%= h @person.disappear_address %>,
   </p>
 
   <p>
     <b>Номер анкеты ЦГСР:</b>
-    <%=h @person.anket_n %>
+    <%= h @person.anket_n %>
   </p>
 
   <% if current_user %>
     <p>
       <b>Запросы, связанные с записью:</b>
-      <ul>
+    <ul>
       <% @person.requests.each do |req| %>
         <li><%= link_to h(req.signature), req %>
       <% end -%>
-      </ul>
+    </ul>
     </p>
   <% end %>
 
   <% if current_user -%>
     <p>
       <b>Исходная запись:</b><br/>
-      <%=h @person.orig_record %>
+      <%= h @person.orig_record %>
     </p>
 
     <p>
       <b>Примечание:</b><br/>
-      <%=h @person.remark %>
+      <%= h @person.remark %>
     </p>
     <% if false %>
-    <p>
-      <% if @person.recent %>
-        <%= recent_tag(@person) %> <%= link_to "Исключить из спиcка по горячим следам", props_person_path(@person, :recent => 0), :method => :post %>
-      <% else %>
-        <%= link_to "Включить в список по горячим следам", props_person_path(@person, :recent => 1), :method => :post %>
-      <% end %>
-    </p>
+      <p>
+        <% if @person.recent %>
+          <%= recent_tag(@person) %> <%= link_to "Исключить из спиcка по горячим следам", props_person_path(@person, :recent => 0), :method => :post %>
+        <% else %>
+          <%= link_to "Включить в список по горячим следам", props_person_path(@person, :recent => 1), :method => :post %>
+        <% end %>
+      </p>
     <% end %>
   <% end -%>
 
   <%= link_to_function h('<<Вернуться'), 'history.back()' %> |
-  <%= link_to 'К списку', (@person.recent? ?  recent_list_people_path: people_path) %>
+  <%= link_to 'К списку', (@person.recent? ? recent_list_people_path : people_path) %>
   <% if current_user -%>
-    | 
-    <%= link_to icon_edit  , edit_person_path(@person), :title => 'Редактировать' %> 
-    <%= link_to icon_delete, person_path(@person), :title => 'Удалить запись', :method => :delete, :confirm => "Вы действительно хотите удалить запись на человека #{@person.full_name}" %>
+    |
+    <%= link_to icon_edit, edit_person_path(@person), title: 'Редактировать' %>
+    <%= link_to icon_delete, person_path(@person), title: 'Удалить запись', method: :delete, data: { confirm: "Вы действительно хотите удалить запись на человека #{@person.full_name}" } %>
   <% end -%>
 
   <% @obj = @person %>

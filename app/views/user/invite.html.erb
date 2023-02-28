@@ -2,7 +2,7 @@
   <%= flash_messages %>
   <h1> Приглашение нового пользователя </h1>
   <%= error_messages_for :invitation -%>
-  <% form_for :invitation do |f| -%>  
+  <%= form_for :invitation do |f| -%>
   <table width="400">
   <tr>
     <td width="200">
@@ -11,7 +11,7 @@
     <td>
       <%= f.text_field :name, :class=>"allwidth" %>
     </td>
-  </tr>  
+  </tr>
   <tr>
     <td>
       <label for="email">Email:</label>
@@ -19,7 +19,7 @@
     <td>
       <%= f.text_field :email, :class=>"allwidth" %>
     </td>
-  </tr>  
+  </tr>
   <tr>
     <td>
       <label>Тема письма: </label>
@@ -40,7 +40,7 @@
     <td>
       <%= f.text_area :text, {:rows => 10,:cols => 50} %>
     </td>
-  </tr> 
+  </tr>
  <tr>
     <td colspan="2">
       Основной текст письма:<br />
@@ -55,7 +55,7 @@
     <td align="right">
       <%= submit_tag "Пригласить" %>
     </td>
-  </tr>  
+  </tr>
   </table>
 <% end -%>
 </div>

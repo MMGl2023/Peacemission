@@ -39,6 +39,7 @@ public/sitemaps
 public/assets
 public/s
 public/images/captcha
+app/assets/images/captcha
 storage
 
 .DS_Store

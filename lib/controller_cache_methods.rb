@@ -4,7 +4,7 @@ module ControllerCacheMethods
     @@check_auth_count ||= 0
     before_method = "check_auth_methods_#{(@@check_auth_count += 1)}".to_sym
     self.class_eval do
-      define_method(before_method) do 
+      define_method(before_method) do
         if current_user
           self.action_name += '_auth'
         end
@@ -16,7 +16,7 @@ module ControllerCacheMethods
         end
       end
     end
-    before_filter before_method, :only => actions
+    before_action before_method, :only => actions
     actions << options if options
     caches_action *actions
     before_method
@@ -39,4 +39,4 @@ module ControllerCacheMethods
     '/' + action_name + login_tag + '/p-' + params[:page].to_i.to_s
   end
 end
- 
+

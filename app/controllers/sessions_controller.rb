@@ -1,4 +1,4 @@
-# This controller handles the login/logout function of the site.  
+# This controller handles the login/logout function of the site.
 class SessionsController < ApplicationController
 
   # =signin form
@@ -17,14 +17,14 @@ class SessionsController < ApplicationController
     if user
       if params[:remember_me] == "1"
         user.remember_me unless user.remember_token?
-        cookies[:auth_token] = { :value => user.remember_token , :expires => user.remember_token_expires_at }
+        cookies[:auth_token] = { value: user.remember_token, expires: user.remember_token_expires_at }
       end
       self.current_user = user
       flash[:info] = "Вы успешно вошли в систему."
       redirect_back_or_default('/i_auth/index')
     else
       flash[:error] = "Неверный логин или пароль."
-      redirect_to :action=>'new'
+      redirect_to action: 'new'
     end
   end
 

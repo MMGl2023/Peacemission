@@ -1,0 +1,11 @@
+<% if @topic -%>
+  <%= flash_messages %>
+  <%= error_messages_for :topic %>
+<% end -%>
+<% if has_permission?(:topics) -%>
+  <%= form_tag birth_topics_path do -%>
+    <label for="name">Новая страница:</label><input id="topic_name" type="text" name="name" value="<%= params[:name] %>" id="_name" size="25">
+    <%= help_tip('Введите имя новой страницы. Имя должно состоять из латинских букв и цифр.') %>
+    <%= submit_tag "Создать", :class => "yes_btn" %>
+  <% end -%>
+<% end -%>

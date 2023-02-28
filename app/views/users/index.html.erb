@@ -13,7 +13,7 @@
       <tr>
         <td>
           <%= link_to icon_edit, edit_user_path(x) %>
-          <%= link_to icon_delete, user_path(x), :method => :delete, :confirm => "Вы действительно хотите удалить пользователя #{x.login}?" %>
+          <%= link_to icon_delete, user_path(x), method: :delete, data: { confirm: "Вы действительно хотите удалить пользователя #{x.login}?" } %>
         </td>
         <td>
           <%= x.login %>

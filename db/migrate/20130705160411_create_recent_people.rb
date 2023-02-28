@@ -1,21 +1,24 @@
-class CreateRecentPeople < ActiveRecord::Migration
+$:.unshift File.dirname(__FILE__)
+require 'migration_ext'
+
+class CreateRecentPeople < ActiveRecord::Migration[6.0]
   def self.up
     create_table "recent_people", :force => true do |t|
-      t.string   "full_name"
-      t.date     "birth_date"
-      t.integer  "birth_year",         :limit => 11
-      t.integer  "birth_month",        :limit => 8
-      t.string   "last_address"
-      t.date     "lost_on"
-      t.integer  "lost_on_year",       :limit => 11
-      t.integer  "lost_on_month",      :limit => 8
-      t.string   "disappear_region"
-      t.string   "disappear_location"
-      t.text     "relatives_contacts"
-      t.text     "info_source"
-      t.text     "remark"
-      t.integer  "status",             :limit => 11, :default => 0
-      
+      t.string "full_name"
+      t.date "birth_date"
+      t.integer "birth_year"
+      t.integer "birth_month", :limit => 8
+      t.string "last_address"
+      t.date "lost_on"
+      t.integer "lost_on_year"
+      t.integer "lost_on_month", :limit => 8
+      t.string "disappear_region"
+      t.string "disappear_location"
+      t.text "relatives_contacts"
+      t.text "info_source"
+      t.text "remark"
+      t.integer "status", :default => 0
+
       t.timestamps
     end
 

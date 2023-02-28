@@ -1,8 +1,6 @@
-require 'md5'
-require 'RMagick'
 class Fitem < ActiveRecord::Base
 
-  belongs_to :user
+  belongs_to :user, optional: true
 
   EXT_RGXP = /(\.[\w\d]+)$/
   @@dir = 'base'
@@ -11,11 +9,9 @@ class Fitem < ActiveRecord::Base
   before_save :update_file_hash, :fix_name_and_ext, :after_rename, :create_links, :update_size
   before_create :set_created_at
   before_destroy :remove_files
-  validates_uniqueness_of :name, 
-    :message => "должно быть уникальным"
+  validates_uniqueness_of :name, message: "должно быть уникальным"
 
-  validates_format_of :name, :with => /^\w[\w\.\d]*$/, 
-    :message => "должно начинаться на букву и состоять из букв, цифр, знаков подчеркивания и точек"
+  validates_format_of :name, with: /\A\w[\w\.\d]*\z/, message: "должно начинаться на букву и состоять из букв, цифр, знаков подчеркивания и точек"
 
   def self.log_cmd(cmd)
     logger.info cmd
@@ -31,7 +27,7 @@ class Fitem < ActiveRecord::Base
   end
 
   def image?
-    self.ext =~ /^\.(png|jpg|bmp|gif)$/i
+    self.ext =~ /\A\.(png|jpg|bmp|gif)\z/i
   end
 
   def ensure_size
@@ -50,7 +46,7 @@ class Fitem < ActiveRecord::Base
         image = image.first if image.is_a?(Array)
         self.width = image.columns
         self.height = image.rows
-      rescue=>e
+      rescue => e
         logger.error "ImageMagic error: #{e.message}"
       end
     end
@@ -61,10 +57,14 @@ class Fitem < ActiveRecord::Base
   end
 
   def remove_files
-    if File.exist?( self.path )
+    if File.exist?(self.path)
       [self.path, self.path_ext, self.path_name].each do |t|
         destroy_logger.info "removing '#{t}'"
-        begin; File.unlink( t ); rescue Errno::ENOENT => e; nil end
+        begin
+          ; File.unlink(t);
+        rescue Errno::ENOENT => e;
+          nil
+        end
       end
     else
       destroy_logger.warn "destroying fitem pointing to unexisting file '#{self.path}'"
@@ -83,7 +83,7 @@ class Fitem < ActiveRecord::Base
 
   def after_rename
     if self.id
-      old = self.class.find(:first, :conditions=>{:id=>self.id})
+      old = self.class.find_by(id: self.id)
       if old && old.name != self.name
         # convertion for images
         if old.image?
@@ -93,7 +93,7 @@ class Fitem < ActiveRecord::Base
           self.class.remove_thumbs(self.name)
         end
         if old.ext != self.ext
-          self.content_type = Mime::Type.lookup_by_extension(self.ext.gsub('.','')).to_s
+          self.content_type = Mime::Type.lookup_by_extension(self.ext.gsub('.', '')).to_s
         end
         [old.path_ext, old.path_name].each do |t|
           log_cmd "rm #{t}"
@@ -108,7 +108,7 @@ class Fitem < ActiveRecord::Base
 
   def fix_name_and_ext
     # Priorities: name, ext
-    name.downcase!   
+    name.downcase!
     if self.name =~ EXT_RGXP
       self.ext = $1
     else
@@ -117,9 +117,10 @@ class Fitem < ActiveRecord::Base
     end
   end
 
-  class <<self
+  class << self
     def dir
-      RAILS_ROOT + '/public/s/' + @sub_dir
+      # RAILS_ROOT + '/public/s/' + @sub_dir
+      Rails.root.join('public/s/' + @sub_dir)
     end
 
     def sub_dir
@@ -135,7 +136,7 @@ class Fitem < ActiveRecord::Base
         fitem.url
       end
     end
-     
+
     def url_by_name(name)
       FILE_HOST + @sub_dir + '/' + name
     end
@@ -143,7 +144,7 @@ class Fitem < ActiveRecord::Base
     def url_by_id(i)
       FILE_HOST + @sub_dir + '/ids/' + i
     end
- 
+
     def path_by_name(name)
       self.dir + '/' + name
     end
@@ -153,10 +154,10 @@ class Fitem < ActiveRecord::Base
     end
 
     def file_hash(file)
-      MD5.file(file).hexdigest 
+      Digest::MD5.file(file).hexdigest
     end
- 
-    def ensure_thumb_url(name, options={})
+
+    def ensure_thumb_url(name, options = {})
       return url_by_name(name) if options.project(:ext, :dims, :width, :height).empty?
       dims = options[:dims] || (options[:width].to_s + 'x' + options[:height].to_s)
       ext = (name =~ EXT_RGXP and $1) || '.jpg'
@@ -165,7 +166,7 @@ class Fitem < ActiveRecord::Base
       thumb_filename = self.dir + '/' + thumb_name
 
       if !File.exist?(thumb_filename) && File.exist?(filename)
-        FileUtils.mkdir_p( File.dirname( thumb_filename) )
+        FileUtils.mkdir_p(File.dirname(thumb_filename))
         log_cmd "convert -resize #{dims} #{filename} #{thumb_filename}"
       end
       url_by_name(thumb_name)
@@ -179,13 +180,13 @@ class Fitem < ActiveRecord::Base
     end
 
     def thumb_name_prefix(name)
-      thumb_name =  'thumbs/' + name.gsub(EXT_RGXP, '') + '.-' 
-    end 
+      thumb_name = 'thumbs/' + name.gsub(EXT_RGXP, '') + '.-'
+    end
   end
- 
+
   # for browsing
   def url
-     FILE_HOST + self.class.sub_dir + '/ids/' + filename_ext + url_suffix
+    FILE_HOST + self.class.sub_dir + '/ids/' + filename_ext + url_suffix
   end
 
   def url_name
@@ -201,7 +202,7 @@ class Fitem < ActiveRecord::Base
     h = self.height || 100
     h = 1 if h == 0
     w = self.width || 100
-    asp = w.to_f/h
+    asp = w.to_f / h
     asp = 1.0 if asp == 0
     mod = false
     if options[:max_width] && w > options[:max_width]
@@ -219,7 +220,7 @@ class Fitem < ActiveRecord::Base
       options[:height] = h unless options[:height] && options[:height] < h
     end
     args << options unless options.blank?
-    self.class.ensure_thumb_url(self.name,*args) + url_suffix
+    self.class.ensure_thumb_url(self.name, *args) + url_suffix
   end
 
   def ensure_file_hash
@@ -227,15 +228,14 @@ class Fitem < ActiveRecord::Base
   end
 
   #  virtual attribute for active scaffold
-  def url=(u)
-  end
+  def url=(u) end
 
   def self.with_stream_or_file(stream, &block)
     if stream.respond_to?(:path) && !stream.path.blank?
       block[stream.path]
     elsif stream.respond_to?(:read)
-      tmp = Tempfile.new('fitem') 
-      File.open(tmp.path, 'w+') {|f| f.write(stream.read)}
+      tmp = Tempfile.new('fitem')
+      File.open(tmp.path, 'w+') { |f| f.write(stream.read) }
       block[tmp.path]
       tmp.close
     elsif stream.is_a?(String) && File.exist?(stream)
@@ -243,10 +243,9 @@ class Fitem < ActiveRecord::Base
     else
       raise ArgumentError, "Don't know how to read stream or file '#{stream.inspect}'"
     end
-   end
+  end
 
- 
-  def update_from_stream(stream, attrs={})
+  def update_from_stream(stream, attrs = {})
     Fitem.with_stream_or_file(stream) do |path|
       FileUtils.cp(path, self.path)
       FileUtils.chmod 0666, self.path
@@ -254,21 +253,21 @@ class Fitem < ActiveRecord::Base
     self.original_filename = stream.original_filename if stream.respond_to?(:original_filename)
     new_ext = attrs[:ext]
     if !new_ext && self.original_filename =~ EXT_RGXP
-      new_ext =  $1.downcase
+      new_ext = $1.downcase
     end
     if new_ext != self.ext
       self.name.sub!(EXT_RGXP, new_ext)
     end
-    self.content_type  = stream.content_type if stream.respond_to?(:content_type)
+    self.content_type = stream.content_type if stream.respond_to?(:content_type)
     self.create_links
     self.save
   end
 
-  def self.create_from(stream, attrs={})
+  def self.create_from(stream, attrs = {})
     fitem = nil
     attrs[:original_filename] ||= stream.original_filename if stream.respond_to?(:original_filename)
     attrs[:content_type] ||= stream.content_type if stream.respond_to?(:content_type)
-    dims_options =  attrs.project(:max_width, :max_width)
+    dims_options = attrs.project(:max_width, :max_width)
     attrs.except!(:max_height, :max_width)
     begin
       fitem = self.new(attrs)
@@ -278,18 +277,18 @@ class Fitem < ActiveRecord::Base
         if fitem.original_filename =~ EXT_RGXP
           fitem.ext ||= $1.downcase
         end
-        
+
         fitem.ext ||= '.nil'
         fitem.name ||= fitem.original_filename
-        
+
         fitem.name.sub!(EXT_RGXP, fitem.ext) || fitem.name += fitem.ext
         if attrs && self.find_by_name(attrs[:name])
-          fitem.errors.add :name,  "File item with name '#{attrs[:name]}' exists."
+          fitem.errors.add :name, "File item with name '#{attrs[:name]}' exists."
           return fitem
         else
           if fitem.save # now we have id
             d = File.dirname(fitem.path)
-            FileUtils.mkdir_p(d, :mode=>0777)
+            FileUtils.mkdir_p(d, mode: 0777)
             logger.info "Creating fitem #{fitem.path} from #{stream}"
             FileUtils.cp(path, fitem.path)
             FileUtils.chmod 0666, fitem.path
@@ -311,36 +310,38 @@ class Fitem < ActiveRecord::Base
     fitem
   end
 
-  def change_dims(options={})
-    max_width,max_height = options.values_at(:max_width, :max_height)
+  def change_dims(options = {})
+    max_width, max_height = options.values_at(:max_width, :max_height)
     if self.image? && (max_width || max_height) && (self.width && self.height)
-      if max_width &&  self.width < max_width
+      if max_width && self.width < max_width
         `convert -resize #{max_width}x  #{self.path_ext} #{self.path_ext}`
       end
-      if max_height &&  self.height < max_height
+      if max_height && self.height < max_height
         `convert -resize x#{max_height}  #{self.path_ext} #{self.path_ext}`
       end
     end
     self.update_size
     self
   end
- 
+
   def dir
     self.class.dir
   end
 
   def path
-    self.dir + '/ids/' + self.filename
+    # self.dir + '/ids/' + self.filename
+    self.dir + 'ids/' + self.filename
   end
 
   def path_name
-    self.dir + '/' + (self.name || 'ids/' + self.id.to_s)
+    # self.dir + '/' + (self.name || 'ids/' + self.id.to_s)
+    self.dir + '' + (self.name || 'ids/' + self.id.to_s)
   end
 
   def path_ext
-    self.path + self.ext
+    Pathname(self.path.to_s + self.ext.to_s)
   end
-    
+
   def filename
     self.id.to_s
   end
@@ -352,7 +353,7 @@ class Fitem < ActiveRecord::Base
   def destroy_logger
     @destroy_logger ||= Logger.new(File.dirname(__FILE__) + '/../../log/file_item_remove.log')
   end
-  
+
   def lib_config
     return @@config if defined?(@@config) && @@config
     self.class.config
@@ -368,11 +369,11 @@ class Fitem < ActiveRecord::Base
   end
 end
 
-unless MD5.respond_to? :file
+unless Digest::MD5.respond_to? :file
   module Digest
     class MD5
       # creates a digest object and reads a given file, _name_.
-      # 
+      #
       #  p Digest::SHA256.file("X11R6.8.2-src.tar.bz2").hexdigest
       #  # => "f02e3c85572dc9ad7cb77c2a638e3be24cc1b5bea9fdbb0b0299c9668475c534"
       def self.file(name)
@@ -382,7 +383,7 @@ unless MD5.respond_to? :file
       # updates the digest with the contents of a given file _name_ and
       # returns self.
       def file(name)
-        File.open(name, 'rb') {|f|
+        File.open(name, 'rb') { |f|
           buf = ''
           while f.read(16384, buf)
             update buf

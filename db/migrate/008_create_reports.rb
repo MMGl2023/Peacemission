@@ -1,4 +1,4 @@
-class CreateReports <ActiveRecord::Migration
+class CreateReports <ActiveRecord::Migration[6.0]
   def self.up
 
     create_table "reports", :force => true do |t|

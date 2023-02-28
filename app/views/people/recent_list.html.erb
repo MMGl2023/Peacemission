@@ -4,7 +4,7 @@
     @region = params[:disappear_region]
     @full_region = regions_cfg[@region]
   %>
-  <h2 style="text-align: center"><%= 
+  <h2 style="text-align: center"><%=
       if !@region.blank?
         (
           if !@full_region.blank?
@@ -20,7 +20,7 @@
  <table width="100%">
     <tr>
       <td>
-      <%- form_tag({}, {:method => 'get'}) do -%>
+      <%= form_tag({}, {:method => 'get'}) do -%>
         Поиск по списку: <input type="search" name="person_s" value="<%= params[:person_s] %>" id="_s" size="25" />
         <%= image_submit_tag "icon-search.gif", :style => 'vertical-align: middle' %>
         <%= hidden_field 'disappear_region', params[:disappear_region] %>
@@ -90,8 +90,8 @@
       <% p = params.dup %>
       <% if current_user -%>
         <td>
-          <%= link_to icon_edit, edit_person_path(x), :title => 'Редактировать' %><br/>
-          <%= link_to icon_delete, props_person_path(x, :recent => 0), :method => :post, :confirm => "Вы действительно хотите удалить запись на человека #{x.full_name} из Списка «Поиск по горячим следам»?", :title => 'Удалить' %>
+          <%= link_to icon_edit, edit_person_path(x), title: 'Редактировать' %><br/>
+          <%= link_to icon_delete, props_person_path(x, recent: 0), method: :post, data: { confirm: "Вы действительно хотите удалить запись на человека #{x.full_name} из Списка «Поиск по горячим следам»?" }, title: 'Удалить' %>
         </td>
       <% end -%>
       <td>
@@ -123,7 +123,7 @@
         %>
       </td>
       <td>
-        <%= x.disappear_address.gsub(x.disappear_region || 'NOTHING', link_to(x.disappear_region, p.flip(:disappear_region => x.disappear_region).except(:page))) %> 
+        <%= x.disappear_address.gsub(x.disappear_region || 'NOTHING', link_to(x.disappear_region, p.flip(:disappear_region => x.disappear_region).except(:page))) %>
       </td>
       <!--
       <td>

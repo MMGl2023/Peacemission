@@ -1,4 +1,4 @@
-class CreateTopicRevisions < ActiveRecord::Migration
+class CreateTopicRevisions < ActiveRecord::Migration[6.0]
   def self.up
     # drop_table :topic_revisions
 
@@ -17,17 +17,17 @@ class CreateTopicRevisions < ActiveRecord::Migration
     add_index :topic_revisions, [:topic_id, :rev]
     add_index :topic_revisions, :name
 
-    Topic.each do |topic|
-      TopicRevision.create( 
-        :name => topic.name, 
+    Topic.all.each do |topic|
+      TopicRevision.create(
+        :name => topic.name,
         :topic_id => topic.id,
-        :topic_data => TopicRevision.topic_data(topic), 
-        :rev => 1 
+        :topic_data => TopicRevision.topic_data(topic),
+        :rev => 1
       )
     end
   end
 
-  def self.down 
+  def self.down
     drop_table :topic_revisions
   end
 end

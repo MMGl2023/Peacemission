@@ -1,7 +1,7 @@
 $:.unshift File.dirname(__FILE__)
 require  'migration_ext'
 
-class AddLostActive < ActiveRecord::Migration
+class AddLostActive < ActiveRecord::Migration[6.0]
   def self.up
     add_column :losts, :active, :boolean, :defaut=>true
     ensure_add_index :losts, [:active, :created_at]

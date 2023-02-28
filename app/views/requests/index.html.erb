@@ -2,6 +2,6 @@
 
 <% if has_permission?(:requests) -%>
   <hr>
-  <%= render :file=>'requests/list' %>
+  <%= render partial: 'requests/list' %>
 <% end -%>
 

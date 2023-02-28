@@ -1,0 +1,17 @@
+<%
+  @attribute ||= 'title'
+  @enumerate = false unless defined?(@enumerate)
+%>
+<h2><%= @list_title || _('list') %></h2>
+<% unless entity_list.empty? -%>
+  <table class="list">
+  <% entity_list.each_with_index do |ent, i| -%>
+    <tr>
+      <%= '<td>' + (i+1).to_s + '. </td>' if @enumerate -%>
+      <td><%= ent.send(@attribute) %></td>
+    </tr>
+  <% end -%>
+  </table>
+<% end -%>
+
+

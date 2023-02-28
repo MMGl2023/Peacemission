@@ -1,4 +1,4 @@
-class AddFitemSizeAndWidthAndHeight < ActiveRecord::Migration
+class AddFitemSizeAndWidthAndHeight < ActiveRecord::Migration[6.0]
   def self.up
     add_column :fitems, :size, :integer
     add_column :fitems, :width, :integer

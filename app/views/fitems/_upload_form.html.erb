@@ -1,23 +1,23 @@
 <%
-  
+
   @nochange_label ||= 'Оставить текущий файл'
-  @reset_label    ||= 'Удалить файл'
-  @upload_label   ||= 'Загрузить файл'
+  @reset_label ||= 'Удалить файл'
+  @upload_label ||= 'Загрузить файл'
 
 %>
 <table>
   <tr>
     <% if !@dont_show_fitem && @fitem && @fitem.image? -%>
       <td>
-        <%= image_item(@fitem, :width => (@width || 64))%>
+        <%= image_item(@fitem, width: (@width || 64)) %>
       </td>
     <% end -%>
     <td>
-      <% form_tag @url, {:multipart => true} do |f|%>
+      <%= form_tag @url, { multipart: true } do |f| %>
         <table>
           <tr>
             <td class="radio_input" valign="top">
-              <input type="radio" name="fitem[fitem_action]" value="nochange" id="fitem_action_nochange" checked />
+              <input type="radio" name="fitem[fitem_action]" value="nochange" id="fitem_action_nochange" checked/>
             </td>
             <td>
               <label for="fitem_action_nochange"><%= @nochange_label %></label>
@@ -25,11 +25,11 @@
           </tr>
           <tr>
             <td class="radio_input" valign="top">
-              <input type="radio" name="fitem[fitem_action]" value="upload" id="fitem_action_upload" />
+              <input type="radio" name="fitem[fitem_action]" value="upload" id="fitem_action_upload"/>
             </td>
             <td>
-              <label for="fitem_action_upload"><%= @upload_label %><br />
-                <input type="file" name="fitem[file]" value="" id="fitem_file" />
+              <label for="fitem_action_upload"><%= @upload_label %><br/>
+                <input type="file" name="fitem[file]" value="" id="fitem_file"/>
                 <% if @upload_hint -%>
                   <div class="hint"><%= @upload_hint %></div>
                 <% end -%>
@@ -39,7 +39,7 @@
           <% if @fitem -%>
             <tr>
               <td class="radio_input" valign="top">
-                <input type="radio" name="fitem[fitem_action]" value="reset" id="fitem_action_reset" />
+                <input type="radio" name="fitem[fitem_action]" value="reset" id="fitem_action_reset"/>
               </td>
               <td>
                 <label for="fitem_action_reset"><%= @reset_label %></label>

@@ -1,4 +1,4 @@
-class CreateAnkets < ActiveRecord::Migration
+class CreateAnkets < ActiveRecord::Migration[6.0]
   def self.up
     create_table :ankets, :force=>true do |t|
       t.string :first_name
@@ -45,7 +45,7 @@ class CreateAnkets < ActiveRecord::Migration
       t.string :forehead_type
       t.string :forehead_height
       t.string :forehead_specials
-      
+
       t.string :eyebrow_position
       t.string :eyebrow_type
       t.string :eyebrow_specials

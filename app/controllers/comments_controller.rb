@@ -1,8 +1,9 @@
 class CommentsController < ApplicationController
-  before_filter :find_comment, :only => [:destroy, :update, :show, :edit]
-  before_filter :can_edit_comment_required, :only => [:destroy, :update, :edit]
+  before_action :find_comment, :only => [:destroy, :update, :show, :edit]
+  before_action :can_edit_comment_required, :only => [:destroy, :update, :edit]
 
   protected
+
   def find_comment
     @comment = Comment.find(params[:id]) || bad_request("Не могу найти комментарий")
   end
@@ -12,17 +13,14 @@ class CommentsController < ApplicationController
   end
 
   public
+
   # GET /comments
   # GET /comments.xml
   def index
-    @comments = Comment.paginate(
-      :page => params[:page], 
-      :conditions => ["root_id IS NULL"],
-      :order => "created_at DESC"
-    )
+    @comments = Comment.where(["root_id IS NULL"]).order("created_at DESC").paginate(page: params[:page])
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @comments }
+      format.xml { render :xml => @comments }
     end
   end
 
@@ -35,17 +33,17 @@ class CommentsController < ApplicationController
           render :layout => false, :partial => 'comment_wrapper'
         end
       }
-      format.xml  { render :xml => @comment }
+      format.xml { render :xml => @comment }
     end
   end
-  
+
   # GET /comments/new
   # GET /comments/new.xml
   def new
     @comment = Comment.new(params[:comment])
     @comment.author_name ||= session[:comment_author_name]
     @comment.contacts ||= session[:comment_contacts]
-     
+
     respond_to do |format|
       format.html {
         if remote?
@@ -55,7 +53,7 @@ class CommentsController < ApplicationController
           end
         end
       }
-      format.xml  { render :xml => @comment }
+      format.xml { render :xml => @comment }
     end
   end
 
@@ -74,7 +72,7 @@ class CommentsController < ApplicationController
   def create
     if params[:cancel]
       render :update do |page|
-        page <<  "if ($('comment_form')) { Element.remove('comment_form');}"
+        page << "if ($('comment_form')) { Element.remove('comment_form');}"
       end
     else
       params[:comment] ||= {}
@@ -85,7 +83,7 @@ class CommentsController < ApplicationController
       end
       @comment = Comment.new(params[:comment])
       @comment.author_id = current_user.id if current_user
-      @comment.session_id = session.session_id
+      @comment.session_id = session.id
       check_and_update
     end
   end
@@ -99,17 +97,17 @@ class CommentsController < ApplicationController
 
   def check_and_update
     if session[:is_spammer] || session[:is_bot]
-      if yacaph_validated?(:prefix => 'comment_') 
+      if yacaph_validated?(:prefix => 'comment_')
         session[:is_human] = true
         session[:is_bot] = nil
       else
         @comment.errors.add :captcha, "неверно"
       end
     end
-    
+
     @comment.is_human = session[:is_human]
     @comment.is_bot = session[:is_bot]
-    
+
     @updating = @comment.id
 
     respond_to do |format|
@@ -117,8 +115,8 @@ class CommentsController < ApplicationController
         @info = 'Комментарий был успешно добавлен.'
         session[:is_spammer] = nil
         session[:comment_author_name] = @comment.author_name
-        format.html { 
-          if params[:remote]  
+        format.html {
+          if params[:remote]
             render :update do |page|
               if @updating
                 page.replace 'comment_form', :partial => 'comment'
@@ -130,10 +128,10 @@ class CommentsController < ApplicationController
               page << 'reset_timeout();'
             end
           else
-            redirect_to(@comment) 
+            redirect_to(@comment)
           end
         }
-        format.xml  { render :xml => @comment, :status => :created, :location => @comment }
+        format.xml { render :xml => @comment, :status => :created, :location => @comment }
       else
         if params[:cancel]
           render :update do |page|
@@ -147,7 +145,7 @@ class CommentsController < ApplicationController
             end
           end
         else
-          format.html { 
+          format.html {
             render :update do |page|
               @info = 'Не могу добавить комментарий'
               session[:is_spammer] = true if @comment.is_spammer
@@ -159,23 +157,24 @@ class CommentsController < ApplicationController
               end
             end
           }
-          format.xml  { render :xml => @comment.errors, :status => :unprocessable_entity }
+          format.xml { render :xml => @comment.errors, :status => :unprocessable_entity }
         end
       end
     end
   end
-  hide_action :check_and_update
+
+  # hide_action :check_and_update
 
   # DELETE /comments/1
   # DELETE /comments/1.xml
   def destroy
     @comment.destroy
     respond_to do |format|
-      format.html { 
+      format.html {
         @info = "Комментарий удален"
         render :template => 'shared/message', :layout => false
       }
-      format.xml  { head :ok }
+      format.xml { head :ok }
     end
   end
 
@@ -185,16 +184,17 @@ class CommentsController < ApplicationController
     page << "if ( $('#{wrapper_cdom_id(comment)}') ) {"
     #  page.replace wrapper_cdom_id(comment), html
     page << "} else {"
-      page.insert_html :top, comments_cdom_id(comment.obj), html
-      page[ wrapper_cdom_id(comment) ].hide();
-      page.visual_effect :slide_down, wrapper_cdom_id(comment), :duration=>3
+    page.insert_html :top, comments_cdom_id(comment.obj), html
+    page[wrapper_cdom_id(comment)].hide();
+    page.visual_effect :slide_down, wrapper_cdom_id(comment), :duration => 3
     page << '}'
   end
+
   helper_method :update_comment
-  hide_action :update_comment
+  # hide_action :update_comment
 
   def update_comments
-    if find_obj && params[:since] 
+    if find_obj && params[:since]
       since = Time.at(params[:since].to_i).utc
       updated = false;
       render :update do |page|
@@ -204,7 +204,7 @@ class CommentsController < ApplicationController
             update_comment(page, c)
             updated = true;
           else
-            c.sub_comments(since).select{|sc| sc.parent == :no || sc.parent == c}.each do |sc|
+            c.sub_comments(since).select { |sc| sc.parent == :no || sc.parent == c }.each do |sc|
               update_comment(page, sc)
               updated = true
             end

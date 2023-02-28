@@ -4,7 +4,7 @@
 <table width="100%">
 <tr>
   <td>
-  <%- form_tag({}, {:method => 'get'}) do -%>
+  <%= form_tag({}, {:method => 'get'}) do -%>
     <input type="text" name="lost_s" value="<%= params[:lost_s] %>" id="lost_s" size="25" />
     <%= hidden_field 'show_all', params[:show_all] %>
     <%= image_submit_tag "icon-search.gif", :style => 'vertical-align: middle' %>
@@ -26,13 +26,13 @@
       <%= column_title(:id, '№', p) %>
     </th>
     <th>
-      <%= column_title(:active, 'Активно?', p) %>  
+      <%= column_title(:active, 'Активно?', p) %>
     </th>
 		<th>
       <%= column_title(:name, 'ФИО', p) %>
     </th>
     <th>
-      <%= column_title(:last_location, 'Место<br>исчезновения', p) %> 
+      <%= column_title(:last_location, 'Место<br>исчезновения', p) %>
     </th>
     <th>
       <%= column_title(:created_at, 'Дата<br>создания', p) %>

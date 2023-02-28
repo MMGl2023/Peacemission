@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RozyskV2023</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'main', media: 'all' %>
+    <%= javascript_include_tag 'application', 'comments', 'hilitor' %>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>

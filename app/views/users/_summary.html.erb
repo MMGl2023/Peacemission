@@ -1,0 +1,34 @@
+<%
+  @user = summary if defined? summary
+  @user ||= current_user
+  unless defined?(@skip_links)
+    @skip_links = (@user != current_user)
+  end
+%>
+<div class="user_summary">
+  <ul class="list">
+    <li><%= gender_icon(@user) -%>
+      <font size="+1"><%= h(@user.full_name) %></font><%= raw(format(': %s', @user.info)) if @user.info.present? %>
+    </li>
+    <% unless @skip_links -%>
+      <li>
+        Вы можете <%= link_to "отредактировать Ваш профайл", edit_user_path(@user) %>.
+      </li>
+    <% end -%>
+    <% unless @user[:birth_day].blank? -%>
+      <li>
+        <%= "До вашего дня рождения осталось :days дней" % { :days => @user.days_until_birthday } %>.
+      </li>
+    <% end -%>
+    <% unless @user.full_name.blank? -%>
+      <li>
+        Полное имя: <%= @user.full_name %>.
+      </li>
+    <% end -%>
+    <% unless @user[:city].blank? -%>
+      <li>
+        Город: <%= link_to h(@user.city), list_users_path(:city => @user.city) %>
+      </li>
+    <% end -%>
+  </ul>
+</div>

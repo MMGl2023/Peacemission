@@ -1,4 +1,4 @@
-class AddFitemsTypeAndOwner < ActiveRecord::Migration
+class AddFitemsTypeAndOwner < ActiveRecord::Migration[6.0]
   def self.up
     add_column :fitems, :type, :string, :limit => 40
     add_column :fitems, :owner_id, :integer
@@ -7,7 +7,7 @@ class AddFitemsTypeAndOwner < ActiveRecord::Migration
     add_index :fitems, [:type]
     add_index :fitems, [:owner_type, :owner_id]
 
-    Fitem.each do |f|
+    Fitem.all.each do |f|
       f.type = "Fitem"
     end
   end

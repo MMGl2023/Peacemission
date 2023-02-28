@@ -1,4 +1,4 @@
-class RenameInvitationTextToBody <ActiveRecord::Migration
+class RenameInvitationTextToBody <ActiveRecord::Migration[6.0]
   def self.up
     rename_column :invitations, :text, :body
   end

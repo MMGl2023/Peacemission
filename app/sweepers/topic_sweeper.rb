@@ -5,12 +5,12 @@ class TopicSweeper < ActionController::Caching::Sweeper
   def after_create(topic)
     expire_cache_for(topic)
   end
-  
+
   # If our sweeper detects that a Topic was updated call this
   def after_update(topic)
     expire_cache_for(topic)
   end
-  
+
   # If our sweeper detects that a Topic was deleted call this
   def after_destroy(topic)
     expire_cache_for(topic)
@@ -18,16 +18,17 @@ class TopicSweeper < ActionController::Caching::Sweeper
 
   def before_update(topic)
     if topic.id
-      topic.old_section = (t=Topic.find_by_id(topic.id, :select=>"section")) && t.section
+      topic.old_section = (t = Topic.select(:section).find_by_id(topic.id)) && t.section
     end
   end
-  
+
   private
+
   def expire_cache_for(topic)
     if topic.section == 'news' or topic.old_section == 'news'
       # expire_action(:controller => 'topic', :action => 'news')
       `setsid rm -rf tmp/cache/views/rozysk.org/topics/news`
-       File.unlink("public/news.html") rescue nil
+      File.unlink("public/news.html") rescue nil
     end
 
     if topic.content =~ /SET_VALUE\{\s*(\w+)/
@@ -39,11 +40,11 @@ class TopicSweeper < ActionController::Caching::Sweeper
     # topic.name.gsub!(/(^\.|\s|\.\.)/,'')
 
     if topic.name == 'people_list'
-      expire_fragment( %r(people/index/.*) )
+      expire_fragment(%r(people/index/.*))
     end
-   
+
     if topic.name == 'lost_index'
-      expire_fragment( %r(lost/.*) )
+      expire_fragment(%r(lost/.*))
     end
 
     if topic.name == 'index'

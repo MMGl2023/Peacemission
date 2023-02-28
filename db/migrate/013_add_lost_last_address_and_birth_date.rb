@@ -1,4 +1,4 @@
-class AddLostLastAddressAndBirthDate < ActiveRecord::Migration
+class AddLostLastAddressAndBirthDate < ActiveRecord::Migration[6.0]
   def self.up
     add_column :losts, :last_address, :string
     add_column :losts, :birth_date, :date

@@ -1,30 +1,27 @@
 class PeopleController < ApplicationController
+  before_action :signin_if_not_yet, except: %i[show recent recent_list list search index db_info]
 
-  before_filter :signin_if_not_yet, :except => ['show', 'recent', 'recent_list', 'list', 'search', 'index', 'db_info']
+  caches_action :index, if: :caching_index_allowed?, tag: :action_and_login_and_page_tag
 
-  caches_action :index, :if => :caching_index_allowed?, :tag => :action_and_login_and_page_tag
+  caches_action :show, tag: :login_tag
 
-  caches_action :show,  :tag => :login_tag
+  cache_sweeper :person_sweeper, only: %i[create update destroy]
 
-  cache_sweeper :person_sweeper, :only => [:create, :update, :destroy]
+  before_action :extract_fuzzy_dates, only: %i[create update]
 
-  before_filter :extract_fuzzy_dates, :only => [:create, :update]
+  before_action :check_authority, only: %i[update destroy]
 
-  before_filter :check_authority, :only => [:update, :destroy]
+  before_action :check_create_authority, only: %i[create]
 
-  before_filter :check_create_authority, :only => [:create]
-
-
-  ext_auto_complete_for_many :request, :lost_full_name, 
-    :prefix   => 'person', 
-    :out      => :signature,
-    :find     => :find_request_by_text,
-    :extract_before => [:create, :update]
+  ext_auto_complete_for_many :request, :lost_full_name,
+                             prefix: 'person',
+                             out: :signature,
+                             find: :find_request_by_text,
+                             extract_before: [:create, :update]
 
   ext_auto_complete_for :person, :disappear_region
 
   protected
-
 
   def self.person_class
     Person
@@ -42,33 +39,33 @@ class PeopleController < ApplicationController
     if text =~ /(\d+)/ && @req = Request.find_by_id($1)
       @req
     else
+      @not_found_requests ||= ''
       @not_found_requests << text
       nil
     end
   end
 
   def caching_index_allowed?
-    [:person_s, :sort, :sort_dir, :birth_year, :lost_on_year, :status, :disappear_region].all?{|p| params[p].blank?}
+    [:person_s, :sort, :sort_dir, :birth_year, :lost_on_year, :status, :disappear_region].all? { |p| params[p].blank? }
   end
 
   public
 
   def db_info
-    render_topic 'people_db_info', :show_title => false
+    render_topic 'people_db_info', show_title: false
   end
 
   # GET /people
   # GET /people.xml
   def index
-    params[:main] = 1
+    params[:main] = true
     list
     params.delete(:main)
     respond_to do |format|
-      format.html { render :action => 'list'  } 
-      format.xml  { render :xml => @people }
+      format.html { render action: 'list' }
+      format.xml { render xml: @people }
     end
   end
-
 
   # GET /people/recent
   def recent2
@@ -83,18 +80,18 @@ class PeopleController < ApplicationController
     list
     params.delete(:recent)
     respond_to do |format|
-      format.html { render :action => 'recent_list'  } 
-      format.xml  { render :xml => @people }
+      format.html { render action: 'recent_list' }
+      format.xml { render xml: @people }
     end
   end
 
   # GET /people/dump
   # GET /people/dump.xml
   def dump
-    @people = Person.find(:all)
+    @people = Person.all
     respond_to do |format|
-      format.html { render :action => 'dump', :layout => 'plain'  } 
-      format.xml  { render :xml => @people }
+      format.html { render action: 'dump', layout: 'plain' }
+      format.xml { render xml: @people }
     end
   end
 
@@ -105,7 +102,7 @@ class PeopleController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @person }
+      format.xml { render xml: @person }
     end
   end
 
@@ -120,9 +117,9 @@ class PeopleController < ApplicationController
         @person = p
         @person.lost_id ||= lost.id
       else
-        [ :full_name, :last_address,
-          :birth_date, :birth_month, :birth_year,
-          :lost_on, :lost_on_year, :lost_on_month
+        [:full_name, :last_address,
+         :birth_date, :birth_month, :birth_year,
+         :lost_on, :lost_on_year, :lost_on_month
         ].each do |f|
           @person[f] = lost[f]
         end
@@ -133,8 +130,8 @@ class PeopleController < ApplicationController
       end
     end
     respond_to do |format|
-      format.html { render :action => 'edit'} 
-      format.xml  { render :xml => @person }
+      format.html { render action: 'edit' }
+      format.xml { render xml: @person }
     end
   end
 
@@ -144,25 +141,29 @@ class PeopleController < ApplicationController
   end
 
   def extract_fuzzy_dates
-    extract_fuzzy_date(:lost_on, :lost_on_year, :lost_on_month, params[:person])
-    extract_fuzzy_date(:birth_date, :birth_year, :birth_month, params[:person])
+    @permitted_params = (params.require(:person).permit!).to_hash
+    extract_fuzzy_date(:lost_on, :lost_on_year, :lost_on_month, @permitted_params)
+    extract_fuzzy_date(:birth_date, :birth_year, :birth_month, @permitted_params)
   end
-  hide_action :extract_fuzzy_dates
+
+  # hide_action :extract_fuzzy_dates
 
   def init_lost_id
-    if @person.lost_id.blank? && !@person.full_name.blank? && lost=Lost.find_by_full_name(@person.full_name)
+    if @person.lost_id.blank? && !@person.full_name.blank? && lost = Lost.find_by_full_name(@person.full_name)
       @person.lost = lost
     end
   end
-  hide_action :init_lost_id
+
+  # hide_action :init_lost_id
 
   def check_requests
     if @not_found_requests
-      @person.errors.add :requests, "не могу найти: " +  @not_found_requests.join(',')
+      @person.errors.add :requests, "не могу найти: " + @not_found_requests.join(',')
     end
   end
-  hide_action :check_requests
- 
+
+  # hide_action :check_requests
+
   # POST /people
   # POST /people.xml
   def create
@@ -170,17 +171,17 @@ class PeopleController < ApplicationController
       flash[:info] = "Создание записи отменено"
       redirect_to(people_path)
     else
-      @person = Person.new(params[:person])
+      @person = Person.new(@permitted_params)
       init_lost_id
       check_requests
       respond_to do |format|
         if @person.save
           flash[:info] = 'Запись на человека успешно создана.'
           format.html { redirect_to(@person) }
-          format.xml  { render :xml => @person, :status => :created, :location => @person }
+          format.xml { render xml: @person, status: :created, location: @person }
         else
-          format.html { render :action => "new" }
-          format.xml  { render :xml => @person.errors, :status => :unprocessable_entity }
+          format.html { render action: "new" }
+          format.xml { render xml: @person.errors, status: :unprocessable_entity }
         end
       end
     end
@@ -197,13 +198,13 @@ class PeopleController < ApplicationController
       check_requests
       init_lost_id
       respond_to do |format|
-        if @person.update_attributes(params[:person])
+        if @person.update(@permitted_params)
           flash[:info] = 'Запись на человека успешно обновлена.'
           format.html { redirect_to(@person) }
-          format.xml  { head :ok }
+          format.xml { head :ok }
         else
-          format.html { render :action => "edit" }
-          format.xml  { render :xml => @person.errors, :status => :unprocessable_entity }
+          format.html { render action: "edit" }
+          format.xml { render xml: @person.errors, status: :unprocessable_entity }
         end
       end
     end
@@ -217,15 +218,14 @@ class PeopleController < ApplicationController
     @person.main = false
     @person.recent = false
     @person.save
-    
+
     flash[:info] = "Запись удалена из списка"
 
     respond_to do |format|
       format.html { redirect_to(people_path) }
-      format.xml  { head :ok }
+      format.xml { head :ok }
     end
   end
-
 
   # POST /people/1/props?main=1&recent=1
   def props
@@ -238,9 +238,9 @@ class PeopleController < ApplicationController
       @person.recent = params[:recent] if params[:recent]
       @person.save
       # @person.update_selected_attributes(:main, :recent) # PersonSweeper does not know about it
-      
+
       msgs = []
-      
+
       if old_main != @person.main
         if @person.main
           msgs << "Запись добавлена в основной список."
@@ -264,7 +264,7 @@ class PeopleController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to(@person) }
-      format.xml  { head :ok }
+      format.xml { head :ok }
     end
   end
 
@@ -272,20 +272,20 @@ class PeopleController < ApplicationController
   def list
     @title ||= "Список пропавших без вести"
     @wide_style = true
-    
+
     cnds = conditions_from_params :person,
-       :sort_by   => %w(id full_name last_address birth_year lost_on_year disappear_location anket_n),
-       :filter    => %w(lost_on_year birth_year status recent main disappear_region),
-       :search_in => %w(full_name last_address disappear_location orig_record remark disappear_region),
-       :page      => params[:page],
-       :per_page  => params[:per_page] || 20
+                                  sort_by: %w(id full_name last_address birth_year lost_on_year disappear_location anket_n),
+                                  filter: %w(lost_on_year birth_year status recent main disappear_region),
+                                  search_in: %w(full_name last_address disappear_location orig_record remark disappear_region),
+                                  page: params[:page],
+                                  per_page: params[:per_page] || 20
 
     cnds[:order] ||= 'id ASC'
 
-    @people = Person.paginate(cnds)
+    @people = Person.where(cnds.delete(:conditions)).order(cnds.delete(:order)).paginate(cnds)
     if @people.size == 0 && @people.total_pages < cnds[:page].to_i
       cnds[:page] = @people.total_pages
-      @people = Person.paginate(cnds)
+      @people = Person.where(cnds.delete(:conditions)).order(cnds.delete(:order)).paginate(cnds)
     end
   end
 end

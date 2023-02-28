@@ -16,12 +16,12 @@ module TopicParser
     end
 
     def basic_parser_for(macros, options={})
-      regexp = /(#{macros.join('|')})[\{]([^\n]+?)[\}]/ 
-      
+      regexp = /(#{macros.join('|')})[\{]([^\n]+?)[\}]/
+
       scanner = (
         options[:no_change] ?
           lambda {|text,block| text.scan(regexp){|m| block[$1, $2]}} :
-          lambda {|text,block| text.gsub!(regexp){|m| block[$1, $2]}} 
+          lambda {|text,block| text.gsub!(regexp){|m| block[$1, $2]}}
       )
 
       {
@@ -56,8 +56,8 @@ module TopicParser
 
     def after_parse(*methods)
       options =  methods.last.is_a?(Hash) ? methods.pop : {}
-      methods_seqs = (options.has_key?(:for) ? 
-        after_parse_callbacks.values_at(*options[:for]) : 
+      methods_seqs = (options.has_key?(:for) ?
+        after_parse_callbacks.values_at(*options[:for]) :
         after_parse_callbacks.values
       )
       methods_seqs.each {|seq| seq.push *methods }

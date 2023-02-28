@@ -1,9 +1,9 @@
 <div class="report">
 Заполните форму ниже, чтобы послать нам письмо или сообщение об ошибке на сайте.
 <p>
-<%= link_to_remote 'Сообщение об ошибке', :update=>'report', :url=>{:action=>'report', :t=>'bug'} %> | 
-<%= link_to_remote 'Письмо', :update=>'report', :url=>{:action=>'report', :t=>'info'} %> 
+<%= link_to_remote 'Сообщение об ошибке', :update=>'report', :url=>{:action=>'report', :t=>'bug'} %> |
+<%= link_to_remote 'Письмо', :update=>'report', :url=>{:action=>'report', :t=>'info'} %>
 </p>
 <%= flash_messages %>
-<%= render :file=>'support/report' %>
+<%= render partial: 'support/report' %>
 </div>

@@ -1,4 +1,4 @@
-class AddTopicLockInfo < ActiveRecord::Migration
+class AddTopicLockInfo < ActiveRecord::Migration[6.0]
   def self.up
     add_column :topics, :locked_by_id, :integer
     add_column :topics, :locked_at, :datetime

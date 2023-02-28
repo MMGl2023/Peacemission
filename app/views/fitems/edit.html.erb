@@ -3,7 +3,7 @@
 <%= flash_messages %>
 <%= error_messages_for :fitem %>
 <br />
-<% form_for @fitem, :html => {:multipart => true} do |f| -%>
+<%= form_for @fitem, :html => {:multipart => true} do |f| -%>
 <table class="fitem_edit_main">
 <tr>
   <td>

@@ -2,30 +2,31 @@
   <%= flash_messages %>
   <br/>
 
-  <%= link_to_function '&lt;&lt;Вернуться обратно', 'history.back()' %> |
-  <%= link_to 'К списку объявлений', :action=>'index', :id=>nil %>
+  <%= link_to_function raw('&lt;&lt;Вернуться обратно'), 'history.back()' %> |
+  <%= link_to 'К списку объявлений', :action => 'index', :id => nil %>
   <% if allow_edit? -%>
-    | 
+    |
     <%= link_to icon_edit, edit_lost_path(@lost) %>
-    <%= link_to icon_delete, lost_path(@lost), :method => :delete, :confirm=>"Вы действительно хотите удалить объявление о #{@lost.full_name} (№ #{@lost.id})" %>
-    <%= link_to icon_info, new_person_path(:from_lost => @lost.id), :title => "Перейти (создать) запись в списке пропавших" if has_permission?(:people) %>
+    <%= link_to icon_delete, lost_path(@lost), method: :delete, data: { confirm: "Вы действительно хотите удалить объявление о #{@lost.full_name} (№ #{@lost.id})" } %>
+    <%= link_to icon_info, new_person_path(from_lost: @lost.id), title: "Перейти (создать) запись в списке пропавших" if has_permission?(:people) %>
   <% end -%>
   <br/><br/>
   <table class="lost_show" cellspacing="6">
     <tr>
       <td width="260" valign="top">
-        <%= image_item(@lost.image, :max_width=>310, :max_height=>350) %>
+        <%= image_item(@lost.image, :max_width => 310, :max_height => 350) %>
       </td>
       <td valign="top" class="lost_summary">
-        <%= '<span class="NB">НЕ АКТИВНО</span><br /><br />' if !@lost.active -%>
-        <%= multiple_link_to( [icon_info, 'Запись в списке'], ' ', @lost.person ) + '<br /><br />' if @lost.person %>
-        <b>Имя:</b><br /> <%= @lost.full_name %><br /><br />
-        <b>Дата рождения:</b><br/> <%= fuzzy_date_s(@lost, :birth_date) %><br /><br />
-        <b>Дата исчезновения:</b><br/> <%= fuzzy_date_s(@lost, :lost_on) %><br /><br/>
+        <%= raw('<span class="NB">НЕ АКТИВНО</span><br /><br />') if !@lost.active -%>
+        <%= multiple_link_to([icon_info, 'Запись в списке'], ' ', @lost.person) + raw('<br /><br />') if @lost.person %>
+        <b>Имя:</b><br/> <%= @lost.full_name %><br/><br/>
+        <b>Дата рождения:</b><br/> <%= fuzzy_date_s(@lost, :birth_date) %><br/><br/>
+        <b>Дата исчезновения:</b><br/> <%= fuzzy_date_s(@lost, :lost_on) %><br/><br/>
         <% unless fuzzy_date_blank?(@lost, :found_on) -%>
           <div class="found">
             <b>Дата обнаружения:</b><br/> <%= fuzzy_date_s(@lost, :found_on) %>
-          </div><br /><br/>
+          </div>
+          <br/><br/>
         <% end -%>
         <b>Последнее место пребывания:</b><br/> <%= @lost.last_location %>
       </td>
@@ -37,11 +38,11 @@
     </tr>
   </table>
   <br/><br/>
-  <%= link_to_function '&lt;&lt;Вернуться обратно', 'histroy.back()' %> |
-  <%= link_to 'К списку объявлений', :action=>'index', :id=>nil %>
+  <%= link_to_function raw('&lt;&lt;Вернуться обратно'), 'histroy.back()' %> |
+  <%= link_to 'К списку объявлений', action: 'index', id: nil %>
   <% if current_user -%>
-    <%= ' | ' + link_to( '[Редактировать]', :action=>'edit' ) %>
+    <%= raw(' | ' + link_to('[Редактировать]', action: 'edit')) %>
   <% end -%>
   <% @obj = @lost %>
-  <%= render :partial => 'comments/obj_comments', :object => @obj %>
+  <%= render partial: 'comments/obj_comments', object: @obj %>
 </div>

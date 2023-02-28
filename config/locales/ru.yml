@@ -1,0 +1,34 @@
+ru:
+  hello: "Привет, мир!"
+  activerecord:
+    errors:
+      models:
+        report:
+          attributes:
+            email:
+              blank: 'не может быть пустым'
+              has_wrong_format: 'в неверном формате'
+            user:
+              required: 'необходимо заполнить'
+        user:
+          attributes:
+            email:
+              too_short: 'слишком короткое'
+            image:
+              required: 'необходимо заполнить'
+            login:
+              too_short: 'слишком короткое'
+            password:
+              too_short: 'слишком короткое'
+        person:
+          attributes:
+            lost:
+              required: 'необходимо заполнить'
+        fitem:
+          attributes:
+            user:
+              required: 'необходимо заполнить'
+        lost:
+          attributes:
+            image:
+              required: 'необходимо заполнить'

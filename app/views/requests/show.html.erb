@@ -3,24 +3,24 @@
 <% end -%>
 
 <% @title = "Запрос №#{@req.id}" %>
-<h1><%= link_to icon_edit(:align=>'top'), edit_request_path(@req) %><%= @title %></h1>
+<h1><%= link_to icon_edit(align: 'top'), edit_request_path(@req) %><%= @title %></h1>
 
 <%= flash_messages %>
 
-  <%= link_to_function '&lt;&lt;вернуться обратно', 'history.back()' %> | 
-  <% if has_permission?(:requests) -%>
-    <%= link_to 'К списку запросов', list_requests_path %>
-  <% else -%>
-    <%= link_to 'К странице нового запроса', requests_path %>
-  <% end -%>
-  <% if allow_edit? -%>
-    | <%= link_to icon_edit, edit_request_path(@req) %>
-      <%= link_to icon_delete, request_path(@req), :method => :delete, :confirm => "Вы действительно хотите удалить запрос на #{@req.lost_full_name} (№ #{@req.id})" %>
-  <% end -%>
+<%= link_to_function raw('&lt;&lt;вернуться обратно'), 'history.back()' %> |
+<% if has_permission?(:requests) -%>
+  <%= link_to 'К списку запросов', list_requests_path %>
+<% else -%>
+  <%= link_to 'К странице нового запроса', requests_path %>
+<% end -%>
+<% if allow_edit? -%>
+  | <%= link_to icon_edit, edit_request_path(@req) %>
+  <%= link_to icon_delete, request_path(@req), method: :delete, data: { confirm: "Вы действительно хотите удалить запрос на #{@req.lost_full_name} (№ #{@req.id})" } %>
+<% end -%>
 
 <%-
-  def table_item(name,value)
-    "<tr>\n<th>#{name}</th><td>#{value}</td>\n</tr>"
+  def table_item(name, value)
+    raw("<tr>\n<th>#{name}</th><td>#{value}</td>\n</tr>")
   end
 -%>
 <table class="request" width="100%">
@@ -28,24 +28,24 @@
     <td>
       <table class="subform notlist">
         <tr>
-          <%= table_item "Статус",  request_statuses[@req.status] %>
-          <%= table_item "Тип запроса",  request_types[@req.request_type] %>
-          <%= table_item "Дата создания",  datetime_s(@req.created_at) %>
+          <%= table_item "Статус", request_statuses[@req.status] %>
+          <%= table_item "Тип запроса", request_types[@req.request_type] %>
+          <%= table_item "Дата создания", datetime_s(@req.created_at) %>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
-    <th class="left">Данные о пропавшем </th>
+    <th class="left">Данные о пропавшем</th>
   </tr>
   <tr>
     <td>
       <table class="subform notlist">
-  <%= table_item 'ФИО', h(@req.lost_full_name) %>
-  <%= table_item 'Дата рождения', fuzzy_date_s(@req, :lost_birth_date) %> 
-  <%= table_item 'Дата исчезновения', fuzzy_date_s(@req, :lost_on) %>
-  <%= table_item 'Место жительства', h(@req.lost_address) %> 
-  <%= table_item 'Место исчезновения', h(@req.lost_last_location) %> 
+        <%= table_item 'ФИО', h(@req.lost_full_name) %>
+        <%= table_item 'Дата рождения', fuzzy_date_s(@req, :lost_birth_date) %>
+        <%= table_item 'Дата исчезновения', fuzzy_date_s(@req, :lost_on) %>
+        <%= table_item 'Место жительства', h(@req.lost_address) %>
+        <%= table_item 'Место исчезновения', h(@req.lost_last_location) %>
       </table>
     </td>
   </tr>
@@ -81,17 +81,17 @@
   <tr>
     <td>
       <table class="subform notlist">
-  <%= table_item 'ФИО', h(@req.full_name) %>
-  <%= table_item 'Место жительства', h(@req.address) %> 
-  <%= table_item 'Телефон', h(@req.phone_number) %> 
-  <%= table_item 'E-mail', h(@req.email) %>
-  <%= table_item 'Др. контакты', h(@req.contacts) %> 
+        <%= table_item 'ФИО', h(@req.full_name) %>
+        <%= table_item 'Место жительства', h(@req.address) %>
+        <%= table_item 'Телефон', h(@req.phone_number) %>
+        <%= table_item 'E-mail', h(@req.email) %>
+        <%= table_item 'Др. контакты', h(@req.contacts) %>
       </table>
     </td>
   </tr>
 </table>
 
-<%= link_to_function '&lt;&lt;вернуться обратно', 'history.back()' %> | 
+<%= link_to_function raw('&lt;&lt;вернуться обратно'), 'history.back()' %> |
 <% if has_permission?(:requests) -%>
   <%= link_to 'К списку запросов', list_requests_path %>
 <% else -%>
@@ -99,7 +99,7 @@
 <% end -%>
 <% if allow_edit? -%>
   | <%= link_to icon_edit, edit_request_path(@req) %>
-    <%= link_to icon_delete, request_path(@req), :method => :delete, :confirm => "Вы действительно хотите удалить запрос на #{@req.lost_full_name} (№ #{@req.id})" %>
+  <%= link_to icon_delete, request_path(@req), method: :delete, data: { confirm: "Вы действительно хотите удалить запрос на #{@req.lost_full_name} (№ #{@req.id})" } %>
 <% end -%>
 
 <% @obj = @req %>

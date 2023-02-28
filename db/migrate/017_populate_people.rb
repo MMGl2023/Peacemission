@@ -22,60 +22,60 @@ end
 def set_date(record, attr, attr_year, h)
   begin
     record.send(attr_year + '=', h[:year]) if h[:year]
-    record.send(attr + '=', h.to_date) 
+    record.send(attr + '=', h.to_date)
   rescue=>e
   end
 end
 
 
-class PopulatePeople < ActiveRecord::Migration
+class PopulatePeople < ActiveRecord::Migration[6.0]
   def self.up
-    
-    fields = [:id, :full_name, :birth_date, :last_address, :disappear_on, :disappear_location, :anket_n] 
-    
-    gz_file_name = File.join( File.dirname(__FILE__), '..', 'bootstrap_data', 'people.csv.gz' )  
-    file_name = File.join( File.dirname(__FILE__), '..', 'bootstrap_data', 'people.csv' )  
-    
+
+    fields = [:id, :full_name, :birth_date, :last_address, :disappear_on, :disappear_location, :anket_n]
+
+    gz_file_name = File.join( File.dirname(__FILE__), '..', 'bootstrap_data', 'people.csv.gz' )
+    file_name = File.join( File.dirname(__FILE__), '..', 'bootstrap_data', 'people.csv' )
+
     gz_cmd =  "gzip -d #{gz_file_name} -c > #{file_name}"
     puts "Executing: #{gz_cmd}"
     `#{gz_cmd}`
-    
+
     File.open( file_name ) do |f|
       f.each do |line|
-        line.strip! 
+        line.strip!
         # puts line
         next if line.blank?
-        
+
         values = line.split('|').map(&:strip)
         p = {:orig_record => line}
         fields.zip(values).each do |k, v|
           p[k] = v
         end
-        
+
         person = Person.new(p)
         set_date(person, 'birth_date', 'birth_year', parse_date( p[:birth_date] ))
         set_date(person, 'disappear_on', 'disappear_year', parse_date( p[:disappear_on] ))
-        
+
         conn = Person.connection
-        reset_pk = lambda do 
+        reset_pk = lambda do
           if conn.respond_to?(:reset_pk_sequence!)
             conn.reset_pk_sequence!( Person.table_name )
           end
         end
-        
+
         reset_pk.call
-        
+
         person.id = p[:id]
         if person.save
           puts "#{p[:id]}: OK!"
         else
           puts "#{p[:id]}: BAD! : #{person.errors.full_messages.join("; ")}"
         end
-       
+
         reset_pk.call
       end
     end
-    
+
     `rm #{file_name}`
   end
 

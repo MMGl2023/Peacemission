@@ -1,0 +1,19 @@
+<div id="main_menu">
+  <ul>
+    <li>
+      <%= link_to_topic "Главная<br/> страница".html_safe, name: 'index' %>
+    </li>
+    <li>
+      <%= link_to "Список пропавших<br/>без вести".html_safe, db_info_people_path %>
+    </li>
+    <li>
+      <%= link_to "Розыск<br/>по горячим следам".html_safe, recent_path %>
+    </li>
+    <li>
+      <%= link_to "Новости<br />ММГЛ".html_safe, news_topics_path %>
+    </li>
+    <li>
+      <%= link_to_topic "О нас<br />Контакты".html_safe, name: 'about' %>
+    </li>
+  </ul>
+</div>

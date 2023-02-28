@@ -1,7 +1,7 @@
-class AddFitemFileHash < ActiveRecord::Migration
+class AddFitemFileHash < ActiveRecord::Migration[6.0]
   def self.up
     add_column :fitems, :file_hash, :string, :limit=>40
-    Fitem.each do |f|
+    Fitem.all.each do |f|
       f.ensure_file_hash
     end
   end

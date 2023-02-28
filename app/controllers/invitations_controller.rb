@@ -1,13 +1,13 @@
 class InvitationsController < ApplicationController
 
   require_permission :invitations
-  
-  before_filter :find_invitation, :only => [:show, :send_inv, :edit, :update]
+
+  before_action :find_invitation, :only => [:show, :send_inv, :edit, :update]
 
   protected
-  
+
   def find_invitation
-    (@invitation = Invitation.find_by_id(params[:id]) || 
+    (@invitation = Invitation.find_by_id(params[:id]) ||
                    Invitation.find_by_email(params[:email])
     ) || bad_request('Не могу найти приглашения с указанными параметрами', previous_url || '/')
   end
@@ -18,7 +18,7 @@ class InvitationsController < ApplicationController
   # GET /invitations.xml
   def index
     list
-    
+
     respond_to do |format|
       format.html { render :action => 'list' }
       format.xml  { render :xml => @invitations }
@@ -50,7 +50,7 @@ class InvitationsController < ApplicationController
        :host => request.host
     }
   end
-  hide_action :set_default_subject
+  # hide_action :set_default_subject
 
   # GET /invitations/new
   # GET /invitations/new.xml
@@ -66,7 +66,7 @@ class InvitationsController < ApplicationController
     )
     @invitation.created_by = current_user
     @letter = render_to_string :template => 'notifier/invite_user', :layout => false
-    
+
     @invitation = Invitation.new(params[:invitation])
 
     respond_to do |format|
@@ -90,7 +90,7 @@ class InvitationsController < ApplicationController
     if @invitation.subject.blank?
       @invitation.subject = @default_subject
     end
-    
+
     respond_to do |format|
       if @invitation.save
         format.html {
@@ -146,10 +146,10 @@ class InvitationsController < ApplicationController
       :page     => params[:page],
       :per_page => params[:per_page] || 20
 
-    @invitations = Invitation.paginate(cnds)
+    @invitations = Invitation.where(cnds.delete(:conditions)).order(cnds.delete(:order)).paginate(cnds)
     if @invitations.size == 0 && @invitations.total_pages < cnds[:page].to_i
       cnds[:page] = @invitations.total_pages
-      @invitations = Invitation.paginate(cnds)
+      @invitations = Invitation.where(cnds.delete(:conditions)).order(cnds.delete(:order)).paginate(cnds)
     end
   end
 end

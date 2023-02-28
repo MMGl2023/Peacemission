@@ -1,4 +1,4 @@
-class CreatePermissions <ActiveRecord::Migration
+class CreatePermissions <ActiveRecord::Migration[6.0]
   def self.up
 
 

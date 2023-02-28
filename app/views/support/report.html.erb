@@ -1,10 +1,10 @@
 <% case @report.report_type -%>
 <% when 'bug' -%>
   <div id="report" class="bug_report">
-    <%= render :file=>'support/bug_report' %>
+    <%= render partial: 'support/bug_report' %>
   </div>
 <% when 'info' -%>
   <div id="report" class="info_report">
-    <%= render :file=>'support/info_report' %>
+    <%= render partial: 'support/info_report' %>
   </div>
 <% end -%>

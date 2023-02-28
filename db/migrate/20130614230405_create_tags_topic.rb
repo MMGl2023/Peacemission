@@ -1,4 +1,4 @@
-class CreateTagsTopic < ActiveRecord::Migration
+class CreateTagsTopic < ActiveRecord::Migration[6.0]
   def self.up
     create_table :tags_topics do |t|
       t.integer :tag_id

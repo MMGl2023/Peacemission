@@ -1,4 +1,4 @@
-class AddTopicTagsText < ActiveRecord::Migration
+class AddTopicTagsText < ActiveRecord::Migration[6.0]
   def self.up
     add_column :topics, :tags_text, :text
   end

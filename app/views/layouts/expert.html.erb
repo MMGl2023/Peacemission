@@ -2,7 +2,9 @@
 <html>
 <head>
   <title>Expert Site</title>
-  <%= stylesheet_link_tag "expert", :media => "all" %>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag "expert", media: "all" %>
   <%= javascript_include_tag "application", "prototype", "effects" %>
   <%= javascript_include_tag :defaults %>
   <%= active_scaffold_includes %>

@@ -1,4 +1,4 @@
-class AddLostAuthorDetails < ActiveRecord::Migration
+class AddLostAuthorDetails < ActiveRecord::Migration[6.0]
   @@columns = %w(author_full_name author_email author_phone_number author_address author_contacts)
   def self.up
     @@columns.each do |c|
@@ -15,7 +15,7 @@ class AddLostAuthorDetails < ActiveRecord::Migration
     @@columns.each do |c|
       remove_index :losts, c
       remove_column :losts, c
-    end 
+    end
     remove_index :losts, :lost_on_year
     remove_column :losts, :lost_on_year
     remove_index :losts, :found_on_year

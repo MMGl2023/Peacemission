@@ -31,25 +31,23 @@ def new_set_date(record, attr, attr_year, attr_month, h)
   end
 end
 
-class RepopulatePeople < ActiveRecord::Migration
+class RepopulatePeople < ActiveRecord::Migration[6.0]
   def self.up
     drop_table :people
 
     create_table :people, :force => true do |t|
       t.string   :full_name
       t.date     :birth_date
-      t.integer  :birth_year,         :limit => 11
+      t.integer  :birth_year,         :limit => 8
       t.integer  :birth_month,        :limit => 8
       t.string   :last_address
       t.date     :lost_on
-      t.integer  :lost_on_year,       :limit => 11
+      t.integer  :lost_on_year,       :limit => 8
       t.integer  :lost_on_month,      :limit => 8
       t.string   :disappear_region
       t.string   :disappear_location
-      t.integer  :anket_n,            :limit => 11
-      t.datetime :created_at
-      t.datetime :updated_at
-      t.integer  :lost_id,            :limit => 11
+      t.integer  :anket_n
+      t.integer  :lost_id
 
       t.text    :orig_record
       t.text    :relatives_contacts
@@ -58,42 +56,42 @@ class RepopulatePeople < ActiveRecord::Migration
 
       t.timestamps
     end
-    
+
     [
-      [:full_name, :birth_year], 
+      [:full_name, :birth_year],
       :birth_date, :birth_year,
-      :last_address, 
+      :last_address,
       :anket_n,
       :lost_on, :lost_on_year,
       :disappear_region,
       :disappear_location,
       :lost_id
-    ].each do |f| 
+    ].each do |f|
       ensure_add_index :people, f
     end
 
     [:orig_record, :relatives_contacts, :info_source, :remark].each do |f|
       add_text_index :people, f
     end
-   
-    fields = [:id, :full_name, :birth_date, :last_address, :lost_on, :disappear_location, :relatives_contacts, :anket_n, :info_source, :remark] 
-    
+
+    fields = [:id, :full_name, :birth_date, :last_address, :lost_on, :disappear_location, :relatives_contacts, :anket_n, :info_source, :remark]
+
     file_name = File.join( File.dirname(__FILE__), '..', 'bootstrap_data', 'people.csv' )
     gz_file_name = file_name + '.gz'
-    
+
     gz_cmd =  "gzip -d #{gz_file_name} -c > #{file_name}"
     puts "Executing: #{gz_cmd}"
     puts `#{gz_cmd}`
 
     raise RuntimeError, "No file #{file_name}" unless File.exist?(file_name)
-    
+
     File.open( file_name ) do |f|
       f.each do |line|
         line.strip!
         line << ' '
         # puts line
         next if line.blank?
-        
+
         values = line.split('|').map(&:strip)
 
         if values.size != fields.size
@@ -106,20 +104,20 @@ class RepopulatePeople < ActiveRecord::Migration
         fields.zip(values).each do |k, v|
           p[k] = v
         end
-        
+
         person = Person.new(p)
         new_set_date(person, 'birth_date', 'birth_year', 'birth_month', parse_date( p[:birth_date] ))
         new_set_date(person, 'lost_on', 'lost_on_year', 'lost_on_month', parse_date( p[:lost_on] ))
-        
+
         conn = Person.connection
-        reset_pk = lambda do 
+        reset_pk = lambda do
           if conn.respond_to?(:reset_pk_sequence!)
             conn.reset_pk_sequence!( Person.table_name )
           end
         end
-        
+
         reset_pk.call
-        
+
         person.id = p[:id]
         if person.save
           puts "#{p[:id]}: OK!"
@@ -127,15 +125,15 @@ class RepopulatePeople < ActiveRecord::Migration
           puts "#{p[:id]}: BAD! : #{person.errors.full_messages.join("; ")}"
           break
         end
-       
+
         reset_pk.call
       end
     end
-    
+
     `rm #{file_name}`
   end
 
   def self.down
-    
+
   end
 end

@@ -1,36 +1,36 @@
 class Array
   def drop_while(&block)
-    idx = (0...self.size).find {|i| !block[self[i]] }
-    idx ?  self[idx..-1] : []
+    idx = (0...self.size).find { |i| !block[self[i]] }
+    idx ? self[idx..-1] : []
   end
 
   def take_while(&block)
-    idx = (0...self.size).find {|i| !block[self[i]] }
-    idx ?  self[0...idx] : self.dup
+    idx = (0...self.size).find { |i| !block[self[i]] }
+    idx ? self[0...idx] : self.dup
   end
 
-  def to_hash(fieldnames)
-    h = {}
-    fieldnames.each_with_index{|name, i| h[name] = self[i]}
-    h.delete(nil)
-    h
-  end
-  
+  # def to_hash(fieldnames = [])
+  #   h = {}
+  #   fieldnames.each_with_index { |name, i| h[name] = self[i] }
+  #   h.delete(nil)
+  #   h
+  # end
+
   def max_by(&block)
-    sv = {}  
-    self.inject(self.first){|a, x|
-      if (sv[a]||=block[a]) < (sv[x]||=block[x]) 
+    sv = {}
+    self.inject(self.first) { |a, x|
+      if (sv[a] ||= block[a]) < (sv[x] ||= block[x])
         x
       else
         a
       end
     }
   end
-  
+
   def min_by(&block)
     sv = {}
-    self.inject(self.first){|a, x|
-      if (sv[x]||=block[x]) < (sv[a]||=block[a]) 
+    self.inject(self.first) { |a, x|
+      if (sv[x] ||= block[x]) < (sv[a] ||= block[a])
         x
       else
         a
@@ -54,8 +54,8 @@ class Array
     return res if empty?
     res << first
     prev = block[res.last]
-    each {|a|
-      if prev != (n=block[a])
+    each { |a|
+      if prev != (n = block[a])
         res << a
         prev = n
       end
@@ -66,8 +66,8 @@ class Array
   def uniq_by(&block)
     res = []
     done = {}
-    each {|i|
-      unless done[ n=block[ i ] ]
+    each { |i|
+      unless done[n = block[i]]
         res << i
         done[n] = true
       end

@@ -3,7 +3,7 @@
 <%= flash_messages %>
 <%= error_messages_for :user %>
 <br />
-<% form_for @user, :html=>{:multipart=>true} do |f| -%>
+<%= form_for @user, :html=>{:multipart=>true} do |f| -%>
   <table>
     <tr>
       <td>
@@ -70,8 +70,8 @@
     </tr>
     <tr>
     <td colspan="2">
-      <label for="user_info"> О себе</label>:<br /> 
-      <%= f.text_area :info, :rows=>13, :cols=>40 %>    
+      <label for="user_info"> О себе</label>:<br />
+      <%= f.text_area :info, :rows=>13, :cols=>40 %>
     </td>
     </tr>
     <tr>

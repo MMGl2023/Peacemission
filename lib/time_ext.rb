@@ -49,7 +49,7 @@ class Time
   def to_yyyy_mm_dd
     "%04d.%02d.%02d" % [year, month, day]
   end
-  
+
   def to_yyyy_mm_dd_time
      to_yyyy_mm_dd + (" %02d:%02d" % [hour,min])
   end
@@ -82,7 +82,7 @@ class Time
     end
     ans
   end
-  
+
   def self.parse_ext(s)
     Time.parse(s)
   rescue ArgumentError
@@ -96,7 +96,7 @@ class Time
       Time.utc($1.to_i, $2.to_i, $3.to_i)
     when /^(\d?\d).(\d?\d)$/
       Time.utc(Time.now.year, $1.to_i, $2.to_i)
-    else 
+    else
       nil
     end
   end

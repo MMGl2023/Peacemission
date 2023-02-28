@@ -1,4 +1,4 @@
-class AddPeopleRequests < ActiveRecord::Migration
+class AddPeopleRequests < ActiveRecord::Migration[6.0]
   def self.up
     create_table :people_requests, :force=>true do |t|
       t.column :person_id, :integer

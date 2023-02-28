@@ -1,21 +1,21 @@
 class Person < ActiveRecord::Base
-  has_many :comments, :as => :obj, :order => "created_at DESC"
+  has_many :comments, -> { order("created_at") }, as: :obj
   belongs_to :lost
   has_many :people_requests
-  has_many :requests, :through => :people_requests
+  has_many :requests, through: :people_requests
 
   before_save :fix_full_name
 
   def requests=(reqs)
-    curr = self.requests.to_a
+    curr = self.request_ids.to_a
     to_del = curr - reqs
     to_add = (reqs - curr).uniq
-    self.requests.delete(*to_del)
-    self.requests.push(*to_add)
+    self.request_ids.delete(*to_del) if to_del.present?
+    self.request_ids.push(*to_add) if to_add.present?
   end
 
   def fix_full_name
-    self.full_name = (self.full_name||'').gsub(/\s+/, ' ').gsub(/^\s*|\s*$/, '')
+    self.full_name = (self.full_name || '').gsub(/\s+/, ' ').gsub(/^\s*|\s*$/, '')
   end
 
   def signature
@@ -24,8 +24,8 @@ class Person < ActiveRecord::Base
 
   def disappear_address
     (!disappear_region.blank? && !disappear_location.index(disappear_region) ?
-      "#{disappear_region}, #{disappear_location}" :
-      disappear_location
+       "#{disappear_region}, #{disappear_location}" :
+       disappear_location
     )
   end
 end

@@ -1,4 +1,4 @@
-class CreateComments < ActiveRecord::Migration
+class CreateComments < ActiveRecord::Migration[6.0]
   def self.up
     create_table :comments, :force=>true do |t|
       t.string :subject, :limit=>1024
@@ -16,8 +16,8 @@ class CreateComments < ActiveRecord::Migration
       t.timestamps
     end
 
-    [ [:obj_type, :obj_id], 
-      :author_id, :author_name, :state, 
+    [ [:obj_type, :obj_id],
+      :author_id, :author_name, :state,
       [:root_id, :thread_updated_at],
       [:created_at, :root_id]
     ].each do |f|

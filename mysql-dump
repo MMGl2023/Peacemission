@@ -1,3 +1,0 @@
-#!/bin/bash
-
-mysqldump mmgl_production -u root --password=ain9oon2Xu  --ignore-table=mmgl_production.sessions | gzip  > ~/db_backups/mmgl-`date +%Y-%m-%d`.sql.gz

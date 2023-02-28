@@ -3,7 +3,7 @@
 <%= error_messages_for :recent_person %>
 
 <% now = Time.now %>
-<% form_for(@recent_person) do |f| %>
+<%= form_for(@recent_person) do |f| %>
 <table width="100%">
   <tr>
     <td colspan="2">
@@ -26,7 +26,7 @@
       <p>
         <label for="recent_person_birth_date">Дата рождения</label><br />
         <%= select_fuzzy_date @recent_person, :birth_date,
-          :start_year => 1900, 
+          :start_year => 1900,
           :end_year => now.year %>
       </p>
       <p>
@@ -45,10 +45,10 @@
       </p>
       <p>
         <label for="recent_person_disapear_region">Регион исчезновения</label><br />
-        <%= text_field_with_auto_complete :recent_person, :disappear_region, {}, :min_chars => 0 %>
+        <%= text_field_with_auto_complete :recent_person, :disappear_region, {}, min_chars: 0 %>
         <div class="explain">
          (Для обозначения региона используйте, пожалуйста,
-         сокращения: РИ - Республика Ингушетия, 
+         сокращения: РИ - Республика Ингушетия,
          РД - Республика Дагестан, РСО-А - Республика Северная Осетия - Алания,
          ЧР - Чеченская Республика, РКБ - Республика Кабардино - Балкарская)
         </div>

@@ -2,54 +2,54 @@
   <%= title "Пропавший без вести №#{@recent_person.id}: #{@recent_person.full_name}" %>
 
   <%= link_to_function h('<<Вернуться'), 'history.back()' %> |
-  <%= link_to 'К списку', recent_people_path  %>
+  <%= link_to 'К списку', recent_people_path %>
   <% if current_user -%>
-    | 
-    <%= link_to icon_edit  , edit_recent_person_path(@recent_person), :title => 'Редактировать' %> 
-    <%= link_to icon_delete, recent_person_path(@recent_person), :title => 'Удалить запись', :method => :delete, :confirm => "Вы действительно хотите удалить запись на человека #{@recent_person.full_name}" %>
+    |
+    <%= link_to icon_edit, edit_recent_person_path(@recent_person), title: 'Редактировать' %>
+    <%= link_to icon_delete, recent_person_path(@recent_person), title: 'Удалить запись', method: :delete, data: { confirm: "Вы действительно хотите удалить запись на человека #{@recent_person.full_name}" } %>
   <% end -%>
   <p></p>
   <p>
     <b>ФИО:</b>
-    <%=h @recent_person.full_name %>
+    <%= h @recent_person.full_name %>
   </p>
 
   <p>
     <b>Дата рождения:</b>
-    <%=  fuzzy_date_s(@recent_person, :birth_date, :birth_year, :birth_month)  %>
+    <%= fuzzy_date_s(@recent_person, :birth_date, :birth_year, :birth_month) %>
   </p>
 
   <p>
     <b>Место жительства на момент исчезновения:</b>
-    <%=h @recent_person.last_address %>
+    <%= h @recent_person.last_address %>
   </p>
 
   <p>
-    <b>Дата  исчезновения или дата объявления в розыск:</b>
+    <b>Дата исчезновения или дата объявления в розыск:</b>
     <%= fuzzy_date_s(@recent_person, :lost_on, :lost_on_year, :lost_on_month) %>
   </p>
 
   <p>
     <b>Место исчезновения:</b>
-    <%=h @recent_person.disappear_address %>,
+    <%= h @recent_person.disappear_address %>,
   </p>
 
   <% if current_user -%>
     <p>
       <b>Принятые меры и результаты поиска:</b><br/>
-      <%=h @recent_person.remark %>
+      <%= h @recent_person.remark %>
     </p>
   <% end -%>
 
   <%= link_to_function h('<<Вернуться'), 'history.back()' %> |
   <%= link_to 'К списку', recent_people_path %>
   <% if current_user -%>
-    | 
-    <%= link_to icon_edit  , edit_recent_person_path(@recent_person), :title => 'Редактировать' %> 
-    <%= link_to icon_delete, recent_person_path(@recent_person), :title => 'Удалить запись', :method => :delete, :confirm => "Вы действительно хотите удалить запись на человека #{@recent_person.full_name}" %>
+    |
+    <%= link_to icon_edit, edit_recent_person_path(@recent_person), title: 'Редактировать' %>
+    <%= link_to icon_delete, recent_person_path(@recent_person), title: 'Удалить запись', method: :delete, data: { confirm: "Вы действительно хотите удалить запись на человека #{@recent_person.full_name}" } %>
   <% end -%>
 
   <% @obj = @recent_person %>
-  <%= render :partial => 'comments/obj_comments', :object => @obj %>
+  <%= render :partial => 'comments/obj_comments', object: @obj %>
 </div>
 

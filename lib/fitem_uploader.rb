@@ -2,7 +2,7 @@ module FitemUploader
 
   def new_fitem
     @fitem = Fitem.new
-    render :file => 'fitem/_upload_form'
+    render file: 'fitem/_upload_form'
   end
 
   attr_accessor :fitem
@@ -11,21 +11,21 @@ module FitemUploader
     true
   end
 
-  def create_fitem 
+  def create_fitem
     upload_fitem(self)
     if @error
       @error = @error.to_s.humanize
-      render :file => 'fitem/_upload_form'
+      render file: 'fitem/_upload_form'
     else
       flash[:info] = 'Succsessfuly uploaded. One more?'
-      redirect_to :action => 'new_fitem'
+      redirect_to action: 'new_fitem'
     end
   end
 
-  def upload_fitem(object, attr_name=:file, options={})
-    fitem_options = options[:fitem_options] || {:max_width => 1024}
+  def upload_fitem(object, attr_name = :file, options = {})
+    fitem_options = options[:fitem_options] || { max_width: 1024 }
     pars = options[:params] || params[:fitem] || params
-    file_field = options[:file_field] || :file 
+    file_field = options[:file_field] || :file
     fitem_options[:name] ||= 'fitem_at_' + Time.now.to_i.to_s
 
     if fitem_options[:name].is_a?(Proc)

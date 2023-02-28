@@ -3,9 +3,9 @@
   @ctitle = (
     case @obj
     when Lost
-     "Комментарии к объявлению"  
+      "Комментарии к объявлению"
     when Comment
-      "Комментарии к комментарию" 
+      "Комментарии к комментарию"
     when Topic
       "Комментарии к статье"
     else
@@ -13,7 +13,7 @@
     end
   )
 %>
-<h2 class="comments"><%= @ctitle  %></h2>
-<%= render :partial => 'comments/comment_wrapper', :object => @obj %>
+<h2 class="comments"><%= @ctitle %></h2>
+<%= render partial: 'comments/comment_wrapper', object: @obj %>
 <%= javascript_tag "live_comments('#{@obj.class}', #{@obj.id})" %>
-  
+

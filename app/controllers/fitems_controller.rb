@@ -1,14 +1,14 @@
 class FitemsController < ApplicationController
-  
-  before_filter :signin_if_not_yet, :except=>[:index, :show, :image]
+
+  before_action :signin_if_not_yet, :except => [:index, :show, :image]
 
   def find_or_message
     unless (params[:id] && @fitem = Fitem.find_by_id(params[:id])) or
-           (params[:name] && @fitem = Fitem.find_by_name(params[:name]))
-      flash[:error] = "Не могу найти файл с name=#{params[:name]||'*'} и id=#{params[:id]||'*'}"
+      (params[:name] && @fitem = Fitem.find_by_name(params[:name]))
+      flash[:error] = "Не могу найти файл с name=#{params[:name] || '*'} и id=#{params[:id] || '*'}"
       respond_to do |f|
         f.html { redirect_to fitems_path }
-        f.xml  { head :not_found }
+        f.xml { head :not_found }
       end
       false
     else
@@ -28,7 +28,7 @@ class FitemsController < ApplicationController
     if find_or_message
       respond_to do |f|
         f.html # show.html.erb
-        f.xml  { render :xml=>@fitem }
+        f.xml { render :xml => @fitem }
       end
     end
   end
@@ -36,8 +36,8 @@ class FitemsController < ApplicationController
   def image
     if find_or_message
       respond_to do |f|
-        f.html { render :action=>'image', :layout=>'image' }
-        f.xml  { render :xml=>@fitem }
+        f.html { render :action => 'image', :layout => 'image' }
+        f.xml { render :xml => @fitem }
       end
     end
   end
@@ -48,48 +48,48 @@ class FitemsController < ApplicationController
         flash[:info] = "Изменения были отменены"
         respond_to do |f|
           f.html { redirect_to @fitem }
-          f.xml  { render :xml => @fitem, :status => :canceled, :location => @fitem }
+          f.xml { render :xml => @fitem, :status => :canceled, :location => @fitem }
         end
       else
-        if @fitem.update_attributes( params[:fitem].project(:name, :comment) )
+        if @fitem.update_attributes(params[:fitem].project(:name, :comment))
           case params[:fitem][:file_action]
           when 'upload'
-            @fitem.update_from_stream(params[:fitem][:file], :max_width=>1024)
+            @fitem.update_from_stream(params[:fitem][:file], :max_width => 1024)
           end
           flash[:info] = "Файл был обновлён"
           if @fitem.errors.empty?
             respond_to do |f|
               f.html { redirect_to @fitem }
-              f.xml  { head :ok }
+              f.xml { head :ok }
             end
             return
           end
         end
       end
       respond_to do |f|
-        f.html { render :action=>'edit'  }
-        f.xml  { render :xml => @fitem.errors, :status => :unprocessable_entity }
+        f.html { render :action => 'edit' }
+        f.xml { render :xml => @fitem.errors, :status => :unprocessable_entity }
       end
     end
   end
 
   def create
-    attrs = params[:fitem]
+    attrs = params[:fitem].to_unsafe_h
     if attrs && attrs[:name]
       if attrs[:name] == '#'
-        attrs[:name] = 'file' + (Fitem.max_id+1).to_s
+        attrs[:name] = 'file' + (Fitem.max_id + 1).to_s
       end
       unless Fitem.find_by_name(attrs[:name])
         @fitem = Fitem.create_from(
-          attrs[:file], 
-          attrs.project(:name,:content_type,:ext,:original_filename)
+          attrs[:file],
+          attrs.project(:name, :content_type, :ext, :original_filename)
         )
 
         if @fitem.errors.empty?
           flash[:info] = "Файл #{@fitem.name} успешно загружен. <a href=\"#{fitem_path(@fitem)}\">Редактировать</a>"
           respond_to do |f|
             f.html { redirect_to @fitem }
-            f.xml  { render :xml => @fitem, :status => :created, :location => @fitem }
+            f.xml { render :xml => @fitem, :status => :created, :location => @fitem }
           end
           return
         else
@@ -103,20 +103,19 @@ class FitemsController < ApplicationController
     end
     @fitem ||= Fitem.new(attrs)
 
-    @fitem.errors.add(*@e)  if @e
+    @fitem.errors.add(*@e) if @e
 
     respond_to do |f|
-       f.html { render :action => 'edit' }
-       f.xml  { render :xml => @fitem.errors, :status => :unprocessable_entity }
+      f.html { render action: 'edit' }
+      f.xml { render xml: @fitem.errors, status: :unprocessable_entity }
     end
   end
-
 
   def destroy
     if find_or_message
       @fitem.destroy
       respond_to do |f|
-        f.html { 
+        f.html {
           flash[:info] = "Файл #{@fitem.name} (#{@fitem.original_filename}) был удален"
           redirect_to fitems_path
         }
@@ -129,22 +128,20 @@ class FitemsController < ApplicationController
     @title ||= "Пользовательские файлы"
 
     @wide_style = true
-    sort_cnds = params[:sort] ? {} : {:order => 'created_at DESC'} 
+    sort_cnds = params[:sort] ? {} : { order: 'created_at DESC' }
 
     cnds = conditions_from_params :fitem,
-      :sort_by    => %w(id name original_filename ext created_at),
-      :search_in  => %w(name content_type comment original_filename),
-      :filter     => %w(content_type ext),
-      :per_page   => params[:per_page] || 20,
-      :page       => params[:page]
+                                  :sort_by => %w(id name original_filename ext created_at),
+                                  :search_in => %w(name content_type comment original_filename),
+                                  :filter => %w(content_type ext),
+                                  :per_page => params[:per_page] || 20,
+                                  :page => params[:page]
 
-    Fitem.send(:with_scope, :find => sort_cnds) do
-      @fitems = Fitem.paginate(cnds)
-    end
+    @fitems = Fitem.where(cnds.delete(:conditions)).order(cnds.delete(:order)).paginate(cnds)
 
     respond_to do |f|
-      f.html { render :action => 'list' }
-      f.xml  { render :xml => @fitems }
+      f.html { render action: 'list' }
+      f.xml { render xml: @fitems }
     end
   end
 end

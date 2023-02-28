@@ -1,9 +1,9 @@
-class AddTopicAllowComments < ActiveRecord::Migration
+class AddTopicAllowComments < ActiveRecord::Migration[6.0]
   def self.up
     add_column :topics, :allow_comments, :boolean, :default=>true, :null=>false
-    Topic.each do |t|
+    Topic.all.each do |t|
       t.allow_comments = (t.section=='news')
-      t.save 
+      t.save
     end
   end
 

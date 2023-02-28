@@ -1,7 +1,7 @@
 $:.unshift File.dirname(__FILE__)
 require 'migration_ext'
 
-class CreateTopics < ActiveRecord::Migration
+class CreateTopics < ActiveRecord::Migration[6.0]
   def self.up
     create_table :topics, :force=>true do |t|
       t.string :name
@@ -16,7 +16,7 @@ class CreateTopics < ActiveRecord::Migration
     [:name, :title, :author, :published_at, :section].each do |f|
       ensure_add_index :topics, f
     end
-    
+
     add_text_index :topics, :content, :length=>128
 
     # execute " ALTER TABLE `topics` ADD INDEX `index_topics_on_content` ( `content` ( 128 ) )"

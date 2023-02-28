@@ -1,7 +1,7 @@
 $:.unshift File.dirname(__FILE__)
 require 'migration_ext'
 
-class CreatePeople < ActiveRecord::Migration
+class CreatePeople < ActiveRecord::Migration[6.0]
   def self.up
     create_table :people, :force=>true do |t|
       t.string  :full_name
@@ -14,16 +14,16 @@ class CreatePeople < ActiveRecord::Migration
       t.string  :disappear_location
       t.text    :remark
       t.integer :anket_n
-      t.text    :orig_record 
+      t.text    :orig_record
 
       t.timestamps
     end
-    
+
     [
-      :full_name, :birth_year, :birth_date, :last_address, :anket_n,  
+      :full_name, :birth_year, :birth_date, :last_address, :anket_n,
       [:full_name, :birth_year], :disappear_on, :disappear_year, :disappear_region,
       :disappear_location
-    ].each do |f| 
+    ].each do |f|
       ensure_add_index :people, f
     end
 

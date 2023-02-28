@@ -1,4 +1,4 @@
-class AddPersonRecentAndMain < ActiveRecord::Migration
+class AddPersonRecentAndMain < ActiveRecord::Migration[6.0]
   def self.up
     add_column :people, :recent, :boolean, :default => false
     add_column :people, :main,   :boolean, :default => true

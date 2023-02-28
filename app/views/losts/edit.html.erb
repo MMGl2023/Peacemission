@@ -1,170 +1,172 @@
 <div class="lost_edit">
-<h1> <%= @title ||= "Информация о пропавшем #{@lost.full_name}" %></h1>
-<%= flash_messages %>
-<%= error_messages_for :lost %>
-<br />
-<% form_for @lost, :html => {:multipart => true} do |f| -%>
-<table class="lost_edit">
-<tr>
-  <th>
-    Данные объявления
-  </th>
-</tr>
-<tr>
-  <td>
-    <table class="subform" width="100%">
-      <% if has_permission?(:lost) -%>
-        <tr>
-          <td>
-            <%= f.check_box :active %> <label> объявление активно</label>
-          </td>
-        </tr>
-      <% else -%>
-        <%= f.hidden_field :active %>
-      <% end -%>
+  <h1> <%= @title ||= "Информация о пропавшем #{@lost.full_name}" %></h1>
+  <%= flash_messages %>
+  <%= error_messages_for :lost %>
+  <br/>
+  <%= form_for @lost, :html => { :multipart => true } do |f| -%>
+    <table class="lost_edit">
       <tr>
-        <td>
-        * <label for="lost_full_name" id="for_lost_full_name">Фамилия Имя Отчество пропавшего</label><br />
-        <div class="hint">
-          Введите полное имя. Например, 
-            <i>Озиев Анзор Сергеевич</i>
-        </div>
-         <%= f.text_field :full_name, :size => 60 %>
-       </td>
-      </tr>
-      <tr>
-      <% current_year = Date.today.year %>
-        <td>
-          <label for="lost_birth_year" id="for_lost_birth_year">Дата рождения</label><br />
-          <%= select_fuzzy_date @lost, :birth_date, 
-            :start_year => current_year, :end_year => 1900 
-          %>
-        </td>
+        <th>
+          Данные объявления
+        </th>
       </tr>
       <tr>
         <td>
-        * <label for="lost_last_location" id="for_lost_last_location">Место исчезновения</label><br />
-        <div class="hint">Укажите район и названия населенного пункта, например:<br/>
-          <i>Республика Ингушетия, г. Назрань</i> или 
-          <i>Чеченская республика, п. Ханкала</i>
-        </div>
-         <%= f.text_field :last_location, :size => 60 %>
-       </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="lost_last_address" id="for_lost_last_address">Место жительства на момент исчезновения</label><br />
-          <div class="hint">Например:<br/>
-            <i>ЧР, г. Грозный ,ул. Ленина, 20</i>  
-          </div>
-          <%= f.text_area :last_address, :cols => 60, :rows => 3 %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="lost_lost_on_year" id="for_lost_lost_on_year">* Дата исчезновения</label><br />
-          <%= select_fuzzy_date  @lost, :lost_on,
-            :default_year=>current_year,
-            :start_year => 1980, :end_year => current_year  %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <div class="hint">Если человек найден, укажите дату обнаружения</div>
-          <label for="lost_found_on" id="for_lost_found_on">Дата обнаружения человека</label><br />
-          <%= select_fuzzy_date @lost, :found_on, 
-            :include_blank => true,
-            :use_month_numbers => true,
-            :start_year => 1980, :end_year => current_year %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="lost_image" id="for_lost_image">Фото</label><br />
-          <div class="hint">Нажмите на кнопку <tt>Browse</tt> и выберите фотографию
-          (файл с расширением <tt>jpg</tt> или <tt>png</tt>)</div>
-          <% if @lost.image_id %>
-            <table>
+          <table class="subform" width="100%">
+            <% if has_permission?(:lost) -%>
               <tr>
                 <td>
-                  <%= image_item(@lost.image, :width=>100) %>
-                </td>
-                <td>
-                  <%= render :partial=>'image_field'%>
+                  <%= f.check_box :active %> <label> объявление активно</label>
                 </td>
               </tr>
-            </table>
-          <% else -%>
-            <input type="file" name="lost_image[file]" id="lost_image_file" value="<%= (params[:lost_image]||{})[:file] %>">
-          <% end %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        *<label for="lost_details" id="for_lost_details">Обстоятельства исчезновения</label>:<br />
-        <div class="hint">
-          Подробно опишите обстоятельства при которых пропал человек или был
-          похищен. Укажите места, где его перед этим видели, людей, с которыми он контактировал, 
-          одежду, которая была на нём, особые приметы.
-          Укажите также контактные данные для связи с Вами или с лицами, заинтересованными в
-          поиске пропавшего человека. <br/>
+            <% else -%>
+              <%= f.hidden_field :active %>
+            <% end -%>
+            <tr>
+              <td>
+                * <label for="lost_full_name" id="for_lost_full_name">Фамилия Имя Отчество пропавшего</label><br/>
+                <div class="hint">
+                  Введите полное имя. Например,
+                  <i>Озиев Анзор Сергеевич</i>
+                </div>
+                <%= f.text_field :full_name, size: 60 %>
+              </td>
+            </tr>
+            <tr>
+              <% current_year = Date.today.year %>
+              <td>
+                <label for="lost_birth_year" id="for_lost_birth_year">Дата рождения</label><br/>
+                <%= select_fuzzy_date @lost, :birth_date, start_year: current_year, end_year: 1900 %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                * <label for="lost_last_location" id="for_lost_last_location">Место исчезновения</label><br/>
+                <div class="hint">Укажите район и названия населенного пункта, например:<br/>
+                  <i>Республика Ингушетия, г. Назрань</i> или
+                  <i>Чеченская республика, п. Ханкала</i>
+                </div>
+                <%= f.text_field :last_location, size: 60 %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="lost_last_address" id="for_lost_last_address">Место жительства на момент
+                  исчезновения</label><br/>
+                <div class="hint">Например:<br/>
+                  <i>ЧР, г. Грозный ,ул. Ленина, 20</i>
+                </div>
+                <%= f.text_area :last_address, :cols => 60, :rows => 3 %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="lost_lost_on_year" id="for_lost_lost_on_year">* Дата исчезновения</label><br/>
+                <%= select_fuzzy_date @lost, :lost_on,
+                                      :default_year => current_year,
+                                      :start_year => 1980, :end_year => current_year %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="hint">Если человек найден, укажите дату обнаружения</div>
+                <label for="lost_found_on" id="for_lost_found_on">Дата обнаружения человека</label><br/>
+                <%= select_fuzzy_date @lost, :found_on,
+                                      :include_blank => true,
+                                      :use_month_numbers => true,
+                                      :start_year => 1980, :end_year => current_year %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="lost_image" id="for_lost_image">Фото</label><br/>
+                <div class="hint">Нажмите на кнопку <tt>Browse</tt> и выберите фотографию
+                  (файл с расширением <tt>jpg</tt> или <tt>png</tt>)
+                </div>
+                <% if @lost.image_id %>
+                  <table>
+                    <tr>
+                      <td>
+                        <%= image_item(@lost.image, :width => 100) %>
+                      </td>
+                      <td>
+                        <%= render :partial => 'image_field' %>
+                      </td>
+                    </tr>
+                  </table>
+                <% else -%>
+                  <input type="file" name="lost_image[file]" id="lost_image_file" value="<%= (params[:lost_image] || {})[:file] %>">
+                <% end %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                *<label for="lost_details" id="for_lost_details">Обстоятельства исчезновения</label>:<br/>
+                <div class="hint">
+                  Подробно опишите обстоятельства при которых пропал человек или был
+                  похищен. Укажите места, где его перед этим видели, людей, с которыми он контактировал,
+                  одежду, которая была на нём, особые приметы.
+                  Укажите также контактные данные для связи с Вами или с лицами, заинтересованными в
+                  поиске пропавшего человека. <br/>
 
-          Между абзацами оставляйте пустую строку.
-        </div>
-        <%= f.text_area :details, :rows => 30, :cols => 60 %>    
-        </td>
-      </tr>
-   </table>
-  </td>
-</tr>
-<tr>
-  <th><br><br>
-    Данные об авторе объявления
-  </th>
-</tr>
-<tr>
-  <td>
-    <table class="subform" width="100%">
-      <tr>
-        <td>
-          * <label for="lost_author_full_name" id="for_lost_author_full_name">Ваши Фамилия Имя Отчество</label><br/>
-          <%= f.text_field :author_full_name, :size => 50 %>
+                  Между абзацами оставляйте пустую строку.
+                </div>
+                <%= f.text_area :details, :rows => 30, :cols => 60 %>
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
       <tr>
+        <th><br><br>
+          Данные об авторе объявления
+        </th>
+      </tr>
+      <tr>
         <td>
-          <label for="lost_author_address" id="for_lost_author_address">Ваш адрес</label><br/>
-          <%= f.text_field :author_address, :size => 50 %>
+          <table class="subform" width="100%">
+            <tr>
+              <td>
+                *
+                <label for="lost_author_full_name" id="for_lost_author_full_name">Ваши Фамилия Имя Отчество</label><br/>
+                <%= f.text_field :author_full_name, :size => 50 %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="lost_author_address" id="for_lost_author_address">Ваш адрес</label><br/>
+                <%= f.text_field :author_address, :size => 50 %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="author_email" id="for_author_email">Ваш E-mail</label><br/>
+                <%= f.text_field :author_email, :size => 50 %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="author_phone_number" id="for_author_phone_number">Ваш телефон</label><br/>
+                <div class="hint">Указывайте код города. Например <tt>+7(495) 123 45 67</tt></div>
+                <%= f.text_field :author_phone_number, :size => 50 %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="lost_author_contacts" id="for_lost_author_contacts">Дополнительные контактные
+                  сведения</label><br/>
+                <%= f.text_field :author_contacts, :size => 50 %>
+              </td>
+            </tr>
+          </table>
         </td>
       </tr>
       <tr>
         <td>
-          <label for="author_email" id="for_author_email">Ваш E-mail</label><br/>
-          <%= f.text_field :author_email, :size => 50 %>
+          <%= submit_tag 'Сохранить', { :name => 'refresh', :class => "yes_btn" } %>
+          <%= submit_tag 'Отменить', { :name => 'cancel', :class => "no_btn" } %>
         </td>
       </tr>
-      <tr>
-        <td>
-          <label for="author_phone_number" id="for_author_phone_number">Ваш телефон</label><br/>
-          <div class="hint">Указывайте код города. Например <tt>+7(495) 123 45 67</tt></div>
-          <%= f.text_field :author_phone_number, :size => 50 %>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <label for="lost_author_contacts" id="for_lost_author_contacts">Дополнительные контактные сведения</label><br/>
-          <%= f.text_field :author_contacts, :size => 50 %>
-        </td>
-      </tr>
-     </table>
-  </td>
-</tr>
-<tr>
-  <td>
-     <%= submit_tag 'Сохранить', {:name => 'refresh', :class => "yes_btn"} %>
-     <%= submit_tag 'Отменить',  {:name => 'cancel', :class => "no_btn"} %>
-  </td>
-</tr>
-</table>
-<% end -%>
+    </table>
+  <% end -%>
 </div>

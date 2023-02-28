@@ -1,21 +1,21 @@
 <div class="users_new">
   <%= title('Регистрация нового пользователя') %>
   <%= error_messages_for :user %>
-  <%= flash_messages %> 
-  
-  <% form_for @user do |f| -%>  
+  <%= flash_messages %>
+
+  <%= form_for @user do |f| -%>
     <div class="form_field">
       <label for="user_email">Email</label>:<br/>
-      <div class="hint">      
+      <div class="hint">
         Email не будет публиковаться.
       </div>
       <%= f.text_field :email%>
     </div>
-    
+
     <div class="form_field">
       <label for="user_login">Логин</label>:<br/>
-      <div class="hint">      
-        Используйте латинские буквы, знак подчеркивания и цифры. 
+      <div class="hint">
+        Используйте латинские буквы, знак подчеркивания и цифры.
         Логин должен начинаться на букву и иметь более 3 символов.
       </div>
        <%= f.text_field :login %>
@@ -42,8 +42,8 @@
         <%= f.text_field :invitation_code%>
       </div>
     <% end -%>
-    
+
     <br /><br /><%= submit_tag 'Зарегистрироваться', :class => 'yes_btn'%>
-    
+
   <% end -%>
 </div>

@@ -2,7 +2,7 @@
 
 <%= error_messages_for :anket %>
 
-<% form_for(@anket) do |f| %>
+<%= form_for(@anket) do |f| %>
   <p>
     <b>Имя</b><br />
     <%= f.text_field :first_name %>

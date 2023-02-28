@@ -1,16 +1,16 @@
 class Request < ActiveRecord::Base
   has_many :people_requests
   has_many :people, :through=>:people_requests
-  has_many :comments, :as => :obj, :order => "created_at DESC"
+  has_many :comments, -> { order("created_at") }, :as => :obj
 
   validates_presence_of :full_name, :address, :request_type, :details, :lost_full_name,
                 :message => 'не должно быть пустым'
 
-  validates_format_of :email, :with=>/^(\s*|[\.\-\d\w]+@[\d\-\w\.]+)$/,
+  validates_format_of :email, :with=>/\A(\s*|[\.\-\d\w]+@[\d\-\w\.]+)z/,
                 :message => 'имеет неверный формат'
 
   # validates_numericality_of :anket_n # does not work. Why?
-  
+
   @@cfg = APP_CONFIG['requests'] || {}
 
   def people=(ppls)
@@ -24,7 +24,7 @@ class Request < ActiveRecord::Base
   def type_short_string
     @type_short = (@@cfg['request_short_types']||{})[self.request_type]
   end
-  
+
   def signature
     "№#{self.id} - #{self.type_short_string} - #{self.lost_full_name}"
   end

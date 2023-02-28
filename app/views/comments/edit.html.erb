@@ -2,7 +2,7 @@
 
 <%= error_messages_for :comment %>
 
-<% form_for(@comment) do |f| %>
+<%= form_for(@comment) do |f| %>
   <p>
     <b>Subject</b><br />
     <%= f.text_field :subject %>

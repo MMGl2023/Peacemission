@@ -3,16 +3,17 @@ require 'digest/sha1'
 
 class UserController < ApplicationController
 
-  before_filter :signin_if_not_yet, :except => [:signin, :signup, :forgot_password, :reset_password, :activate]
+  before_action :signin_if_not_yet, :except => [:signin, :signup, :forgot_password, :reset_password, :activate]
 
-protected
+  protected
+
   def controls_authentication?
     # skip general scope authentication rules;
     # i will take care of it by myself
     true
   end
 
-public  
+  public
 
   def find_user
     if params[:login]
@@ -29,7 +30,6 @@ public
     flash[:error] = "Пользователь #{params[:login] || params[:email] || params[:id]} не найден"
     redirect_back_or_default('/')
   end
- 
 
   def signin
     @title = "Вход в систему"
@@ -51,21 +51,21 @@ public
               redirect_to("/")
             end
           else
-             @info = 'Неверный логин или пароль'
+            @info = 'Неверный логин или пароль'
           end
         else
-           @info = 'Данный аккаунт еще не подтверждён'
+          @info = 'Данный аккаунт еще не подтверждён'
         end
       else
-         @info = 'Неверный логин или пароль'
+        @info = 'Неверный логин или пароль'
       end
     end
   end
 
   def signup
     @title = "Регистрация нового пользователя"
-    code = (params[:user]||={})[:invitation_code] ||=  params[:invitation_code]
-    @user = User.new( params[:user] )
+    code = (params[:user] ||= {})[:invitation_code] ||= params[:invitation_code]
+    @user = User.new(params[:user])
     if @invitation = Invitation.find_by_code(code)
       @user.email ||= @invitation.email
       @user.full_name ||= @invitation.name
@@ -80,11 +80,11 @@ public
           return
         end
       end
-      
-      if @user.save 
+
+      if @user.save
         Notifier.deliver_signup(@user)
-        flash[:info] = 'На ваш email было выслано письмо для подтверждения регистрации' 
-        redirect_to :action => 'signin' 
+        flash[:info] = 'На ваш email было выслано письмо для подтверждения регистрации'
+        redirect_to :action => 'signin'
         return
       end
     end
@@ -104,121 +104,121 @@ public
     if params[:id].to_i == current_user.id
       # User wants to see his home page
       redirect_to :action => 'index'
-    elsif params[:id] && !(@user = User.find_by_id(params[:id])).nil? 
+    elsif params[:id] && !(@user = User.find_by_id(params[:id])).nil?
       # user wants to see other user home page
       # in fact, normal users should be redirected to people_controller --
       # user_controller is for logged in users
-      
+
       @voted_tracks = @user.last_voted(:track, 5)
 
-      @title  = "Данные пользователя "  + @user.login unless @title
+      @title = "Данные пользователя " + @user.login unless @title
     else
       redirect_to :action => 'index'
     end
   end
 
-  # 
+  #
   def good_password?(p)
-#    (p.length > 4) &&
-#    (p =~ /[^a-z]/i) &&
-#    (p =~ /^[a-z0-9!@#$\%\^&*?\\\[\]\(\)_\+=\-]{5,9}$/i)i
+    #    (p.length > 4) &&
+    #    (p =~ /[^a-z]/i) &&
+    #    (p =~ /^[a-z0-9!@#$\%\^&*?\\\[\]\(\)_\+=\-]{5,9}$/i)i
     true
   end
-  
+
   def can_edit?
     has_roles?(:admin) || current_user.id == @user.id
   end
 
-  hide_action :good_password?, :good_password?
+  # hide_action :good_password?, :good_password?
 
   def edit
-    @zones = TZInfo::Country.get('RU').zone_names.map {|x| TZInfo::Timezone.new(x)}
+    @zones = TZInfo::Country.get('RU').zone_names.map { |x| TZInfo::Timezone.get(x) }
     params[:id] ||= current_user.id
     @user = User.find_by_id(params[:id])
     @title = "Редактирование профайла"
-   
+
     if !@user
-      flash[:error] = "Пользователь с id=:id не существует" % {:id=>params[:id]}
-      redirect_to :action=>'index'
+      flash[:error] = "Пользователь с id=:id не существует" % { :id => params[:id] }
+      redirect_to :action => 'index'
       return
     end
 
     unless can_edit?
-      flash[:error] = "Вы не можете менять персональные данные пользователя :user" % {:user=>(@user.login rescue "")}
-      redirect_to :action=>'index'
+      flash[:error] = "Вы не можете менять персональные данные пользователя :user" % { :user => (@user.login rescue "") }
+      redirect_to :action => 'index'
       return
     end
 
     if request.post?
       if params[:cancel]
         flash[:info] = "Изменение данных отменено"
-        redirect_to :action=>'index'
+        redirect_to :action => 'index'
         return
       end
-      
-      # TODO: rewrite it :-) rude DRY violation      
+
+      # TODO: rewrite it :-) rude DRY violation
       error = false
-			if params[:user][:password].length > 0
-				if User.authenticate(@user.login, params[:user][:current_password])
-					@user.errors.add('current_password', 'Неверный текущий пароль')
-				else
+      if params[:user][:password].length > 0
+        if User.authenticate(@user.login, params[:user][:current_password])
+          @user.errors.add('current_password', 'Неверный текущий пароль')
+        else
           new_password = params[:user][:password]
           if good_password?(new_password)
-       		  @user.password,@user.password_confirmation = params[:user][:password],params[:user][:password_confirmation]
+            @user.password, @user.password_confirmation = params[:user][:password], params[:user][:password_confirmation]
           else
             @user.errors.add('password', _('weak_password'))
           end
-				end
-			end
-			
-			if @user.errors.size == 0
-        
-        @user.update_attributes( params[:user].project(
-          :first_name, :summary, :country, :state, :city, :zip_code, 
+        end
+      end
+
+      if @user.errors.size == 0
+
+        @user.update_attributes(params[:user].project(
+          :first_name, :summary, :country, :state, :city, :zip_code,
           :gender, :birthday, :timezone, :ui_language, :preferred_bitrate
         ))
-        
+
         @user.birthday = build_date_from_params(:birthday, params[:user])
 
         params[:user_langs] ||= {}
-        @user.language = User.basic_languages.select{|l| 
+        @user.language = User.basic_languages.select { |l|
           params[:user_langs][l]
-        }.join(', ') + ", " + (params[:user][:other_languages]||'')
-        
+        }.join(', ') + ", " + (params[:user][:other_languages] || '')
+
         @user.ui_language = nil if @user.ui_language.blank?
         session[:lc_code] = @user.ui_language
 
         @user.string_gender = params[:user][:gender]
 
-				# @user.interest_line = params[:user][:interest_line]
-				if @user.save
-					begin
+        # @user.interest_line = params[:user][:interest_line]
+        if @user.save
+          begin
             set_userpicture
             flash[:info] = _('personal_information_was_updated')
-						redirect_to :action=>'index'
-					rescue Exception=>e
+            redirect_to :action => 'index'
+          rescue Exception => e
             logger.error "ERROR: Can't set user picture: #{e.to_s}\n#{e.backtrace.join("\n")}"
-						@user.errors.add('picture', _('problems_with_user_picture') + ": #{e.message}" )
-					end
+            @user.errors.add('picture', _('problems_with_user_picture') + ": #{e.message}")
+          end
         end
-			end
+      end
     end
   end
 
   def set_userpicture
     if @user
-  	  case params[:user][:picture]
-	  	when 'reset'
-        @user.set_picture( '' )
-  		when 'upload'
-        @user.set_picture( params[:user][:picture_file] )
-  		end
+      case params[:user][:picture]
+      when 'reset'
+        @user.set_picture('')
+      when 'upload'
+        @user.set_picture(params[:user][:picture_file])
+      end
     else
       nil
     end
   end
-  hide_action :set_userpicture
 
+  # hide_action :set_userpicture
 
   def userpicture
     begin
@@ -229,8 +229,8 @@ public
       else
         flash[:error] = _('you_have_no_permission_to_change_userpicture')
       end
-    rescue=>e
-      @info =_('cant_change_userpicture') + ": #{e.message}\n#{e.backtrace[0..10].join("\n")}"
+      rescue => e
+      @info = _('cant_change_userpicture') + ": #{e.message}\n#{e.backtrace[0..10].join("\n")}"
     else
       @info = _('userpicture_was_changed')
     end
@@ -252,38 +252,38 @@ public
       end
     end
   end
-  
+
   def reset_password
     if params[:c] != @user.to_hexdigest
-      redirect_to :action=>'forgot_password'
+      redirect_to :action => 'forgot_password'
     else
       password = ''
       chars = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890!@$%^&()+=|\\<>,"
-      (rand(4) + 6).times{ password += chars[ rand(chars.length-1),1 ] }
+      (rand(4) + 6).times { password += chars[rand(chars.length - 1), 1] }
 
       @user.password = @user.password_confirmation = password
       @user.save!
-    
+
       Notifier.deliver_reset_password(@user)
 
-      flash[:info] = 'Пароль был послан Вам на почту' 
+      flash[:info] = 'Пароль был послан Вам на почту'
 
-      redirect_to :action=>'forgot_password'
+      redirect_to :action => 'forgot_password'
     end
   end
 
   def invite
     unless check_permission :invitations
       flash[:info] = 'У вас нет прав для приглашения новых редакторов сайта'
-      redirect_to :action=>'index'
+      redirect_to :action => 'index'
     end
 
-    p =  (params[:invitation]||{}).project(:email, :name, :body, :subject)
+    p = (params[:invitation] || {}).project(:email, :name, :body, :subject)
     @default_subject = "Вас пригласил :name для работы над сайтом :host" % {
-       :name => current_user.full_name,
-       :host => request.host
+      :name => current_user.full_name,
+      :host => request.host
     }
-     
+
     @invitation = Invitation.new(p)
 
     if request.post?
@@ -293,29 +293,30 @@ public
           @invitation.subject = @default_subject
         end
         return unless @invitation.save
-      rescue=>e
-        msg = 'Не могу создать приглашение'  + ": #{e.message}\n#{e.backtrace.join("\n")}"
+        rescue => e
+        msg = 'Не могу создать приглашение' + ": #{e.message}\n#{e.backtrace.join("\n")}"
         logger.error msg
         flash[:error] = msg
-        redirect_to :action=>'invite'
+        redirect_to :action => 'invite'
       else
         Notifier.deliver_invite_user(@invitation)
-        flash[:info] =  "Приглашение пользователю :user было отправлено. Можно создать ещё одно" % {
-          :user=>@invitation.name
+        flash[:info] = "Приглашение пользователю :user было отправлено. Можно создать ещё одно" % {
+          :user => @invitation.name
         }
-        redirect_to :action=>'invite'
+        redirect_to :action => 'invite'
       end
-    else # get
+    else
+      # get
       @host = request.host
       @invitation = Invitation.new(
-        :body => '[YOUR TEXT]', 
-        :email => '[EMAIL]', 
-        :name => '[NAME]', 
+        :body => '[YOUR TEXT]',
+        :email => '[EMAIL]',
+        :name => '[NAME]',
         :code => '[CODE]',
         :subject => @default_subject
       )
       @invitation.created_by = current_user
-      @letter = render_to_string :template=>'notifier/invite_user', :layout=>false
+      @letter = render_to_string :template => 'notifier/invite_user', :layout => false
       @invitation = Invitation.new
     end
   end
@@ -323,15 +324,15 @@ public
   def activate
     redirect_to :action => 'signin' and return unless params[:id]
     begin
-		  @user = User.find(params[:id])
-	  rescue
+      @user = User.find(params[:id])
+    rescue
       flash[:error] = "Пользователь не найден"
-		  redirect_to index_url
+      redirect_to index_url
       return
-	  end
-	
-    redirect_to :action=>'signin' and return unless @user
-    redirect_to :action=>'signin' and return if params[:activation_code] != @user.to_hexdigest 
+    end
+
+    redirect_to :action => 'signin' and return unless @user
+    redirect_to :action => 'signin' and return if params[:activation_code] != @user.to_hexdigest
 
     @user.activate
     @user.hidden = false

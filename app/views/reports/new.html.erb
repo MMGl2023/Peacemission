@@ -1,10 +1,15 @@
 <div class="report">
-  <div style="text-align: center; font-size: 18px; margin-bottom: 10px">Заполните форму ниже, чтобы послать нам письмо или сообщение об ошибке на сайте.</div>
+  <div style="text-align: center; font-size: 18px; margin-bottom: 10px">Заполните форму ниже, чтобы послать нам письмо
+    или сообщение об ошибке на сайте.
+  </div>
   <p>
-    <%= link_to_remote 'Сообщение об ошибке работы сайта', :update => 'report_edit', :url => new_report_path(:t => 'bug') %> | 
-    <%= link_to_remote 'Письмо в ЦГСР', :update => 'report_edit', :url => new_report_path(:t => 'info') %> 
+    <%#= link_to_remote 'Сообщение об ошибке работы сайта', :update => 'report_edit', :url => new_report_path(:t => 'bug') %>
+    <%= link_to 'Сообщение об ошибке работы сайта', new_report_path(t: 'bug') %>
+    |
+    <%#= link_to_remote 'Письмо в ЦГСР', :update => 'report_edit', :url => new_report_path(:t => 'info') %>
+    <%= link_to 'Письмо в ЦГСР', new_report_path(t: 'info') %>
   </p>
   <%= flash_messages %>
   <%= error_messages_for :report %>
-  <%= render :file => 'reports/edit' %>
+  <%= render partial: 'reports/edit' %>
 </div>

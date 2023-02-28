@@ -2,7 +2,7 @@
 
 <%= error_messages_for :invitation %>
 
-<% form_for(@invitation) do |f| %>
+<%= form_for(@invitation) do |f| %>
   <p>
     <b>Name</b><br />
     <%= f.text_field :name %>
