@@ -88,7 +88,8 @@ module TopicParser
 
   def make_args(str)
     args, *options = str.split(/[\|;]/)
-    args = YAML.load('["' + args.gsub(/,/, '","') + '"]')
+    # args = YAML.load('[' + args + ']')
+    args = args.split(/,/)
     options = options.inject({}) do |f, o|
       unless o.blank?
         k, v = o.split(/=/)
