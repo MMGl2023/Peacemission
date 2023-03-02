@@ -38,7 +38,7 @@ group :development do
   gem "capistrano-rails", "~> 1.6", require: false
   gem 'capistrano-rbenv', '~> 2.2', require: false
   gem 'capistrano-bundler', require: false
-  gem 'capistrano3-puma', "~> 4", require: false
+  gem "capistrano3-puma", require: false, github: "seuros/capistrano-puma"
   # gem "capistrano-sidekiq"
 end
 
