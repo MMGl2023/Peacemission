@@ -62,7 +62,7 @@ class SupportController < ApplicationController
           break if stream == ''
           f = ReportFitem.create_from(stream)
           f.user = current_user
-          @report.file_items << f
+          @report.fitems << f
         end
         @report.save!
         Notifier.send('deliver_report_' + @report.report_type, @report)
