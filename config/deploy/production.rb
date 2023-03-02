@@ -58,3 +58,4 @@ set :rvm_ruby_version, '2.7.7'
 server "31.177.78.126", user: "webmaster", port: 22, roles: [:web, :app, :db], primary: 'true'
 set :stage, :production
 set :rails_env, :production
+set :deploy_to, "/home/#{fetch(:user)}/apps/#{fetch(:application)}"
