@@ -1,6 +1,6 @@
 class RolesController < ApplicationController
 
-  include RolesHelper
+  # include RolesHelper
 
   before_action :signin_if_not_yet, :only => [:show, :destroy, :list]
 
