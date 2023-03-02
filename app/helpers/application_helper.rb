@@ -155,8 +155,8 @@ module ApplicationHelper
     spin_id = options.delete(:spin_id) || 'spin' + rand(10000).to_s + '_' + (@_s_id ||= 0; @_s_id += 1;).to_s
     options[:before] ||= ''
     options[:complete] ||= ''
-    options[:before] << ";$('#{spin_id}').show();"
-    options[:complete] << ";$('#{spin_id}').hide();"
+    options[:before] << ";$('#{spin_id}').show();".html_safe
+    options[:complete] << ";$('#{spin_id}').hide();".html_safe
     text << icon_spinning(id: spin_id, style: 'display:none;')
     args << options if options
     # link_to_remote(text, *args)
