@@ -15,6 +15,8 @@ set :puma_pid, "#{shared_path}/tmp/pids/puma.pid"
 set :puma_access_log, "#{release_path}/log/puma.error.log"
 set :puma_error_log, "#{release_path}/log/puma.access.log"
 
+set :ssh_options, { forward_agent: true, user: fetch(:user), keys: %w(~/.ssh/id_rsa.pub) }
+
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 set :branch, 'main'
@@ -64,17 +66,38 @@ set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
 # ===== See Inside: lib/capistrano/tasks =========
 # ================================================
 
-# upload configuration files
-before 'deploy:starting', 'config_files:upload'
+namespace :puma do
+  desc 'Create Directories for Puma Pids and Socket'
+  task :make_dirs do
+    on roles(:app) do
+      execute "mkdir #{shared_path}/tmp/sockets -p"
+      execute "mkdir #{shared_path}/tmp/pids -p"
+    end
+  end
 
-# set this to false after deploying for the first time
-set :initial, true
+  before :start, :make_dirs
+end
 
-# run only if app is being deployed for the very first time, should update "set :initial, true" above to run this
-before 'deploy:migrate', 'database:create' if fetch(:initial)
+namespace :deploy do
+  # upload configuration files
+  before :starting, 'config_files:upload'
 
-# update cron job from whenever schedule file at "config/schedule.rb"
-after 'deploy:finishing', 'whenever:update_crontab'
+  # set this to false after deploying for the first time
+  set :initial, true
 
-# reload application after successful deploy
-after 'deploy:publishing', 'application:reload'
+  # run only if app is being deployed for the very first time, should update "set :initial, true" above to run this
+  desc 'Initial Deploy'
+  task :initial do
+    on roles(:app) do
+      before 'deploy:migrate', 'database:create'
+      before 'deploy:restart', 'puma:start'
+      invoke 'deploy'
+    end
+  end
+
+  # update cron job from whenever schedule file at "config/schedule.rb"
+  after 'deploy:finishing', 'whenever:update_crontab'
+
+  # reload application after successful deploy
+  after 'deploy:publishing', 'application:reload'
+end
