@@ -155,6 +155,7 @@ class Topic < ActiveRecord::Base
   end
 
   def formatted(text, helper)
+    text = text.html_safe
     pre_i = 0;
     pre_h = []
     text = (text || "").gsub(/<PRE>(.+?)<\/PRE>/m) do |m|
@@ -202,7 +203,7 @@ class Topic < ActiveRecord::Base
     if helper
       # Helper is responsible for expanding macros related to generating HTML.
       # See topic_helper
-      text = helper.parse_topic(self, text).html_safe
+      text = helper.parse_topic(self, text.html_safe).html_safe
     end
 
     pre_h.reverse.each do |pre_i, pre_tag|
