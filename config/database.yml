@@ -34,7 +34,7 @@ development: &development
   socket: /tmp/mysql.sock
 
 production:
-  <<: *development
+  <<: *shared
   database: mmgl_production
 
 # Warning: The database defined as 'test' will be erased and
