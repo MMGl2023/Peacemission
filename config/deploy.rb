@@ -3,7 +3,7 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.17.2"
 
-set :application, "RozyskV2023"
+set :application, "rozysk"
 set :repo_url, "git@github.com:MMGl2023/Peacemission.git"
 set :user, 'webmaster'
 set :puma_threads, [4, 16]
