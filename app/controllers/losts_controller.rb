@@ -5,8 +5,8 @@ class LostsController < ApplicationController
   before_action :find_lost, only: [:edit, :update, :show, :destroy]
   before_action :check_edit_permissions, only: [:edit, :update, :destroy]
 
-  caches_action :show, if: :caching_allowed?, tag: :login_tag
-  caches_action :index, if: :caching_index_allowed?, tag: :action_and_login_and_page_tag
+  # caches_action :show, if: :caching_allowed?, tag: :login_tag
+  # caches_action :index, if: :caching_index_allowed?, tag: :action_and_login_and_page_tag
 
   # cache_sweeper :lost_sweeper, only: [:update, :create]
 

@@ -1,9 +1,9 @@
 class PeopleController < ApplicationController
   before_action :signin_if_not_yet, except: %i[show recent recent_list list search index db_info]
 
-  caches_action :index, if: :caching_index_allowed?, tag: :action_and_login_and_page_tag
+  # caches_action :index, if: :caching_index_allowed?, tag: :action_and_login_and_page_tag
 
-  caches_action :show, tag: :login_tag
+  # caches_action :show, tag: :login_tag
 
   # cache_sweeper :person_sweeper, only: %i[create update destroy]
 
