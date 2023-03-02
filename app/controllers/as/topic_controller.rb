@@ -3,10 +3,10 @@ class As::TopicController < ApplicationController
 
   require_permission :topics
 
-  active_scaffold :topic do |config|
-    # config.columns = [ ]
-    # config.show.columns << [ ]
-  end
+  # active_scaffold :topic do |config|
+  #   # config.columns = [ ]
+  #   # config.show.columns << [ ]
+  # end
 
   def new_or_edit
     p = Topic.find_or_create_by(name: params[:name])
