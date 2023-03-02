@@ -52,10 +52,14 @@ module ApplicationHelper
       }.join("\n")
       content_tag('div',
                   content_tag('div',
-                              content_tag('div', link_to_function(
-                                icon_close, "$('errors').hide();"), :class => 'right') +
-                                content_tag('h2', "Ошибки при заполнении формы") +
-                                content_tag('ul', errors.join("\n").html_safe), class: 'form_error',
+                              content_tag('div',
+                                          link_to_function(icon_close, "$('errors').hide();".html_safe),
+                                          class: 'right') +
+                                content_tag('h2',
+                                            "Ошибки при заполнении формы") +
+                                content_tag('ul',
+                                            errors.join("\n").html_safe,
+                                            class: 'form_error'),
                               class: 'error_msg2'
                   ),
                   class: 'error_msg',

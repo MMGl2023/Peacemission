@@ -66,6 +66,9 @@ set :whenever_identifier, -> { "#{fetch(:application)}_#{fetch(:stage)}" }
 # ===== See Inside: lib/capistrano/tasks =========
 # ================================================
 
+# set this to false after deploying for the first time
+set :initial, true
+
 namespace :puma do
   desc 'Create Directories for Puma Pids and Socket'
   task :make_dirs do
@@ -79,13 +82,17 @@ namespace :puma do
 end
 
 namespace :deploy do
-  # upload configuration files
-  before :starting, 'config_files:upload'
+  # desc "Make sure local git is in sync with remote."
+  # task :check_revision do
+  #   on roles(:app) do
+  #     unless `git rev-parse HEAD` == `git rev-parse origin/master`
+  #       puts "WARNING: HEAD is not the same as origin/master"
+  #       puts "Run `git push` to sync changes."
+  #       exit
+  #     end
+  #   end
+  # end
 
-  # set this to false after deploying for the first time
-  set :initial, true
-
-  # run only if app is being deployed for the very first time, should update "set :initial, true" above to run this
   desc 'Initial Deploy'
   task :initial do
     on roles(:app) do
@@ -95,9 +102,21 @@ namespace :deploy do
     end
   end
 
-  # update cron job from whenever schedule file at "config/schedule.rb"
-  after 'deploy:finishing', 'whenever:update_crontab'
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      invoke 'puma:restart'
+    end
+  end
 
+  # upload configuration files
+  before :starting, 'config_files:upload'
+  # before :starting, :check_revision
+  after :finishing, :compile_assets
+  after :finishing, :cleanup
+  after :finishing, :restart
+  # update cron job from whenever schedule file at "config/schedule.rb"
+  after :finishing, 'whenever:update_crontab'
   # reload application after successful deploy
-  after 'deploy:publishing', 'application:reload'
+  after :publishing, 'application:reload'
 end
