@@ -54,7 +54,7 @@
 #     # password: "please use keys"
 #   }
 
-set :rvm_ruby_version, '2.6.6'
+set :rvm_ruby_version, '2.7.7'
 server "31.177.78.126", user: "webmaster", port: 22, roles: [:web, :app, :db], primary: 'true'
 set :stage, :production
 set :rails_env, :production
