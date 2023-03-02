@@ -11,7 +11,7 @@ class TopicsController < ApplicationController
 
   #  caches_action :news, if: :allow_news_caching?, tag: :action_and_login_and_page_tag
 
-  cache_sweeper :topic_sweeper, only: %i[update create]
+  # cache_sweeper :topic_sweeper, only: %i[update create]
 
   protected
 

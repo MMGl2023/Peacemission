@@ -5,7 +5,7 @@ class PeopleController < ApplicationController
 
   caches_action :show, tag: :login_tag
 
-  cache_sweeper :person_sweeper, only: %i[create update destroy]
+  # cache_sweeper :person_sweeper, only: %i[create update destroy]
 
   before_action :extract_fuzzy_dates, only: %i[create update]
 
