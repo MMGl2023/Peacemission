@@ -79,3 +79,13 @@ namespace :deploy do
   after :finishing, :cleanup
   after :finishing, :restart
 end
+
+#
+# 23 2 * * * root /home/webmaster/rozysk.org/script/clear_logs
+# 30 3 * * * root /home/webmaster/rozysk.org/script/httpd_restart
+#
+# s.rozysk.org -> /home/webmaster/mmgl/branches/v2.0/public
+# static.rozysk.org -> static_rozysk_mongrel_cluster
+# rozysk.org -> rozysk_mongrel_cluster
+# www.rozysk.org -> www_rozysk_mongrel_cluster
+#
