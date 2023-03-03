@@ -17,14 +17,14 @@ namespace :images do
     dir = args['dir'] || ENV['MYSQL_DUMP_DIR'] || 'db_backups'
     FileUtils.mkdir_p(dir)
 
-    puts "Remove older than 5-days"
-    cmd = "find #{dir} -mindepth 1 -mtime +5 -delete"
+    puts "Remove older than 3-days"
+    cmd = "find #{dir} -mindepth 1 -mtime +3 -delete"
     puts cmd
     system(cmd)
 
     file = File.join(dir, file)
     puts "Creating tgz file '#{file}'."
-    # cmd = "tar -czf /home/webmaster/db_backups/s_.tgz /home/webmaster/apps/rozysk/shared/public/s"
+    cmd = "tar -czf #{file} /home/webmaster/apps/rozysk/shared/public/s"
     puts cmd
     system(cmd)
   end

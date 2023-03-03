@@ -43,8 +43,8 @@ namespace :db do
     FileUtils.mkdir_p(dir)
 
     unless ENV['DUMP']
-      puts "Remove older than 5-days"
-      cmd = "find #{dir} -mindepth 1 -mtime +5 -delete"
+      puts "Remove older than 3-days"
+      cmd = "find #{dir} -mindepth 1 -mtime +3 -delete"
       puts cmd
       system(cmd)
     end
