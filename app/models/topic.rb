@@ -4,11 +4,11 @@ class Topic < ActiveRecord::Base
   @@cfg = APP_CONFIG['topics']
   @@cfg[:max_revisions] ||= 20
 
-  has_many :revisions, :class_name => 'TopicRevision'
+  has_many :revisions, class_name: 'TopicRevision'
 
-  validates_uniqueness_of :name, :message => 'должно быть уникальным'
-  validates_format_of :name, :with => /\A[a-z_][a-z\d_]+\z/,
-                      :message => 'должно состоять из маленьких латинских букв, цифр и знаков подчеркивания и должно начинаться с буквы'
+  validates_uniqueness_of :name, message: 'должно быть уникальным'
+  validates_format_of :name, with: /\A[a-z_][a-z\d_]+\z/,
+                      message: 'должно состоять из маленьких латинских букв, цифр и знаков подчеркивания и должно начинаться с буквы'
 
   before_save :correct_news, :fix_name, :extract_tags_from_tags_text
 
@@ -16,21 +16,21 @@ class Topic < ActiveRecord::Base
 
   after_save :remove_old_revisions
 
-  belongs_to :locked_by, :class_name => 'User', :foreign_key => 'locked_by_id'
+  belongs_to :locked_by, class_name: 'User', foreign_key: 'locked_by_id'
 
   attr_accessor :edited_by, :comment, :restored
   attr_accessor :old_section
 
-  has_many :comments, -> { order("created_at") }, :as => :obj
+  has_many :comments, -> { order("created_at") }, as: :obj
   has_many :tags_topics
-  has_many :tags, :through => :tags_topics
+  has_many :tags, through: :tags_topics
 
   class << self
     def find_all_by_tag(tag_name, options = {})
       if options[:only_ids]
-        Tag.find_all_by_name(tag_name, :include => :tags_topics).map(&:tags_topics).flatten.map(&:topic_id).uniq
+        Tag.find_all_by_name(tag_name, include: :tags_topics).map(&:tags_topics).flatten.map(&:topic_id).uniq
       else
-        Tag.find_all_by_name(tag_name, :include => :topics).map(&:topics).flatten.uniq
+        Tag.find_all_by_name(tag_name, include: :topics).map(&:topics).flatten.uniq
       end
     end
   end
@@ -59,7 +59,9 @@ class Topic < ActiveRecord::Base
   def remove_old_revisions
     if self.rev && self.rev > @@cfg[:max_revisions]
       old_rev = self.rev - @@cfg[:max_revisions]
-      TopicRevision.delete_all("rev < #{old_rev}")
+      TopicRevision.where("rev < #{old_rev}").each do |tr|
+        tr.destroy
+      end
     end
   end
 
