@@ -1,2 +1,3 @@
 #RAILS_ENV=production rake db:sqldump[~/db_backups/]
 cd /home/webmaster/apps/rozysk/current && RAILS_ENV=production /home/webmaster/.rbenv/bin/rbenv exec bundle exec rails db:sqldump[~/db_backups/]
+cd /home/webmaster/apps/rozysk/current && RAILS_ENV=production /home/webmaster/.rbenv/bin/rbenv exec bundle exec rails images:dump[~/db_backups/]
