@@ -92,7 +92,7 @@ class TopicsController < ApplicationController
   end
 
   def edit
-    @topic.attributes = params[:topic] if params[:topic].present?
+    @topic.attributes = params.require(:topic).permit! if params[:topic].present?
     if @topic.locked_at &&
       (secs = Time.now - @topic.locked_at) < @@cfg['lock_seconds'] &&
       current_user.id != @topic.locked_by_id &&
