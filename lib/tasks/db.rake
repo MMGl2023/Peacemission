@@ -4,7 +4,7 @@ require 'yaml'
 namespace :db do
 
   def read_db_config
-    unless @db_config = YAML::load(ERB.new(IO.read(RAILS_ROOT + "/config/database.yml")).result)[RAILS_ENV]
+    unless @db_config = YAML::load(ERB.new(IO.read(Rails.root.join(".config/database.yml")).result)[Rails.env]
       abort "No database is configured for the environment '#{env}'"
     end
 
@@ -21,9 +21,9 @@ namespace :db do
     elsif @db_config['password'] && !@db_config['password'].to_s.empty?
       args << "-p"
     end
-  
+
     args << @db_config['database']
-    
+
     @mysql_options = args.join(" ")
   end
 
@@ -54,7 +54,7 @@ namespace :db do
     file = ENV['DUMP'] || "#{@db_config['database']}_#{Time.now.strftime("%Y-%m-%d-%H-%M-%S")}.sql.gz"
     dir = args['dir'] || ENV['MYSQL_DUMP_DIR'] || 'db_backups'
     file = File.join(dir, file)
-    cmd = (file ? 
+    cmd = (file ?
       (file =~ /\.gz$/ ? "zcat #{file} |" : "cat #{file}") :
       ""
     )

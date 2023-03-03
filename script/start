@@ -1,0 +1,25 @@
+echo
+echo "Updating from svn"
+svn up
+
+echo
+echo "Removing cached pages"
+rm -rf public/i 
+rm public/index.html 
+rm public/news.html
+
+echo 
+echo "Removing cached actions"
+rake tmp:cache:clear
+
+mkdir -p tmp/cache/views/rozysk.org
+cd tmp/cache/views
+ln -s rozysk.org www.rozysk.org
+cd ../../..
+
+echo
+echo "(Re)starting mongrels cluster"
+
+mongrel_rails  cluster::stop
+sleep 2
+mongrel_rails  cluster::start
