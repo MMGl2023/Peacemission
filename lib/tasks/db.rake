@@ -41,6 +41,14 @@ namespace :db do
     file = ENV['DUMP'] || "#{@db_config['database']}_#{Time.now.strftime("%Y-%m-%d-%H-%M-%S")}.sql"
     dir = args['dir'] || ENV['MYSQL_DUMP_DIR'] || 'db_backups'
     FileUtils.mkdir_p(dir)
+
+    unless ENV['DUMP']
+      puts "Remove older than 5-days"
+      cmd = "find #{dir} -mindepth 1 -mtime +5 -delete"
+      puts cmd
+      system(cmd)
+    end
+
     file = File.join(dir, file)
     puts "Creating dump file '#{file}'."
     cmd = "mysqldump #{@mysql_options} --ignore-table=#{@db_config['database']}.sessions > #{file} && gzip #{file}"
