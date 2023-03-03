@@ -16,11 +16,11 @@ namespace :db do
       'encoding'  => '--default-character-set'
     }.map { |opt, arg| "#{arg}=#{@db_config[opt]}" if @db_config[opt] }.compact
 
-    if @db_config['password']
-      args << "--password=#{@db_config['password']}"
-    elsif @db_config['password'] && !@db_config['password'].to_s.empty?
-      args << "-p"
-    end
+    # if @db_config['password']
+    #   args << "--password=#{@db_config['password']}"
+    # elsif @db_config['password'] && !@db_config['password'].to_s.empty?
+    #   args << "-p"
+    # end
 
     args << @db_config['database']
 
