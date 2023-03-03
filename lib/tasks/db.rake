@@ -4,7 +4,7 @@ require 'yaml'
 namespace :db do
 
   def read_db_config
-    unless @db_config = YAML::load(ERB.new(IO.read(Rails.root.join(".config/database.yml"))).result)[Rails.env]
+    unless @db_config = YAML::load(ERB.new(IO.read(Rails.root.join("config/database.yml"))).result)[Rails.env]
       abort "No database is configured for the environment '#{env}'"
     end
 
