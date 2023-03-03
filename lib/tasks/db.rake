@@ -45,7 +45,7 @@ namespace :db do
     puts "Creating dump file '#{file}'."
     cmd = "mysqldump #{@mysql_options} --ignore-table=#{@db_config['database']}.sessions > #{file} && gzip #{file}"
     puts cmd
-    # system(cmd)
+    system(cmd)
   end
 
   #command line usage: rake db:dumpimport
