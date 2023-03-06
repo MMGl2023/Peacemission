@@ -3,15 +3,20 @@ class FitemsController < ApplicationController
   before_action :signin_if_not_yet, except: [:index, :show, :image]
 
   def find_or_message
+    puts 'DEBUG!!! 0001'
     unless (params[:id] && @fitem = Fitem.find_by_id(params[:id])) or
       (params[:name] && @fitem = Fitem.find_by_name(params[:name]))
+      puts 'DEBUG!!! 0002'
       flash[:error] = "Не могу найти файл с name=#{params[:name] || '*'} и id=#{params[:id] || '*'}"
+      puts 'DEBUG!!! 0003'
       respond_to do |f|
         f.html { redirect_to fitems_path }
         f.xml { head :not_found }
       end
+      puts 'DEBUG!!! 0004'
       false
     else
+      puts 'DEBUG!!! 0005'
       @fitem
     end
   end
@@ -21,7 +26,9 @@ class FitemsController < ApplicationController
   end
 
   def edit
+    puts 'DEBUG!!! 0000'
     find_or_message
+    puts 'DEBUG!!! 1111'
   end
 
   def show
