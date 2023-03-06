@@ -1,6 +1,6 @@
 class FitemsController < ApplicationController
 
-  before_action :signin_if_not_yet, :except => [:index, :show, :image]
+  before_action :signin_if_not_yet, except: [:index, :show, :image]
 
   def find_or_message
     unless (params[:id] && @fitem = Fitem.find_by_id(params[:id])) or
@@ -28,7 +28,7 @@ class FitemsController < ApplicationController
     if find_or_message
       respond_to do |f|
         f.html # show.html.erb
-        f.xml { render :xml => @fitem }
+        f.xml { render xml: @fitem }
       end
     end
   end
@@ -37,7 +37,7 @@ class FitemsController < ApplicationController
     if find_or_message
       respond_to do |f|
         f.html { render :action => 'image', :layout => 'image' }
-        f.xml { render :xml => @fitem }
+        f.xml { render xml: @fitem }
       end
     end
   end
@@ -48,13 +48,13 @@ class FitemsController < ApplicationController
         flash[:info] = "Изменения были отменены"
         respond_to do |f|
           f.html { redirect_to @fitem }
-          f.xml { render :xml => @fitem, :status => :canceled, :location => @fitem }
+          f.xml { render xml: @fitem, status: :canceled, location: @fitem }
         end
       else
         if @fitem.update_attributes(params[:fitem].project(:name, :comment))
           case params[:fitem][:file_action]
           when 'upload'
-            @fitem.update_from_stream(params[:fitem][:file], :max_width => 1024)
+            @fitem.update_from_stream(params[:fitem][:file], max_width: 1024)
           end
           flash[:info] = "Файл был обновлён"
           if @fitem.errors.empty?
@@ -68,7 +68,7 @@ class FitemsController < ApplicationController
       end
       respond_to do |f|
         f.html { render :action => 'edit' }
-        f.xml { render :xml => @fitem.errors, :status => :unprocessable_entity }
+        f.xml { render xml: @fitem.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -89,7 +89,7 @@ class FitemsController < ApplicationController
           flash[:info] = "Файл #{@fitem.name} успешно загружен. <a href=\"#{fitem_path(@fitem)}\">Редактировать</a>"
           respond_to do |f|
             f.html { redirect_to @fitem }
-            f.xml { render :xml => @fitem, :status => :created, :location => @fitem }
+            f.xml { render xml: @fitem, status: :created, location: @fitem }
           end
           return
         else

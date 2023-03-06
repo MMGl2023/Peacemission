@@ -120,7 +120,7 @@ class Fitem < ActiveRecord::Base
   class << self
     def dir
       # RAILS_ROOT + '/public/s/' + @sub_dir
-      Rails.root.join('public/s/' + @sub_dir)
+      Pathname("#{Rails.root}/public/s/#{@sub_dir}")
     end
 
     def sub_dir
@@ -162,8 +162,8 @@ class Fitem < ActiveRecord::Base
       dims = options[:dims] || (options[:width].to_s + 'x' + options[:height].to_s)
       ext = (name =~ EXT_RGXP and $1) || '.jpg'
       thumb_name = thumb_name_prefix(name) + dims + (options[:ext] || ext)
-      filename = self.dir + '/' + name
-      thumb_filename = self.dir + '/' + thumb_name
+      filename = "#{self.dir}/#{name}"
+      thumb_filename = "#{self.dir}/#{thumb_name}"
 
       if !File.exist?(thumb_filename) && File.exist?(filename)
         FileUtils.mkdir_p(File.dirname(thumb_filename))
