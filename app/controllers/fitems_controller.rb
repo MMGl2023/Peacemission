@@ -50,18 +50,19 @@ class FitemsController < ApplicationController
   end
 
   def update
+    params_unsafe = params.dup.to_unsafe_h
     if find_or_message
-      if params[:cancel]
+      if params_unsafe[:cancel]
         flash[:info] = "Изменения были отменены"
         respond_to do |f|
           f.html { redirect_to @fitem }
           f.xml { render xml: @fitem, status: :canceled, location: @fitem }
         end
       else
-        if @fitem.update_attributes(params[:fitem].project(:name, :comment))
-          case params[:fitem][:file_action]
+        if @fitem.update(params_unsafe[:fitem].project(:name, :comment))
+          case params_unsafe[:fitem][:file_action]
           when 'upload'
-            @fitem.update_from_stream(params[:fitem][:file], max_width: 1024)
+            @fitem.update_from_stream(params_unsafe[:fitem][:file], max_width: 1024)
           end
           flash[:info] = "Файл был обновлён"
           if @fitem.errors.empty?
@@ -74,7 +75,7 @@ class FitemsController < ApplicationController
         end
       end
       respond_to do |f|
-        f.html { render :action => 'edit' }
+        f.html { render action: 'edit' }
         f.xml { render xml: @fitem.errors, status: :unprocessable_entity }
       end
     end

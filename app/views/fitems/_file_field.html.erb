@@ -1,46 +1,58 @@
-<% 
-  file = @fitem 
-  file = file_field  if defined? file_field
+<%
+  file = @fitem
+  file = file_field if defined? file_field
 %>
 <table class="file_field">
   <tr>
-  <% if file && file.errors.empty?  %>
-  <td class="file_field_current">
-   <table >
-      <tbody>
-      <% if file.image? %>
-        <% file.update_size if file.width.blank? || file.size.blank? %>
-        <tr><td colspan="2" align="center"><%= image_item file, :width => 100 %><td></tr>
-        <tr><td colspan="2" align="center"><%= file.dims %><td></tr>
-      <% end %>
-      <tr><th align="right">Размер:</th><td><%= file.ensure_size.to_human_size %></td></tr>
-      <tr><th align="right">Исходный&nbsp;файл:</th><td><%= link_to_file file.original_filename,:fitem => file %></td></tr>
-      </tbody>
-    </table>
-  </td>
-  <% end %>
-  <td class="file_field_actions">
-    <table class>
-      <tr>
-        <td class="radio_input">
-          <input type="radio" name="fitem[file_action]" value="nochange" id="fitem_file_action_nochange" checked />
-        </td>
-        <td>
-          <label for="fitem_file_action_nochange">Не менять файл </label>
-        </td>
-      </tr>
-      <tr>
-        <td class="radio_input">
-          <input type="radio" name="fitem[file_action]" value="upload" id="fitem_file_action_upload" <%= 'checked' if !file || file.original_filename.blank? %>/>
-        </td>
-        <td>
-          <label for="fitem_file_action_upload">Загрузить новый файл <br />
-            <input type="file" name="fitem[file]" value="" id="fitem_file" />
-          </label>
-        </td>
-      </tr>
-    </table>
-  </td>
+    <% if file && file.errors.empty? %>
+      <td class="file_field_current">
+        <table>
+          <tbody>
+          <% if file.image? %>
+            <% file.update_size if file.width.blank? || file.size.blank? %>
+            <tr>
+              <td colspan="2" align="center"><%= image_item file, :width => 100 %>
+              <td>
+            </tr>
+            <tr>
+              <td colspan="2" align="center"><%= file.dims %>
+              <td>
+            </tr>
+          <% end %>
+          <tr>
+            <th align="right">Размер:</th>
+            <td><%= file.ensure_size.to_human_size %></td>
+          </tr>
+          <tr>
+            <th align="right">Исходный&nbsp;файл:</th>
+            <td><%= link_to_file file.original_filename, :fitem => file %></td>
+          </tr>
+          </tbody>
+        </table>
+      </td>
+    <% end %>
+    <td class="file_field_actions">
+      <table class>
+        <tr>
+          <td class="radio_input">
+            <input type="radio" name="fitem[file_action]" value="nochange" id="fitem_file_action_nochange" checked/>
+          </td>
+          <td>
+            <label for="fitem_file_action_nochange">Не менять файл </label>
+          </td>
+        </tr>
+        <tr>
+          <td class="radio_input">
+            <input type="radio" name="fitem[file_action]" value="upload" id="fitem_file_action_upload" <%= 'checked' if !file || file.original_filename.blank? %>/>
+          </td>
+          <td>
+            <label for="fitem_file_action_upload">Загрузить новый файл <br/>
+              <input type="file" name="fitem[file]" value="" id="fitem_file"/>
+            </label>
+          </td>
+        </tr>
+      </table>
+    </td>
   </tr>
 </table>
 

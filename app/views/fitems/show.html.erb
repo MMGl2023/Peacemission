@@ -3,23 +3,23 @@
 <%= flash_messages %>
 
 <div class="right">
-<%= link_to '[Редактировать]', edit_fitem_path(@fitem) %><br />
-<%= link_to_file "[Скачать]", :fitem => @fitem %>
+  <%= link_to '[Редактировать]', edit_fitem_path(@fitem) %><br/>
+  <%= link_to_file "[Скачать]", fitem: @fitem %>
 </div>
 
 <% if @fitem.image? %>
   <div class="right" style="clear: both; margin: 10px 0px 10px 10px">
-    <%= image_item @fitem, :width => 200 %>
+    <%= image_item @fitem, width: 200 %>
   </div>
 <% end %>
-  <table class="notlist">
+<table class="notlist">
   <tr>
     <th>№</th>
     <td><%= @fitem.id %></td>
   </tr>
   <tr>
     <th>Имя</th>
-    <td><%= link_to_file @fitem.name, :name=>@fitem.name %></td>
+    <td><%= link_to_file @fitem.name, name: @fitem.name %></td>
   </tr>
   <tr>
     <th>Имя исходного файла</th>
@@ -31,9 +31,9 @@
   </tr>
   <tr>
     <th>Размер</th>
-    <td><%= @fitem.size.to_human_size %><%= ", <span class=\"imgdims\">#{@fitem.dims}</span>" if @fitem.image? %></td>
+    <td><%= @fitem.size.to_human_size %><%= raw(", <span class=\"imgdims\">#{@fitem.dims}</span>") if @fitem.image? %></td>
   </tr>
-   <tr>
+  <tr>
     <th>Дата загрузки:</th>
     <td><%= time_s(@fitem.created_at) %></td>
   </tr>
