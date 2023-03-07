@@ -7,7 +7,7 @@ class TopicsController < ApplicationController
 
   before_action :find_and_check_topic, only: %i[update edit show show_auth destroy]
 
-  caches_page :show, if: :allow_topic_caching?
+  # caches_page :show, if: :allow_topic_caching?
 
   #  caches_action :news, if: :allow_news_caching?, tag: :action_and_login_and_page_tag
 
@@ -132,7 +132,7 @@ class TopicsController < ApplicationController
       TopicRevision.restore_topic(@topic, params[:rev])
       @topic.restored = true
     end
-    render :action => 'show'
+    render action: 'show'
   end
 
   def rollback
