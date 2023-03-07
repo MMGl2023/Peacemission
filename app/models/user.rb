@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
   has_many :roles_users, dependent: :destroy
   has_many :roles, through: :roles_users
 
-  belongs_to :image, class_name: 'Fitem', foreign_key: 'image_id'
+  belongs_to :image, class_name: 'Fitem', foreign_key: 'image_id', optional: true
 
   composed_of :tz, class_name: 'TZInfo::Timezone', mapping: %w( time_zone time_zone )
 

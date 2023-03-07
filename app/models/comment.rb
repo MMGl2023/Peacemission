@@ -28,13 +28,13 @@ class Comment < ActiveRecord::Base
     end
   end
 
-  belongs_to :obj, :polymorphic => true
-  belongs_to :author, :class_name => 'User', :foreign_key => 'author_id'
-  belongs_to :root, :class_name => 'Comment', :foreign_key => 'root_id'
+  belongs_to :obj, polymorphic: true, optional: true
+  belongs_to :author, class_name: 'User', foreign_key: 'author_id', optional: true
+  belongs_to :root, class_name: 'Comment', foreign_key: 'root_id', optional: true
 
-  # has_many :comments, :class_name=>'Comment', :foreign_key=>'obj_id', :conditions=>'obj_type = "Comment"'
+  # has_many :comments, class_name: 'Comment', foreign_key: 'obj_id', conditions: 'obj_type = "Comment"'
 
-  has_many :sub_comments, :class_name => 'Comment', :foreign_key => 'root_id'
+  has_many :sub_comments, class_name: 'Comment', foreign_key: 'root_id'
 
   before_create :set_author_name, :set_auth_visibility_for_requests
   before_save :update_root, :set_visibility

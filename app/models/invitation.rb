@@ -4,9 +4,9 @@ class Invitation < ActiveRecord::Base
     INVITATION_EXPIRE_AFTER = 2.weeks
   end
 
-  belongs_to :created_by, class_name: 'User', foreign_key: :created_by_id
+  belongs_to :created_by, class_name: 'User', foreign_key: :created_by_id, optional: true
 
-  belongs_to :used_by, class_name: 'User', foreign_key: :used_by_id
+  belongs_to :used_by, class_name: 'User', foreign_key: :used_by_id, optional: true
 
   validates_format_of :email, with: /\A([^@\s]+|"[^@]+")@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
 

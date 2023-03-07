@@ -16,7 +16,7 @@ class Topic < ActiveRecord::Base
 
   after_save :remove_old_revisions
 
-  belongs_to :locked_by, class_name: 'User', foreign_key: 'locked_by_id'
+  belongs_to :locked_by, class_name: 'User', foreign_key: 'locked_by_id', optional: true
 
   attr_accessor :edited_by, :comment, :restored
   attr_accessor :old_section

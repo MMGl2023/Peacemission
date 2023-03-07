@@ -1,6 +1,6 @@
 class Person < ActiveRecord::Base
   has_many :comments, -> { order("created_at") }, as: :obj
-  belongs_to :lost
+  belongs_to :lost, optional: true
   has_many :people_requests
   has_many :requests, through: :people_requests
 

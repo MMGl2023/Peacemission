@@ -2,8 +2,8 @@ class TopicRevision < ActiveRecord::Base
 
   # serialize :topic_date
 
-  belongs_to :author, class_name: 'User', foreign_key: 'author_id'
-  belongs_to :topic
+  belongs_to :author, class_name: 'User', foreign_key: 'author_id', optional: true
+  belongs_to :topic, optional: true
 
   class << self
     def topic_data(topic)
