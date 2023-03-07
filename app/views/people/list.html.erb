@@ -74,7 +74,7 @@
         <% if current_user -%>
           <td>
             <%= link_to icon_edit, edit_person_path(x), title: 'Редактировать' %><br/>
-            <%= link_to icon_delete, props_person_path(x, main: 0), mehod: :delete, data: { confirm: "Вы действительно хотите удалить запись на человека #{x.full_name} из Основного Списка?" }, title: 'Удалить' %>
+            <%= link_to icon_delete, props_person_path(x, main: 0), method: :delete, data: { confirm: "Вы действительно хотите удалить запись на человека #{x.full_name} из Основного Списка?" }, title: 'Удалить' %>
           </td>
         <% end -%>
         <td>

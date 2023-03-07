@@ -33,7 +33,7 @@ Rails.application.routes.draw do
 
   resources :people do
     member do
-      post 'props'
+      match 'props', via: %i[post put delete]
     end
     collection do
       get 'list'
