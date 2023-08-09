@@ -71,3 +71,6 @@ gem 'i18n-js', '>= 3.0.0.rc11'
 gem 'active_scaffold'
 gem 'date', '3.3.3'
 gem 'whenever'
+
+# Captcha
+gem 'new_google_recaptcha'

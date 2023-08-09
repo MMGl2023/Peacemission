@@ -170,6 +170,8 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     net-ssh (7.0.1)
+    new_google_recaptcha (1.4.0)
+      rails (>= 4.2.0)
     nio4r (2.5.8)
     nokogiri (1.13.10-arm64-darwin)
       racc (~> 1.4)
@@ -297,6 +299,7 @@ DEPENDENCIES
   net-http
   net-imap
   net-smtp
+  new_google_recaptcha
   puma (>= 3.11)
   rails (~> 6.1.7, >= 6.1.7.2)
   rails-observers
@@ -314,4 +317,4 @@ RUBY VERSION
    ruby 2.7.7p221
 
 BUNDLED WITH
-   2.2.32
+   2.4.10

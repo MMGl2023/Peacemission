@@ -133,7 +133,10 @@ class LostsController < ApplicationController
     update_attributes
     attrs = params[:lost_image] || {}
     # update image
-    if @lost.valid?
+    @lost.valid?
+    NewGoogleRecaptcha.human?(params[:new_google_recaptcha_token], 'losts/new', NewGoogleRecaptcha.minimum_score, @lost)
+
+    if @lost.errors.messages.nil?
       @lost.active = true if @lost.active.nil?
       @lost.session_id ||= session.id
       case attrs[:fitem_action]

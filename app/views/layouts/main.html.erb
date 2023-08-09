@@ -8,6 +8,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
+
+  <%= yield :recaptcha_js %>
+
   <%= stylesheet_link_tag 'main', media: 'screen, projection' %>
   <%= auto_discovery_link_tag :rss, @rss_link if @rss_link %>
   <%= javascript_include_tag 'application', 'comments', 'hilitor' %>
@@ -58,6 +61,16 @@
 </div>
 <script lang="text/javascript">
   <%= raw(@run_on_load) %>
+  Array.prototype.reduce = function(callback, initialVal) {
+    var accumulator = (initialVal === undefined) ? undefined : initialVal;
+    for (var i = 0; i < this.length; i++) {
+      if (accumulator !== undefined)
+        accumulator = callback.call(undefined, accumulator, this[i], i, this);
+      else
+        accumulator = this[i];
+    }
+    return accumulator;
+  };
 </script>
 <%= render partial: 'layouts/google_analytics' %>
 </body>

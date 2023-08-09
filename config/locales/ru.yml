@@ -32,3 +32,6 @@ ru:
           attributes:
             image:
               required: 'необходимо заполнить'
+  new_google_recaptcha:
+    errors:
+      verification_human: 'Верификация reCAPTCHA не пройдена.<br/>Попробуйте отправить форму ещё раз'

@@ -1,9 +1,14 @@
+<%= content_for :recaptcha_js do %>
+  <%= include_recaptcha_js %>
+<% end %>
+
 <div class="lost_edit">
   <h1> <%= @title ||= "Информация о пропавшем #{@lost.full_name}" %></h1>
   <%= flash_messages %>
   <%= error_messages_for :lost %>
   <br/>
   <%= form_for @lost, :html => { :multipart => true } do |f| -%>
+    <%= recaptcha_action('losts/new') %>
     <table class="lost_edit">
       <tr>
         <th>
@@ -168,5 +173,6 @@
         </td>
       </tr>
     </table>
+    <label for="lost_base"></label>
   <% end -%>
 </div>
