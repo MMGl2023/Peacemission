@@ -17,8 +17,8 @@ namespace :images do
     dir = args['dir'] || ENV['MYSQL_DUMP_DIR'] || 'db_backups'
     FileUtils.mkdir_p(dir)
 
-    puts "Remove older than 3-days"
-    cmd = "find #{dir} -mindepth 1 -mtime +3 -delete"
+    puts "Remove older than 2-days"
+    cmd = "find #{dir} -mindepth 1 -mtime +2 -delete"
     puts cmd
     system(cmd)
 
